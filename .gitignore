@@ -1,0 +1,7 @@
+/.vs
+engine/.vs
+engine/GL_Release_Steam/
+engine/GL_Debug_STEAM/
+
+*.obj
+*.dll
