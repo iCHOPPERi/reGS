@@ -48,11 +48,10 @@ int Draw_MessageCharacterAdd( int x, int y, int num, int rr, int gg, int bb, uns
 
 int Draw_String( int x, int y, char* str )
 {
-	const auto iWidth = VGUI2_DrawString( x, y, str, VGUI2_GetConsoleFont() );
-
+	int width = VGUI2_DrawString(x, y, str, VGUI2_GetConsoleFont());
 	Draw_ResetTextColor();
 
-	return iWidth + x;
+	return width + x;
 }
 
 int Draw_StringLen( const char* psz, unsigned int font )

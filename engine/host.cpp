@@ -42,7 +42,6 @@ bool host_initialized = false;
 double realtime = 0;
 double oldrealtime = 0;
 double host_frametime = 0;
-double rolling_fps = 0;
 
 client_t* host_client = nullptr;
 
@@ -67,24 +66,23 @@ int host_hunklevel = 0;
 void Host_InitLocal()
 {
 	Host_InitCommands();
-	//TODO: implement - Solokiller
-	/*
-	Cvar_RegisterVariable( &host_killtime );
-	Cvar_RegisterVariable( &sys_ticrate );
-	Cvar_RegisterVariable( &fps_max );
-	Cvar_RegisterVariable( &fps_override );
-	Cvar_RegisterVariable( &host_name );
-	Cvar_RegisterVariable( &host_limitlocal );
+
+	//Cvar_RegisterVariable(&host_killtime); // TODO: Implement
+	Cvar_RegisterVariable(&sys_ticrate);
+	Cvar_RegisterVariable(&fps_max);
+	Cvar_RegisterVariable(&fps_override);
+	//Cvar_RegisterVariable(&host_name); // TODO: Implement
+	//Cvar_RegisterVariable(&host_limitlocal); // TODO: Implement
 	sys_timescale.value = 1;
-	Cvar_RegisterVariable( &host_framerate );
-	Cvar_RegisterVariable( &host_speeds );
-	Cvar_RegisterVariable( &host_profile );
-	*/
-	Cvar_RegisterVariable( &mp_logfile );
-	Cvar_RegisterVariable( &mp_logecho );
-	Cvar_RegisterVariable( &sv_log_onefile );
-	Cvar_RegisterVariable( &sv_log_singleplayer );
-	Cvar_RegisterVariable( &sv_logsecret );
+	Cvar_RegisterVariable(&host_framerate);
+	//Cvar_RegisterVariable( &host_speeds );
+	Cvar_RegisterVariable(&host_profile);
+
+	Cvar_RegisterVariable(&mp_logfile);
+	Cvar_RegisterVariable(&mp_logecho);
+	Cvar_RegisterVariable(&sv_log_onefile);
+	Cvar_RegisterVariable(&sv_log_singleplayer);
+	Cvar_RegisterVariable(&sv_logsecret);
 	//TODO: implement - Solokiller
 	/*
 	Cvar_RegisterVariable( &sv_stats );
@@ -439,180 +437,211 @@ void Host_Shutdown()
 
 		//TODO: implement - Solokiller
 		//sv.time = 0;
-		//cl.time = 0;
+		cl.time = 0;
 	}
 }
 
+/*
+===============
+Host_FilterTime
+
+Computes simulation time (FPS value)
+===============
+*/
 bool Host_FilterTime( float time )
 {
-	if( host_framerate.value > 0 )
+	double fps;
+	static int command_line_ticrate = -1;
+
+	if (host_framerate.value > 0.0f)
 	{
-		if( ( sv.active && svs.maxclients == 1 ) ||
-			( cl.maxclients == 1 ) ||
-			cls.demoplayback )
+		if (Host_IsSinglePlayerGame() || cls.demoplayback)
 		{
-			host_frametime = host_framerate.value * sys_timescale.value;
-			realtime = host_frametime + realtime;
+			host_frametime = sys_timescale.value * host_framerate.value;
+			realtime += host_frametime;
 			return true;
 		}
 	}
 
-	realtime += time * sys_timescale.value;
+	realtime += sys_timescale.value * time;
 
-	const double flDelta = realtime - oldrealtime;
-
-	if( g_bIsDedicatedServer )
+	if (g_bIsDedicatedServer)
 	{
-		static int command_line_ticrate = -1;
+		if (command_line_ticrate == -1)
+			command_line_ticrate = COM_CheckParm("-sys_ticrate");
 
-		if( command_line_ticrate == -1 )
+		if (command_line_ticrate > 0)
+			fps = Q_atof(com_argv[command_line_ticrate + 1]);
+		else
+			fps = sys_ticrate.value;
+
+		host_frametime = realtime - oldrealtime;
+
+		if (fps > 0.0f)
 		{
-			command_line_ticrate = COM_CheckParm( "-sys_ticrate" );
-		}
-
-		double flTicRate = sys_ticrate.value;
-
-		if( command_line_ticrate > 0 )
-		{
-			flTicRate = strtod( com_argv[ command_line_ticrate + 1 ], nullptr );
-		}
-
-		if( flTicRate > 0.0 )
-		{
-			if( ( 1.0 / ( flTicRate + 1.0 ) ) > flDelta )
+			if (1.0f / (fps + 1.0f) > host_frametime)
 				return false;
 		}
 	}
 	else
 	{
-		double flFPSMax;
+		fps = fps_max.value;
+		if (sv.active == false && cls.state != ca_disconnected && cls.state != ca_active)
+			fps = 31.0;
 
-		if( sv.active || cls.state == ca_disconnected || cls.state == ca_active )
-		{
-			flFPSMax = 0.5;
-			if( fps_max.value >= 0.5 )
-				flFPSMax = fps_max.value;
-		}
-		else
-		{
-			flFPSMax = 31.0;
-		}
+		// Limit fps to withing tolerable range
+		fps = __max(MIN_FPS, fps);
+		if (!fps_override.value)
+			fps = __min(MAX_FPS, fps);
 
-		if( !fps_override.value )
+		if (cl.maxclients > 1)
 		{
-			if( flFPSMax > 100.0 )
-				flFPSMax = 100.0;
+			if (fps < 20.0f)
+				fps = 20.0f;
 		}
 
-		if( cl.maxclients > 1 )
+		if (gl_vsync.value)
 		{
-			if( flFPSMax < 20.0 )
-				flFPSMax = 20.0;
+			if (!fps_override.value)
+				fps = MAX_FPS;
 		}
 
-		if( gl_vsync.value )
-		{
-			if( !fps_override.value )
-				flFPSMax = 100.0;
-		}
+		host_frametime = realtime - oldrealtime;
 
-		if( !cls.timedemo )
+		if (!cls.timedemo)
 		{
-			if( sys_timescale.value / ( flFPSMax + 0.5 ) > flDelta )
+			if (sys_timescale.value / (fps + 0.5f) > host_frametime)
 				return false;
 		}
 	}
 
-	host_frametime = flDelta;
 	oldrealtime = realtime;
 
-	if( flDelta > 0.25 )
-	{
-		host_frametime = 0.25;
-	}
+	if (host_frametime > 0.25f)
+		host_frametime = 0.25f;
 
 	return true;
 }
 
-void _Host_Frame( float time )
+double rolling_fps = 0.0;
+
+void Host_ComputeFPS( double frametime )
 {
-	if( setjmp( host_enddemo ) || !Host_FilterTime( time ) )
+	rolling_fps = frametime * 0.4 + rolling_fps * 0.6;
+}
+
+/*
+=====================
+Host_UpdateScreen
+
+Refresh the screen
+=====================
+*/
+void Host_UpdateScreen( void )
+{
+	if (gfBackground)
 		return;
 
-	SystemWrapper_RunFrame( host_frametime );
+	// Refresh the screen
+	SCR_UpdateScreen();
 
-	if( g_modfuncs.m_pfnFrameBegin )
+	//if (cl_inmovie) TODO: Implement
+	{
+		//if (scr_con_current == 0.0)
+			//VID_WriteBuffer(nullptr);
+	}
+}
+
+void _Host_Frame( float time )
+{
+	static double host_times[6];
+
+	if (setjmp(host_enddemo))
+		return;			// demo finished.
+
+	// decide the simulation time
+	if (!Host_FilterTime(time))
+		return;
+
+	SystemWrapper_RunFrame(host_frametime);
+
+	if (g_modfuncs.m_pfnFrameBegin)
 		g_modfuncs.m_pfnFrameBegin();
 
-	rolling_fps = 0.6 + rolling_fps + 0.4 * host_frametime;
+	Host_ComputeFPS(host_frametime);
 
 	//TODO: implement - Solokiller
 
 	Cbuf_Execute();
 
-	//TODO: implement - Solokiller
-
-	if( !gfBackground )
-	{
-		SCR_UpdateScreen();
-		//TODO: implement - Solokiller
-	}
+	ClientDLL_UpdateClientData();
 
 	//TODO: implement - Solokiller
+
+	//ClientDLL_Frame(host_frametime); TODO: implement
+
+	//TODO: implement - Solokiller
+
+	Host_UpdateScreen();
+
+	//TODO: implement - Solokiller
+
+	//host_framecount++; TODO: Implement
+
+	// TODO: Implement
 }
 
 int Host_Frame( float time, int iState, int* stateInfo )
 {
-	if( setjmp( host_abortserver ) )
+	double time1, time2;
+
+	if (setjmp(host_abortserver))
 	{
 		return giActive;
 	}
 
-	if( giActive != DLL_CLOSE || !g_iQuitCommandIssued )
+	if (giActive != DLL_CLOSE || !g_iQuitCommandIssued)
 		giActive = iState;
 
 	*stateInfo = 0;
 
-	double time1, time2;
-
-	if( host_profile.value )
+	if (host_profile.value)
 		time1 = Sys_FloatTime();
 
-	_Host_Frame( time );
+	_Host_Frame(time);
 
-	if( host_profile.value )
+	if (host_profile.value)
 		time2 = Sys_FloatTime();
 
-	if( giStateInfo )
+	if (giStateInfo)
 	{
 		*stateInfo = giStateInfo;
 		giStateInfo = 0;
 		Cbuf_Execute();
 	}
 
-	if( host_profile.value )
+	if (host_profile.value)
 	{
 		static double timetotal = 0;
 		static int timecount = 0;
 
-		timetotal = time2 - time1 + timetotal;
-		++timecount;
+		timecount++;
+		timetotal += time2 - time1;
 
-		//Print status every 1000 frames.
-		if( timecount >= 1000 )
+		// Print status every 1000 frames
+		if (timecount >= 1000)
 		{
+			int i;
 			int iActiveClients = 0;
 
-			for( int i = 0; i < svs.maxclients; ++i )
+			for (i = 0; i < svs.maxclients; i++)
 			{
-				if( svs.clients[ i ].active )
-					++iActiveClients;
+				if (svs.clients[i].active)
+					iActiveClients++;
 			}
 
-			Con_Printf( "host_profile: %2i clients %2i msec\n",
-						iActiveClients,
-						static_cast<int>( floor( timetotal * 1000.0 / timecount ) ) );
-		
+			Con_Printf("host_profile: %2i clients %2i msec\n", iActiveClients, (int)(floor(timetotal * 1000.0 / timecount)));
+
 			timecount = 0;
 			timetotal = 0;
 		}

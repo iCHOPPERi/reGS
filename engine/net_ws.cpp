@@ -1,27 +1,17 @@
-/*
-Copyright (C) 1996-1997 Id Software, Inc.
-
-This program is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
-of the License, or (at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-
-See the GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-
-*/
 #include "quakedef.h"
+#include "host.h"
+#include "gl_draw.h"
 
 sizebuf_t net_message;
 
+extern cvar_t cl_showfps;
+
 void NET_Config( bool multiplayer )
+{
+	//TODO: implement - Solokiller
+}
+
+void NET_Init()
 {
 	//TODO: implement - Solokiller
 }
@@ -31,7 +21,41 @@ void NET_Shutdown()
 	//TODO: implement - Solokiller
 }
 
-void NET_Init()
+void NET_DrawString( int x, int y, int font, float r, float g, float b, char* fmt, ... )
 {
-	//TODO: implement - Solokiller
+	static char string[1024];
+	va_list varargs;
+
+	va_start(varargs, fmt);
+	vsnprintf(string, sizeof(string), fmt, varargs);
+	va_end(varargs);
+
+	Draw_SetTextColor(r, g, b);
+	Draw_String(x, y, string);
+}
+
+/*
+==================
+SCR_NetGraph
+
+Visualizes data flow
+==================
+*/
+void SCR_NetGraph( void )
+{
+	// TODO: Implement
+}
+
+static double rolling_fps;
+
+void SCR_DrawFPS( void )
+{
+	if (!cl_showfps.value)
+		return;
+
+	if (host_frametime <= 0.0)
+		return;
+
+	rolling_fps = 0.6 * rolling_fps + host_frametime * 0.4;
+	NET_DrawString(2, 2, 0, 1, 1, 1, "%d fps", (int)floor(1.0 / rolling_fps));
 }

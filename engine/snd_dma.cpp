@@ -43,8 +43,16 @@ cvar_t _snd_mixahead = { "_snd_mixahead", "0.100", FCVAR_ARCHIVE };
 cvar_t speak_enable = { "speak_enabled", "1", FCVAR_ARCHIVE };
 cvar_t fs_lazy_precache = { "fs_lazy_precache", "0", FCVAR_ARCHIVE };
 
+bool fakedma = false;
+bool snd_initialized = false;
+int sound_started = 0;
+volatile dma_t* shm;
+sfx_t* known_sfx;
+int num_sfx = 0;
+
 void S_Init()
 {
+    /*
     Con_DPrintf("Sound Initialization\n");
     VOX_Init();
     if (COM_CheckParm("-nosound") != 0) {
@@ -109,7 +117,7 @@ void S_Init()
     }
     SX_Init();
     Wavstream_Init();
-    return;
+    return;*/
 }
 
 void S_Shutdown()
@@ -119,6 +127,7 @@ void S_Shutdown()
 
 sfx_t* S_PrecacheSound(const char* name)
 {
+    /*
     int len;
     sfx_t* sfx;
 
@@ -133,7 +142,7 @@ sfx_t* S_PrecacheSound(const char* name)
         }
         sfx = S_FindName(name, NULL);
         return sfx;
-    }
+    }*/
     return NULL;
 }
 

@@ -47,13 +47,13 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <TargetName>hw</TargetName>
-    <IntDir>$(SolutionDir)\engine\$(Configuration)\</IntDir>
+    <IntDir>$(Configuration)\</IntDir>
     <OutDir>$(SolutionDir)\engine\$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <TargetName>hw</TargetName>
-    <IntDir>$(SolutionDir)\engine\$(Configuration)\</IntDir>
+    <IntDir>$(Configuration)\</IntDir>
     <OutDir>$(SolutionDir)\engine\$(Configuration)\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -68,7 +68,7 @@
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>false</EnableCOMDATFolding>
       <OptimizeReferences>false</OptimizeReferences>
-      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>psapi.lib;wsock32.lib;Winmm.lib;../external/game_controls.lib;../external/steam_api.lib;../external/vstdlib.lib;../external/tier0.lib;../external/tier1.lib;../external/mss32.lib;../external/vgui2_controls.lib;opengl32.lib;glu32.lib;../external/GLEW/lib/glew32s.lib;../external/SDL2/lib/SDL2.lib;../utils/vgui/lib/win32_vc6/vgui.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -87,7 +87,7 @@
       <AdditionalDependencies>psapi.lib;wsock32.lib;Winmm.lib;../external/game_controls.lib;../external/steam_api.lib;../external/vstdlib.lib;../external/tier0.lib;../external/tier1.lib;../external/mss32.lib;../external/vgui2_controls.lib;opengl32.lib;glu32.lib;../external/GLEW/lib/glew32s.lib;../external/SDL2/lib/SDL2.lib;../utils/vgui/lib/win32_vc6/vgui.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
-   <ItemGroup>
+  <ItemGroup>
     <ClCompile Include="..\common\BaseSystemModule.cpp" />
     <ClCompile Include="..\common\FilePaths.cpp" />
     <ClCompile Include="..\common\ObjectList.cpp" />

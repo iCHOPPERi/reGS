@@ -426,7 +426,9 @@ void SCR_UpdateScreen()
 
 				GLBeginHud();
 
-				//TODO: implement - Solokiller
+				// Draw FPS and net graph
+				SCR_DrawFPS();
+				SCR_NetGraph();
 
 				if (!VGuiWrap2_IsGameUIVisible())
 				{

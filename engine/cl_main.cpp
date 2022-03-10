@@ -45,7 +45,10 @@ lightstyle_t cl_lightstyle[ MAX_LIGHTSTYLES ] = {};
 //TODO: implement API and add here - Solokiller
 playermove_t g_clmove;
 
+
 float g_LastScreenUpdateTime = 0;
+
+cvar_t cl_showfps = { "cl_showfps", "0", FCVAR_ARCHIVE };
 
 cvar_t cl_mousegrab = { "cl_mousegrab", "1", FCVAR_ARCHIVE };
 cvar_t m_rawinput = { "m_rawinput", "1", FCVAR_ARCHIVE };
@@ -129,6 +132,7 @@ void CL_Init()
 	Cmd_AddCommand("snapshot", CL_TakeSnapshot_f);
 	Cvar_RegisterVariable( &rate );
 	Cvar_RegisterVariable( &cl_lw );
+	Cvar_RegisterVariable(&cl_showfps);
 	Cvar_RegisterVariable( &dev_overview );
 	Cvar_RegisterVariable( &cl_mousegrab );
 	Cvar_RegisterVariable( &m_rawinput );

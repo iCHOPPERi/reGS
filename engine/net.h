@@ -25,6 +25,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "tier0/platform.h"
 #include "netadr.h"
 
+// Draw client info
+void		SCR_DrawFPS( void );
+void		SCR_NetGraph( void );
+
 /**
 *	Maximum size for a fragment buffer.
 */

@@ -119,4 +119,11 @@ void Host_InitializeGameDLL();
 
 void Host_ClearSaveDirectory();
 
+// PERFORMANCE INFO
+#define MIN_FPS         0.5         // Host minimum fps value for maxfps.
+#define MAX_FPS         100.0       // Upper limit for maxfps.
+
+#define MAX_FRAMETIME	0.25
+#define MIN_FRAMETIME	0.001
+
 #endif //ENGINE_QUAKEDEF_H

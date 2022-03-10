@@ -37,13 +37,6 @@ typedef struct dma_s
     unsigned char* buffer;
 } dma_t;
 
-bool fakedma = false;
-bool snd_initialized = false;
-int sound_started = 0;
-volatile dma_t* shm;
-sfx_t* known_sfx;
-int num_sfx = 0;
-
 extern cvar_t suitvolume;
 
 extern bool g_fUseDInput;
