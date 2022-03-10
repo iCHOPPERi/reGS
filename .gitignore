@@ -1,7 +1,11 @@
 /.vs
 engine/.vs
-engine/GL_Release_Steam/
-engine/GL_Debug_STEAM/
+engine/Release/
+engine/Debug/
+vgui2/Release/
+vgui2/Debug/
+vgui2/.vs
+
 
 *.obj
 *.dll

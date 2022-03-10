@@ -11,7 +11,7 @@
 
 #include "tier0/platform.h"
 #include "tier1/interface.h"
-#include "interface.h"
+#include "../public/interface.h"
 
 #endif
 

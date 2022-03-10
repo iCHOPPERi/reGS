@@ -8,6 +8,8 @@
 #ifndef MATCHMAKINGTYPES_H
 #define MATCHMAKINGTYPES_H
 
+#pragma warning(disable: 4996)
+
 #ifdef _WIN32
 #pragma once
 #endif

@@ -3,6 +3,8 @@
 #include <stdio.h>
 #include "interface.h"
 
+#pragma warning(disable: 4996)
+
 #if !defined ( _WIN32 )
 // Linux doesn't have this function so this emulates its functionality
 //
