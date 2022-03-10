@@ -106,7 +106,7 @@ void EditablePanel::OnChildAdded(VPANEL child)
 //-----------------------------------------------------------------------------
 void EditablePanel::OnKeyCodeTyped(KeyCode code)
 {
-	if (code == KEY_ENTER)
+	if (code == KEY_PAD_ENTER || code == KEY_ENTER)
 	{
 		// check for a default button
 		VPANEL panel = GetFocusNavGroup().GetCurrentDefaultButton();
