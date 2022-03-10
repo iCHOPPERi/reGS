@@ -13,13 +13,13 @@
 #include <vgui_controls/AnimationController.h>
 #include "FileSystem.h"
 #include "FileSystem_Helpers.h"
+#include "CharacterSet.h"
 
 #include <stdio.h>
 #include <math.h>
 #include "MemPool.h"
 #include "UtlDict.h"
 #include "mathlib.h"
-#include "CharacterSet.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
 #include <tier0/dbg.h>
