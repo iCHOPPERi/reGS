@@ -11,7 +11,7 @@
 #include "commonmacros.h"
 #include "wchartypes.h"
 
-#include "tier0/valve_off.h"
+#include "../public/tier0/valve_off.h"
 
 #ifdef _WIN32
 #pragma once
@@ -325,6 +325,6 @@ protected:
 #define EXPAND_CONCAT(a,c) UID_CAT1(a,c)
 #define UNIQUE_ID UID_CAT2(UID_PREFIX,__LINE__)
 
-#include "tier0/valve_on.h"
+#include "../public/tier0/valve_on.h"
 
 #endif // BASETYPES_H

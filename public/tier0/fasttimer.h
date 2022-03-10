@@ -12,7 +12,7 @@
 #endif
 
 #include <assert.h>
-#include "tier0/platform.h"
+#include "../public/tier0/platform.h"
 
 
 PLATFORM_INTERFACE int64 g_ClockSpeed;

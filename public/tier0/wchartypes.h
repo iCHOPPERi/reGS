@@ -18,7 +18,7 @@
 #endif
 
 // Temporarily turn off Valve defines
-#include "tier0/valve_off.h"
+#include "../public/tier0/valve_off.h"
 
 //TODO: this block is copied to vgui2.h and ilocalize.h. Either include this header or move it to its own header. - Solokiller
 #ifndef _WCHAR_T_DEFINED
@@ -105,7 +105,7 @@ typedef wchar_t uchar32;
 #endif
 
 // Turn valve defines back on
-#include "tier0/valve_on.h"
+#include "../public/tier0/valve_on.h"
 
 
 #endif // WCHARTYPES

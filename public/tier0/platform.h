@@ -11,7 +11,7 @@
 
 #include "wchartypes.h"
 #include "basetypes.h"
-#include "tier0/valve_off.h"
+#include "../public/tier0/valve_off.h"
 
 #ifdef _WIN32
 #pragma once
@@ -963,7 +963,7 @@ PLATFORM_INTERFACE bool Plat_FastVerifyHardwareKey();
 //-----------------------------------------------------------------------------
 // Include additional dependant header components.
 //-----------------------------------------------------------------------------
-#include "tier0/fasttimer.h"
+#include "../public/tier0/fasttimer.h"
 
 
 //-----------------------------------------------------------------------------
@@ -1198,6 +1198,6 @@ RETURN_TYPE FASTCALL __Function_##NAME<nArgument>::Run ARGS
 		CODE;\
 	}
 
-#include "tier0/valve_on.h"
+#include "../public/tier0/valve_on.h"
 
 #endif /* PLATFORM_H */

@@ -1,5 +1,5 @@
 #ifdef WIN32
-#include "winheaders.h"
+#include "../common/winheaders.h"
 #else
 
 #endif
