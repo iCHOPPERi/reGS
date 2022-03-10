@@ -1,12 +1,48 @@
 #ifndef ENGINE_SND_H
 #define ENGINE_SND_H
 
+// sound engine rate defines
+#define SOUND_DMA_SPEED		44100		// hardware playback rate
+#define SOUND_11k			11025		// 11khz sample rate
+#define SOUND_22k			22050		// 22khz sample rate
+#define SOUND_44k			44100		// 44khz sample rate
+#define SOUND_ALL_RATES		1			// mix all sample rates
+
+#define SOUND_MIX_WET		0			// mix only samples that don't have channel set to 'dry' (default)
+#define SOUND_MIX_DRY		1			// mix only samples with channel set to 'dry' (ie: music)
+
+#define	SOUND_BUSS_ROOM			(1<<0)		// mix samples using channel dspmix value (based on distance from player)
+#define SOUND_BUSS_FACING		(1<<1)		// mix samples using channel dspface value (source facing)
+#define	SOUND_BUSS_FACINGAWAY	(1<<2)		// mix samples using 1-dspface
+
 typedef struct sfx_s
 {
 	char 	name[ MAX_QPATH ];
 	cache_user_t	cache;
 	int servercount;
 } sfx_t;
+
+typedef struct dma_s
+{
+    qboolean gamealive;
+    qboolean soundalive;
+    qboolean splitbuffer;
+    int channels;
+    int samples;
+    int submission_chunk;
+    int samplepos;
+    int samplebits;
+    int speed;
+    int dmaspeed;
+    unsigned char* buffer;
+} dma_t;
+
+bool fakedma = false;
+bool snd_initialized = false;
+int sound_started = 0;
+volatile dma_t* shm;
+sfx_t* known_sfx;
+int num_sfx = 0;
 
 extern cvar_t suitvolume;
 
