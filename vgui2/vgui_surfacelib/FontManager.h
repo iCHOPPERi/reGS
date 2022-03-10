@@ -1,7 +1,7 @@
 #ifndef VGUI2_VGUI_SURFACELIB_FONTMANAGER_H
 #define VGUI2_VGUI_SURFACELIB_FONTMANAGER_H
 
-#include <UtlVector.h>
+#include <tier1/UtlVector.h>
 
 #include <vgui/VGUI2.h>
 

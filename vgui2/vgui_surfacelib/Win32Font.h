@@ -1,7 +1,7 @@
 #ifndef VGUI2_VGUI_SURFACELIB_WIN32FONT_H
 #define VGUI2_VGUI_SURFACELIB_WIN32FONT_H
 
-#include <UtlRBTree.h>
+#include <tier1/UtlRBTree.h>
 
 #include <winheaders.h>
 

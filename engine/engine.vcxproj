@@ -47,14 +47,14 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <TargetName>hw</TargetName>
-    <IntDir>$(SolutionDir)\engine\$(Configuration)</IntDir>
-    <OutDir>$(SolutionDir)\engine\$(Configuration)</OutDir>
+    <IntDir>$(SolutionDir)\engine\$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)\engine\$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <TargetName>hw</TargetName>
-    <IntDir>$(SolutionDir)\engine\$(Configuration)</IntDir>
-    <OutDir>$(SolutionDir)\engine\$(Configuration)</OutDir>
+    <IntDir>$(SolutionDir)\engine\$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)\engine\$(Configuration)\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>

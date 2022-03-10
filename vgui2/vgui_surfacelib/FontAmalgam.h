@@ -1,7 +1,7 @@
 #ifndef VGUI2_VGUI_SURFACELIB_FONTAMALGAM_H
 #define VGUI2_VGUI_SURFACELIB_FONTAMALGAM_H
 
-#include <UtlVector.h>
+#include <tier1/UtlVector.h>
 
 class CWin32Font;
 
