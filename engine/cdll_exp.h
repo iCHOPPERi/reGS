@@ -11,10 +11,6 @@ struct CPoint
 	int y;
 };
 
-#ifndef _WINDOWS_
-#define POINT CPoint
-#endif
-
 int hudGetScreenInfo( SCREENINFO* pscrinfo );
 
 cvar_t* hudRegisterVariable( char* szName, char* szValue, int flags );
@@ -146,8 +142,6 @@ qboolean GetPlayerUniqueID( int iPlayer, char* playerID );
 int GetTrackerIDForPlayer( int playerSlot );
 
 int GetPlayerForTrackerID( int trackerID );
-
-void SDL_GetMousePos( POINT* ppt );
 
 void SDL_SetMousePos( int x, int y );
 

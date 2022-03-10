@@ -38,6 +38,35 @@
 #include "voice.h"
 #include "vgui2/text_draw.h"
 
+void SDL_GetMousePos( POINT* ppt )
+{
+	g_engdstAddrs.pfnGetMousePos( &ppt );
+
+	//TODO: this code is all over the place, consider refactoring - Solokiller
+
+	int x, y;
+
+	SDL_GetMouseState( &x, &y );
+
+	if( !VideoMode_IsWindowed() )
+	{
+		int wW, wT;
+		SDL_GetWindowSize( pmainwindow, &wW, &wT );
+
+		int vW, vT;
+		VideoMode_GetCurrentVideoMode( &vW, &vT, nullptr );
+
+		x = static_cast<int>( x * ( static_cast<double>( vW ) / wW ) );
+		y = static_cast<int>( y * ( static_cast<double>( vT ) / wT ) );
+
+		x = static_cast<int>( x + static_cast<double>( x - vW / 2 ) * ( GetXMouseAspectRatioAdjustment() - 1.0 ) );
+		y = static_cast<int>( y + static_cast<double>( y - vT / 2 ) * ( GetYMouseAspectRatioAdjustment() - 1.0 ) );
+	}
+
+	ppt->x = x;
+	ppt->y = y;
+}
+
 cl_enginefunc_t cl_enginefuncs = 
 {
 	&SPR_Load,
@@ -205,7 +234,7 @@ bool LoadSecureClient( const char* pszDllName )
 }
 
 #define LOAD_IFACE_FUNC( func, pszName, bRequired )												\
-	func = reinterpret_cast<decltype( func )>( Sys_GetProcAddress( hClientDLL, pszName ) );		\
+	func = reinterpret_cast<decltype( func )>( GetProcAddress( (HMODULE)hClientDLL, pszName ) );		\
 																								\
 	if( bRequired && !cl_funcs.pInitFunc )														\
 		Sys_Error( "could not link client.dll function " pszName "\n" )
@@ -342,7 +371,7 @@ void ClientDLL_CheckStudioInterface( CSysModule* hClientDLL )
 	if( fClientLoaded )
 	{
 		//TODO: doesn't seem to actually be used - Solokiller
-		Sys_GetProcAddress( hClientDLL, "HUD_GetStudioModelInterface" );
+		GetProcAddress( (HMODULE)hClientDLL, "HUD_GetStudioModelInterface" );
 
 		if( cl_funcs.pStudioInterface )
 		{
@@ -1010,35 +1039,6 @@ int GetPlayerForTrackerID( int trackerID )
 	g_engdstAddrs.GetPlayerForTrackerID( &trackerID );
 
 	return 0;
-}
-
-void SDL_GetMousePos( POINT* ppt )
-{
-	g_engdstAddrs.pfnGetMousePos( &ppt );
-
-	//TODO: this code is all over the place, consider refactoring - Solokiller
-
-	int x, y;
-
-	SDL_GetMouseState( &x, &y );
-
-	if( !VideoMode_IsWindowed() )
-	{
-		int wW, wT;
-		SDL_GetWindowSize( pmainwindow, &wW, &wT );
-
-		int vW, vT;
-		VideoMode_GetCurrentVideoMode( &vW, &vT, nullptr );
-
-		x = static_cast<int>( x * ( static_cast<double>( vW ) / wW ) );
-		y = static_cast<int>( y * ( static_cast<double>( vT ) / wT ) );
-
-		x = static_cast<int>( x + static_cast<double>( x - vW / 2 ) * ( GetXMouseAspectRatioAdjustment() - 1.0 ) );
-		y = static_cast<int>( y + static_cast<double>( y - vT / 2 ) * ( GetYMouseAspectRatioAdjustment() - 1.0 ) );
-	}
-
-	ppt->x = x;
-	ppt->y = y;
 }
 
 void SDL_SetMousePos( int x, int y )

@@ -210,7 +210,7 @@ FIELDIOFUNCTION GetIOFunction( const char* pName )
 
 	for( int i = 0; i < g_iextdllMac; ++i )
 	{
-		result = reinterpret_cast<FIELDIOFUNCTION>( Sys_GetProcAddress( g_rgextdll[ i ].pDLLHandle, pName ) );
+		result = reinterpret_cast<FIELDIOFUNCTION>( GetProcAddress( (HMODULE)g_rgextdll[ i ].pDLLHandle, pName ) );
 
 		if( result )
 			break;
@@ -225,7 +225,7 @@ DISPATCHFUNCTION GetDispatch( const char* pname )
 
 	for( int i = 0; i < g_iextdllMac; ++i )
 	{
-		result = reinterpret_cast<DISPATCHFUNCTION>( Sys_GetProcAddress( g_rgextdll[ i ].pDLLHandle, pname ) );
+		result = reinterpret_cast<DISPATCHFUNCTION>( GetProcAddress( (HMODULE)g_rgextdll[ i ].pDLLHandle, pname ) );
 
 		if( result )
 			break;
@@ -240,7 +240,7 @@ ENTITYINIT GetEntityInit( const char* pClassName )
 
 	for( int i = 0; i < g_iextdllMac; ++i )
 	{
-		result = reinterpret_cast<ENTITYINIT>( Sys_GetProcAddress( g_rgextdll[ i ].pDLLHandle, pClassName ) );
+		result = reinterpret_cast<ENTITYINIT>( GetProcAddress( (HMODULE)g_rgextdll[ i ].pDLLHandle, pClassName ) );
 
 		if( result )
 			break;
@@ -343,7 +343,7 @@ static void LoadThisDll( const char* szDllFilename )
 
 	if( pModule )
 	{
-		auto pFn = reinterpret_cast<GiveFnptrsToDllFn>( Sys_GetProcAddress( pModule, "GiveFnptrsToDll" ) );
+		auto pFn = reinterpret_cast<GiveFnptrsToDllFn>( GetProcAddress( (HMODULE)pModule, "GiveFnptrsToDll" ) );
 
 		if( pFn )
 		{

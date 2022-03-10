@@ -46,12 +46,12 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <IntDir>$(SolutionDir)\vgui2\$(Configuration)\</IntDir>
-    <OutDir>$(SolutionDir)\vgui2\$(Configuration)\</OutDir>
+    <OutDir>$(SolutionDir)vgui2\controls\Debug</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <IntDir>$(SolutionDir)\vgui2\$(Configuration)\</IntDir>
-    <OutDir>$(SolutionDir)\vgui2\$(Configuration)\</OutDir>
+    <OutDir>$(SolutionDir)vgui2\controls\Release</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -155,40 +155,10 @@
     <ClCompile Include="controls\URLLabel.cpp" />
     <ClCompile Include="controls\WizardPanel.cpp" />
     <ClCompile Include="controls\WizardSubPanel.cpp" />
-    <ClCompile Include="src\Bitmap.cpp" />
-    <ClCompile Include="src\Border.cpp" />
-    <ClCompile Include="src\input.cpp" />
-    <ClCompile Include="src\LocalizedStringTable.cpp" />
-    <ClCompile Include="src\MemoryBitmap.cpp" />
-    <ClCompile Include="src\Scheme.cpp" />
-    <ClCompile Include="src\system_win32.cpp" />
-    <ClCompile Include="src\vgui.cpp" />
-    <ClCompile Include="src\VGuiKeyValues.cpp" />
     <ClCompile Include="src\vgui_key_translation.cpp" />
-    <ClCompile Include="src\VPanel.cpp" />
-    <ClCompile Include="src\VPanelWrapper.cpp" />
-    <ClCompile Include="vgui_surfacelib\FontAmalgam.cpp" />
-    <ClCompile Include="vgui_surfacelib\FontManager.cpp" />
-    <ClCompile Include="vgui_surfacelib\linuxfont.cpp" />
-    <ClCompile Include="vgui_surfacelib\Win32Font.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Bitmap.h" />
-    <ClInclude Include="src\Border.h" />
-    <ClInclude Include="src\input.h" />
-    <ClInclude Include="src\LocalizedStringTable.h" />
-    <ClInclude Include="src\MemoryBitmap.h" />
-    <ClInclude Include="src\Scheme.h" />
-    <ClInclude Include="src\system_win32.h" />
-    <ClInclude Include="src\vgui.h" />
-    <ClInclude Include="src\VGuiKeyValues.h" />
     <ClInclude Include="src\vgui_key_translation.h" />
-    <ClInclude Include="src\VPanel.h" />
-    <ClInclude Include="src\VPanelWrapper.h" />
-    <ClInclude Include="vgui_surfacelib\FontAmalgam.h" />
-    <ClInclude Include="vgui_surfacelib\FontManager.h" />
-    <ClInclude Include="vgui_surfacelib\linuxfont.h" />
-    <ClInclude Include="vgui_surfacelib\Win32Font.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

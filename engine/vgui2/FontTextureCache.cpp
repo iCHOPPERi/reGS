@@ -3,8 +3,8 @@
 #include "BaseUI_Interface.h"
 #include "BaseUISurface.h"
 #include "FontTextureCache.h"
-#include "vgui_surfacelib/FontManager.h"
-#include "vgui_surfacelib/Win32Font.h"
+#include "vgui2_surfacelib/FontManager.h"
+#include "vgui2_surfacelib/Win32Font.h"
 
 bool CFontTextureCache::CacheEntryLessFunc( const cacheentry_t& lhs, const cacheentry_t& rhs )
 {

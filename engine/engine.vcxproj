@@ -63,13 +63,14 @@
       <PreprocessorDefinitions>WIN32;NO_MALLOC_OVERRIDE;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>false</ConformanceMode>
       <AdditionalIncludeDirectories>../common;../tier1;../vgui2;../utils/vgui/include/;../pm_shared/;../public;../engine;../external/GLEW/include;../external/SDL2/include;</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>false</EnableCOMDATFolding>
       <OptimizeReferences>false</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>psapi.lib;wsock32.lib;Winmm.lib;../external/game_controls.lib;../external/steam_api.lib;../external/vstdlib.lib;../external/tier0.lib;../external/tier1.lib;../external/mss32.lib;../external/vgui2_controls.lib;opengl32.lib;glu32.lib;../external/GLEW/lib/glew32s.lib;../external/SDL2/lib/SDL2.lib;../utils/vgui/lib/win32_vc6/vgui.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>psapi.lib;wsock32.lib;Winmm.lib;../external/game_controls.lib;../external/steam_api.lib;../external/vstdlib.lib;../external/tier0.lib;../external/tier1.lib;../external/mss32.lib;../vgui2/controls/Release/vgui2_controls.lib;../vgui2/vgui2_surfacelib/Release/vgui2_surfacelib.lib;opengl32.lib;glu32.lib;../external/GLEW/lib/glew32s.lib;../external/SDL2/lib/SDL2.lib;../utils/vgui/lib/win32_vc6/vgui.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -84,7 +85,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>psapi.lib;wsock32.lib;Winmm.lib;../external/game_controls.lib;../external/steam_api.lib;../external/vstdlib.lib;../external/tier0.lib;../external/tier1.lib;../external/mss32.lib;../external/vgui2_controls.lib;opengl32.lib;glu32.lib;../external/GLEW/lib/glew32s.lib;../external/SDL2/lib/SDL2.lib;../utils/vgui/lib/win32_vc6/vgui.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>psapi.lib;wsock32.lib;Winmm.lib;../external/game_controls.lib;../external/steam_api.lib;../external/vstdlib.lib;../external/tier0.lib;../external/tier1.lib;../external/mss32.lib;../vgui2/controls/Debug/vgui2_controls.lib;../vgui2/vgui2_surfacelib/Debug/vgui2_surfacelib.lib;opengl32.lib;glu32.lib;../external/GLEW/lib/glew32s.lib;../external/SDL2/lib/SDL2.lib;../utils/vgui/lib/win32_vc6/vgui.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>

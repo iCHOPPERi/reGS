@@ -1,28 +1,46 @@
-#ifndef ENGINE_TMESSAGE_H
-#define ENGINE_TMESSAGE_H
+//========= Copyright © 1996-2002, Valve LLC, All rights reserved. ============
+//
+// Purpose: 
+//
+// $NoKeywords: $
+//=============================================================================
 
-/**
-*	Maximum number of game_text messages that can be displayed at any one time.
-*/
-const int TMSG_MAX_MSGS = 4;
-const int TMSG_MAX_MESSAGE_LENGTH = 512;
-const int MAX_MESSAGES = 1000;
+#ifndef TMESSAGE_H
+#define TMESSAGE_H
+#pragma once
 
-char* memfgets( byte* pMemFile, int fileSize, int& filePos, char* pBuffer, int bufferSize );
+#ifdef __cplusplus
+extern "C" {
+#endif // __cplusplus
 
-/**
-*	Trims leading and trailing whitespace
-*/
-void TrimSpace( const char* source, char* dest );
+#define DEMO_MESSAGE "__DEMOMESSAGE__"
+#define NETWORK_MESSAGE1 "__NETMESSAGE__1"
+#define NETWORK_MESSAGE2 "__NETMESSAGE__2"
+#define NETWORK_MESSAGE3 "__NETMESSAGE__3"
+#define NETWORK_MESSAGE4 "__NETMESSAGE__4"
+#define MAX_NETMESSAGE	4
 
-void TextMessageShutdown();
+extern client_textmessage_t* gMessageTable;
+extern int					gMessageTableCount;
 
-void TextMessageInit();
+extern client_textmessage_t	gNetworkTextMessage[MAX_NETMESSAGE];
+extern char					gNetworkTextMessageBuffer[MAX_NETMESSAGE][512];
+extern const char*			gNetworkMessageNames[MAX_NETMESSAGE];
+
+char* memfgets( byte* pMemFile, int fileSize, int* pFilePos, char* pBuffer, int bufferSize );
+
+// text message system
+void					TextMessageInit( void );
+client_textmessage_t*	TextMessageGet( const char* pName );
+void					TextMessageShutdown( void );
 
 void SetDemoMessage( const char* pszMessage, float fFadeInTime, float fFadeOutTime, float fHoldTime );
-
-client_textmessage_t* TextMessageGet( const char* pName );
-
 int TextMessageDrawCharacter( int x, int y, int number, int r, int g, int b );
 
-#endif //ENGINE_TMESSAGE_H
+void TrimSpace( const char* source, char* dest );
+
+#ifdef __cplusplus
+}
+#endif // __cplusplus
+
+#endif		//TMESSAGE_H

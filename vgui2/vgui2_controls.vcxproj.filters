@@ -7,9 +7,6 @@
     <Filter Include="Src">
       <UniqueIdentifier>{f4d89ec4-2d4f-4407-9631-9cbce7b57a99}</UniqueIdentifier>
     </Filter>
-    <Filter Include="VGUI_SurfaceLib">
-      <UniqueIdentifier>{c1b3e9b8-eb2b-4a98-af94-f129802a29c1}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="controls\AnimatingImagePanel.cpp">
@@ -189,106 +186,16 @@
     <ClCompile Include="controls\WizardSubPanel.cpp">
       <Filter>Controls</Filter>
     </ClCompile>
-    <ClCompile Include="src\Bitmap.cpp">
-      <Filter>Src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Border.cpp">
-      <Filter>Src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\input.cpp">
-      <Filter>Src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\LocalizedStringTable.cpp">
-      <Filter>Src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\MemoryBitmap.cpp">
-      <Filter>Src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scheme.cpp">
-      <Filter>Src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\system_win32.cpp">
-      <Filter>Src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\vgui.cpp">
-      <Filter>Src</Filter>
-    </ClCompile>
     <ClCompile Include="src\vgui_key_translation.cpp">
       <Filter>Src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\VGuiKeyValues.cpp">
-      <Filter>Src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\VPanel.cpp">
-      <Filter>Src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\VPanelWrapper.cpp">
-      <Filter>Src</Filter>
-    </ClCompile>
-    <ClCompile Include="vgui_surfacelib\FontAmalgam.cpp">
-      <Filter>VGUI_SurfaceLib</Filter>
-    </ClCompile>
-    <ClCompile Include="vgui_surfacelib\FontManager.cpp">
-      <Filter>VGUI_SurfaceLib</Filter>
-    </ClCompile>
-    <ClCompile Include="vgui_surfacelib\linuxfont.cpp">
-      <Filter>VGUI_SurfaceLib</Filter>
-    </ClCompile>
-    <ClCompile Include="vgui_surfacelib\Win32Font.cpp">
-      <Filter>VGUI_SurfaceLib</Filter>
     </ClCompile>
     <ClCompile Include="..\public\FileSystem_Helpers.cpp">
       <Filter>Controls</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Bitmap.h">
-      <Filter>Src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Border.h">
-      <Filter>Src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\input.h">
-      <Filter>Src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\LocalizedStringTable.h">
-      <Filter>Src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\MemoryBitmap.h">
-      <Filter>Src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scheme.h">
-      <Filter>Src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\system_win32.h">
-      <Filter>Src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\vgui.h">
-      <Filter>Src</Filter>
-    </ClInclude>
     <ClInclude Include="src\vgui_key_translation.h">
       <Filter>Src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\VGuiKeyValues.h">
-      <Filter>Src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\VPanel.h">
-      <Filter>Src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\VPanelWrapper.h">
-      <Filter>Src</Filter>
-    </ClInclude>
-    <ClInclude Include="vgui_surfacelib\FontAmalgam.h">
-      <Filter>VGUI_SurfaceLib</Filter>
-    </ClInclude>
-    <ClInclude Include="vgui_surfacelib\FontManager.h">
-      <Filter>VGUI_SurfaceLib</Filter>
-    </ClInclude>
-    <ClInclude Include="vgui_surfacelib\linuxfont.h">
-      <Filter>VGUI_SurfaceLib</Filter>
-    </ClInclude>
-    <ClInclude Include="vgui_surfacelib\Win32Font.h">
-      <Filter>VGUI_SurfaceLib</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

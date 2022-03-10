@@ -8,6 +8,14 @@
 #include "net_chan.h"
 #include "server.h"
 
+#include "winsani_in.h"
+#include "windows.h"
+#include "winsani_out.h"
+
+#ifdef GetProcAddress
+#undef GetProcAddress
+#endif
+
 //TODO: security modules are obsolete and no longer used. Remove all of this - Solokiller
 
 using PFunc = void ( * )( void* );
@@ -40,7 +48,7 @@ static engdata_t g_engdata =
 	nullptr,
 	&SZ_GetSpace,
 	&g_modfuncs,
-	&Sys_GetProcAddress,
+	&GetProcAddress,
 	&GetModuleHandle,
 	&svs,
 	nullptr,
@@ -121,7 +129,7 @@ void LoadSecurityModuleFromDisk( char* pszDllName )
 	{
 		g_pvModuleSpecial = malloc( MODULE_MAX_SIZE );
 
-		auto pPFunc = reinterpret_cast<PFunc>( Sys_GetProcAddress( reinterpret_cast<void*>( g_blobfootprintModule.m_hDll ), "P" ) );
+		auto pPFunc = reinterpret_cast<PFunc>( GetProcAddress( (HMODULE)( g_blobfootprintModule.m_hDll ), "P" ) );
 		pPFunc( g_pvModuleSpecial );
 
 		CommonLoadSecurityModule( g_pvModuleSpecial );

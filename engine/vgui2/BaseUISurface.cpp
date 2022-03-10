@@ -10,7 +10,7 @@
 #include <vgui/ILocalize.h>
 #include <vgui/IScheme.h>
 #include <src/vgui_key_translation.h>
-#include <vgui_surfacelib/FontManager.h>
+#include <vgui2_surfacelib/FontManager.h>
 
 #include <vgui_controls/Controls.h>
 

@@ -32,7 +32,7 @@
 #ifdef ARRAYSIZE
 #undef ARRAYSIZE
 #endif
-#define ARRAYSIZE(p)		(sizeof(p)/sizeof(p[0]))
+#define Q_ARRAYSIZE(p)		(sizeof(p)/sizeof(p[0]))
 
 //TODO: comment these out for now, need to rework this header to use the latest code we've got. - Solokiller
 //#define SETBITS(iBitVector, bits)	((iBitVector) |= (bits))

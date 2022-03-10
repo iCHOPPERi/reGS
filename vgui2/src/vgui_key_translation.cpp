@@ -163,7 +163,7 @@ void InitKeyTranslationTable()
 
 		memset( s_pVirtualKeyToVGUI, 0, sizeof( s_pVirtualKeyToVGUI ) );
 
-		for( int i = 0; i < ARRAYSIZE( keyMap ); ++i )
+		for( int i = 0; i < Q_ARRAYSIZE( keyMap ); ++i )
 		{
 			s_pVirtualKeyToVGUI[ keyMap[ i ].sdlKeyCode ] = keyMap[ i ].vguiKeyCode;
 		}
@@ -180,7 +180,7 @@ void InitVGUIToVKTranslationTable()
 
 		memset( s_pVGUIToVirtualKey, 0, sizeof( s_pVGUIToVirtualKey ) );
 
-		for( int i = 0; i < ARRAYSIZE( keyMap ); ++i )
+		for( int i = 0; i < Q_ARRAYSIZE( keyMap ); ++i )
 		{
 			s_pVGUIToVirtualKey[ keyMap[ i ].vguiKeyCode ] = keyMap[ i ].sdlKeyCode;
 		}

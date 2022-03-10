@@ -41,7 +41,7 @@ void* NLoadBlobFile( const char* pstFileName, BlobFootprint_t* pblobfootprint, v
 
 		if( pFile )
 		{
-			auto pFunc = reinterpret_cast<FFunction>( Sys_GetProcAddress( pFile, "F" ) );
+			auto pFunc = reinterpret_cast<FFunction>( GetProcAddress( (HMODULE)pFile, "F" ) );
 			
 			if( pFunc )
 			{
