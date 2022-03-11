@@ -40,6 +40,52 @@ const size_t NET_MAX_FRAG_BUFFER = 1400;
 
 extern sizebuf_t net_message;
 
+const int FRAGMENT_MAX_SIZE = 1024;
+
+typedef struct flowstats_s
+{
+	// Size of message sent/received
+	int size;
+	// Time that message was sent/received
+	double time;
+} flowstats_t;
+
+const int MAX_LATENT = 32;
+
+typedef struct flow_s
+{
+	// Data for last MAX_LATENT messages
+	flowstats_t stats[MAX_LATENT];
+	// Current message position
+	int current;
+	// Time when we should recompute k/sec data
+	double nextcompute;
+	// Average data
+	float kbytespersec;
+	float avgkbytespersec;
+} flow_t;
+
+typedef struct fragbuf_s
+{
+	fragbuf_s* next;
+	int bufferid;
+	sizebuf_t frag_message;
+	byte frag_message_buf[FRAGMENT_MAX_SIZE];
+	qboolean isfile;
+	qboolean isbuffer;
+	qboolean iscompressed;
+	char filename[MAX_PATH];
+	int foffset;
+	int size;
+} fragbuf_t;
+
+typedef struct fragbufwaiting_s
+{
+	fragbufwaiting_s* next;
+	int fragbufcount;
+	fragbuf_t* fragbufs;
+} fragbufwaiting_t;
+
 void NET_Config( bool multiplayer );
 
 void NET_Shutdown();

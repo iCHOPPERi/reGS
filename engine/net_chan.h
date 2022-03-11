@@ -18,8 +18,6 @@ typedef enum netsrc_s
 
 typedef struct netchan_s
 {
-	//TODO: implement - Solokiller
-	/*
 	netsrc_t sock;
 	netadr_t remote_address;
 	int player_slot;
@@ -53,7 +51,6 @@ typedef struct netchan_s
 	void *tempbuffer;
 	int tempbuffersize;
 	flow_t flow[ 2 ];
-	*/
 } netchan_t;
 
 extern char gDownloadFile[ 256 ];
