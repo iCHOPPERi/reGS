@@ -1,6 +1,7 @@
 #include "quakedef.h"
 #include "host.h"
 #include "gl_draw.h"
+#include "net_chan.h"
 
 sizebuf_t net_message;
 
@@ -17,6 +18,11 @@ void NET_Init()
 }
 
 void NET_Shutdown()
+{
+	//TODO: implement - Solokiller
+}
+
+void NET_SendPacket(netsrc_t sock, int length, void* data, netadr_t to)
 {
 	//TODO: implement - Solokiller
 }
