@@ -3,6 +3,8 @@ engine/.vs
 engine/Release/
 engine/Debug/
 engine/steam_appid.txt
+engine/debug.log
+engine/qconsole.log
 launcher/.vs
 launcher/Release/
 launcher/Debug/
