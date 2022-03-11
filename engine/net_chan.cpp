@@ -1,9 +1,6 @@
 #include "quakedef.h"
 #include "net_chan.h"
 
-//TODO: should be MAX_PATH - Solokiller
-char gDownloadFile[ 256 ] = {};
-
 cvar_t net_log = { "net_log", "0", 0, 0.0f, nullptr };
 cvar_t net_showpackets = { "net_showpackets", "0", 0, 0.0f, nullptr };
 cvar_t net_showdrop = { "net_showdrop", "0", 0, 0.0f, nullptr };
