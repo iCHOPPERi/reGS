@@ -1,6 +1,14 @@
 #ifndef ENGINE_NET_CHAN_H
 #define ENGINE_NET_CHAN_H
 
+extern cvar_t net_log;
+extern cvar_t net_showpackets;
+extern cvar_t net_showdrop;
+extern cvar_t net_drawslider;
+extern cvar_t net_chokeloopback;
+extern cvar_t sv_filetransfercompression;
+extern cvar_t sv_filetransfermaxsize;
+
 typedef enum netsrc_s
 {
 	NS_CLIENT = 0,
