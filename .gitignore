@@ -2,6 +2,7 @@
 engine/.vs
 engine/Release/
 engine/Debug/
+engine/steam_appid.txt
 launcher/.vs
 launcher/Release/
 launcher/Debug/
