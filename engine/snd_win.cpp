@@ -12,3 +12,8 @@ int SNDDMA_Init(void)
 	//TODO: implement - ScriptedSnark
 	return 1;
 }
+
+void SNDDMA_Shutdown(void)
+{
+	//TODO: implement - ScriptedSnark
+}

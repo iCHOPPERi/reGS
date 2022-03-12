@@ -57,7 +57,7 @@ void Snd_AcquireBuffer();
 void Snd_ReleaseBuffer();
 void SND_InitScaletable(void);
 int SNDDMA_Init(void);
-
+void SNDDMA_Shutdown(void);
 void SetMouseEnable( int fState );
 
 void VOX_Init();

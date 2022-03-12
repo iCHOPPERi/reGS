@@ -125,12 +125,27 @@ void S_Init()
 
 void S_Shutdown()
 {
-	//TODO: implement - Solokiller
+    // VOX_Shutdown();
+    if (sound_started)
+    {
+        if (shm)
+            shm->gamealive = false;
+
+        shm = 0;
+        sound_started = 0;
+
+        if (fakedma == false)
+            SNDDMA_Shutdown();
+    }
 }
 
-sfx_t* S_PrecacheSound(const char* name)
+sfx_t* __cdecl S_FindName(char* name, int* pfInCache)
 {
- /* TODO: UNCOMMENT THIS CODE WHEN S_ FUNCTIONS WILL BE REVERSED - ScriptedSnark
+    //TODO: implement - ScriptedSnark
+}
+
+sfx_t* S_PrecacheSound(char* name)
+{
     int len;
     sfx_t* sfx;
 
@@ -138,7 +153,7 @@ sfx_t* S_PrecacheSound(const char* name)
         if ((*name != '!') && (*name != '*')) {
             sfx = S_FindName(name, NULL);
             if (fs_lazy_precache.value == 0.0) {
-                S_LoadSound(sfx, NULL);
+                //S_LoadSound(sfx, NULL); - IMPLEMENT - ScriptedSnark
                 return sfx;
             }
             return sfx;
@@ -146,7 +161,7 @@ sfx_t* S_PrecacheSound(const char* name)
         sfx = S_FindName(name, NULL);
         return sfx;
     }
-    */
+
     return NULL;
 }
 
