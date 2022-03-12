@@ -7,7 +7,7 @@ engine_studio_api_t engine_studio_api;
 
 //TODO: implement and add functions here - Solokiller
 r_studio_interface_t studio;
-
+sfx_t* S_PrecacheSound(char* name);
 r_studio_interface_t* pStudioAPI = &studio;
 
 cvar_t* cl_righthand = nullptr;
@@ -25,5 +25,5 @@ sfx_t* CL_LookupSound( const char* pName )
 			return pSound;
 	}
 
-	return S_PrecacheSound( pName );
+	return S_PrecacheSound( (char*)pName );
 }

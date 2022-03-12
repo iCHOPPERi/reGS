@@ -17,6 +17,8 @@
 #include "vid.h"
 #include "vgui2/text_draw.h"
 
+sfx_t* S_PrecacheSound(char* name);
+
 int hudGetScreenInfo( SCREENINFO* pscrinfo )
 {
 	g_engdstAddrs.pfnGetScreenInfo( &pscrinfo );

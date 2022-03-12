@@ -152,6 +152,23 @@ void Host_Error( const char* error, ... )
 	Sys_Error( "Host_Error: recursively entered" );
 }
 
+void Host_UpdateSounds(void)
+{
+	if (cls.state == ca_dedicated)
+		return;
+
+	// update audio
+	if (cls.state == ca_active)
+	{
+		// TODO: implement h_origin, h_forward, h_right, h_up - ScriptedSnark
+		// S_Update(h_origin, h_forward, h_right, h_up);
+	}
+	else
+	{
+		S_Update(vec3_origin, vec3_origin, vec3_origin, vec3_origin);
+	}
+}
+
 void CheckGore()
 {
 	char szBuffer[ 128 ];

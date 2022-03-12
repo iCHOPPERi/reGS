@@ -142,6 +142,8 @@ void S_Shutdown()
 sfx_t* __cdecl S_FindName(char* name, int* pfInCache)
 {
     //TODO: implement - ScriptedSnark
+    sfx_t* sfx = NULL;
+    return sfx;
 }
 
 sfx_t* S_PrecacheSound(char* name)
@@ -168,6 +170,92 @@ sfx_t* S_PrecacheSound(char* name)
 void S_StartDynamicSound(int entnum, int entchannel, sfx_t* sfx, vec3_t origin, float fvol, float attenuation, int flags, int pitch)
 {
 	//TODO: implement - Solokiller
+}
+
+void __cdecl S_Update(vec_t* origin, vec_t* forward, vec_t* right, vec_t* up)
+{/* TODO: reverse S_Update func - ScriptedSnark
+    int v4; // eax
+    channel_t* v5; // ebx
+    int v6; // esi
+    int v7; // ebp
+    channel_t* v8; // ebx
+    int i; // esi
+    int v10; // ecx
+    int v11; // edi
+    unsigned int v12; // eax
+    int v13; // [esp+18h] [ebp-34h]
+    unsigned int v14; // [esp+1Ch] [ebp-30h]
+
+    if (sound_started && snd_blocked <= 0)
+    {
+        listener_origin[0] = *origin;
+        listener_origin[1] = origin[1];
+        listener_origin[2] = origin[2];
+        listener_forward[0] = *forward;
+        listener_forward[1] = forward[1];
+        listener_forward[2] = forward[2];
+        listener_right[0] = *right;
+        listener_right[1] = right[1];
+        listener_right[2] = right[2];
+        listener_up[0] = *up;
+        listener_up[1] = up[1];
+        listener_up[2] = up[2];
+        S_UpdateAmbientSounds();
+        v4 = total_channels;
+        if (total_channels > 4)
+        {
+            v5 = &channels[4];
+            v6 = 4;
+            do
+            {
+                if (v5->sfx)
+                {
+                    SND_Spatialize(v5);
+                    v4 = total_channels;
+                }
+                ++v6;
+                ++v5;
+            } while (v6 < v4);
+        }
+        if (snd_show.value != 0.0)
+        {
+            v7 = 0;
+            if (v4 > 0)
+            {
+                v8 = channels;
+                for (i = 0; i < v4; ++i)
+                {
+                    if (v8->sfx)
+                    {
+                        v10 = v8->leftvol;
+                        v11 = v8->rightvol;
+                        if (v10 || v11)
+                        {
+                            ++v7;
+                            Con_Printf("%3i %3i %s\n", v10, v11, v8->sfx->name);
+                            v4 = total_channels;
+                        }
+                    }
+                    ++v8;
+                }
+            }
+            Con_Printf("----(%i)----\n", v7);
+        }
+        if (sound_started && snd_blocked <= 0)
+        {
+            GetSoundtime();
+            if (shm)
+            {
+                v14 = (__int64)((long double)soundtime + (long double)shm->dmaspeed * snd_mixahead.value);
+                v13 = shm->samples >> (LOBYTE(shm->channels) - 1);
+            }
+            v12 = v13 + soundtime;
+            if ((int)(v14 - soundtime) <= v13)
+                v12 = v14;
+            S_PaintChannels(v12 >> 1);
+            SNDDMA_Submit(origin, forward, right, up);
+        }
+    }*/
 }
 
 void S_StopSound(int entnum, int entchannel)

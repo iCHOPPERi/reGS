@@ -37,6 +37,31 @@ typedef struct dma_s
     unsigned char* buffer;
 } dma_t;
 
+struct channel_t
+{
+	sfx_t* sfx;			// sfx number
+	int		leftvol;		// 0-255 volume
+	int		rightvol;		// 0-255 volume
+
+	int end;			// end time in global paintsamples
+	int pos;			// sample position in sfx
+
+	int looping;		// where to loop, -1 = no looping
+
+	int entnum;			// to allow overriding a specific sound
+	int entchannel;		// TODO: Define as enum, modify const.h then -Enko
+
+	vec3_t origin;		// origin of sound effect
+	vec_t dist_mult;	// distance multiplier (attenuation/clipK)
+
+	int master_vol;		// 0-255 master volume
+
+	int isentence;		// true if playing linked sentence
+	int iword;
+
+	int pitch;
+};
+
 extern cvar_t suitvolume;
 
 extern bool g_fUseDInput;
@@ -52,6 +77,8 @@ void S_StartDynamicSound( int entnum, int entchannel, sfx_t* sfx, vec3_t origin,
 void S_StopSound( int entnum, int entchannel );
 
 void S_StopAllSounds( bool clear );
+
+void S_Update(vec_t* origin, vec_t* forward, vec_t* right, vec_t* up);
 
 void Snd_AcquireBuffer();
 void Snd_ReleaseBuffer();
