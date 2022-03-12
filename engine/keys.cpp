@@ -347,6 +347,7 @@ Interactive line editing and console scrollback
 */
 void Key_Console(int key)
 {
+	// I think there should be return statement. - xWhitey
 	//Obsolete
 }
 
