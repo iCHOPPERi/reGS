@@ -1,5 +1,2 @@
-﻿C:\Program Files (x86)\Microsoft Visual Studio\2019\Professional\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(477,5): warning MSB8004: каталог Output заканчивается не косой чертой.  Этот экземпляр сборки добавит косую черту, поскольку она необходима для правильного определения каталога Output.
-  FontAmalgam.cpp
-  FontManager.cpp
-  Win32Font.cpp
-  vgui2_surfacelib.vcxproj -> C:\Enko\GitHub\Repositories\reGS\vgui2\vgui2_surfacelib\Release\vgui2_surfacelib.lib
+﻿C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(499,5): warning MSB8004: Output Directory does not end with a trailing slash.  This build instance will add the slash as it is required to allow proper evaluation of the Output Directory.
+  vgui2_surfacelib.vcxproj -> C:\Users\xWhitey\source\repos\reGoldSrc\vgui2\vgui2_surfacelib\Release\vgui2_surfacelib.lib
