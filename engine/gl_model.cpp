@@ -49,6 +49,8 @@ trivertx_t	*poseverts[ MAXALIASFRAMES ];
 int			posenum;
 
 char* wadpath = nullptr;
+int	mod_numknown;
+model_t	mod_known[1024];
 
 void Mod_ClearAll()
 {
