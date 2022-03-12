@@ -52,7 +52,19 @@ char* wadpath = nullptr;
 
 void Mod_ClearAll()
 {
-	//TODO: implement - Solokiller
+	int i;
+	model_t* mod;
+
+	for (i = 0, mod = mod_known; i < mod_numknown; i++, mod++)
+	{
+		if (mod->type != mod_alias && mod->needload != (NL_NEEDS_LOADED | NL_UNREFERENCED))
+		{
+			mod->needload = NL_UNREFERENCED;
+
+			if (mod->type == mod_sprite)
+				mod->cache.data = nullptr;
+		}
+	}
 }
 
 byte* Mod_DecompressVis(byte* in, model_t* model)

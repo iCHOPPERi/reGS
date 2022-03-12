@@ -4,6 +4,13 @@
 #include "modelgen.h"
 #include "spritegn.h"
 
+#define NL_NEEDS_LOADED 1
+#define NL_UNREFERENCED 2
+#define NL_CLIENT 3
+
+extern model_t mod_known[1024];
+extern int mod_numknown;
+
 /*
 ==============================================================================
 
