@@ -13,7 +13,8 @@ typedef enum netsrc_s
 {
 	NS_CLIENT = 0,
 	NS_SERVER = 1,
-	NS_MULTICAST = 2
+	NS_MULTICAST = 2,
+	NS_MAX = 3
 } netsrc_t;
 
 typedef struct netchan_s

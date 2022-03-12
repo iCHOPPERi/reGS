@@ -66,16 +66,6 @@ extern sizebuf_t net_message;
 
 const int FRAGMENT_MAX_SIZE = 1024;
 
-
-typedef enum netsrc_s
-{
-	NS_CLIENT = 0,
-	NS_SERVER,
-	NS_MULTICAST,    // xxxMO
-	NS_MAX
-} netsrc_t;
-
-
 typedef struct flowstats_s
 {
 	// Size of message sent/received
