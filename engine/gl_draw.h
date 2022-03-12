@@ -36,6 +36,6 @@ void Draw_Pic( int x, int y, qpic_t* pic );
 
 void Draw_BeginDisc();
 
-#define	MAX_GLTEXTURES 2048
+#define	MAX_GLTEXTURES 4800
 
 #endif //ENGINE_GL_DRAW_H
