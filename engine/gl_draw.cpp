@@ -17,8 +17,8 @@ qpic_t* draw_disc = nullptr;
 typedef struct
 {
 	int texnum;
-	__int16 servercount;
-	__int16 paletteIndex;
+	short servercount;
+	short paletteIndex;
 	int width;
 	int height;
 	qboolean mipmap;
