@@ -35,12 +35,46 @@ void		SCR_NetGraph( void );
 //TODO: unrelated to actual net constants, remove - Solokiller
 const size_t NET_MAX_FRAG_BUFFER = 1400;
 
+#pragma pack(push, 1)
+typedef struct SPLITPACKET_t
+{
+	int netID;
+	int sequenceNumber;
+	unsigned char packetID;
+} SPLITPACKET;
+#pragma pack(pop)
+
 #define	MAX_MSGLEN		4000		// max length of a reliable message
 #define	MAX_DATAGRAM	4000		// max length of unreliable message
+
+#define MAX_ROUTEABLE_PACKET 1400 // probably should be 0x579 (1401 in decimal)
+#define SPLIT_SIZE		(MAX_ROUTEABLE_PACKET - sizeof(SPLITPACKET))
+
+#define NET_HEADER_FLAG_QUERY					-1
+#define NET_HEADER_FLAG_SPLITPACKET				-2
+#define NET_HEADER_FLAG_COMPRESSEDPACKET		-3
+
+#define MAX_STREAMS			2  
+
+#define HEADER_BYTES	( 8 + MAX_STREAMS * 9 )	
+
+#define	NET_MAX_PAYLOAD			96000
+
+#define	NET_MAX_MESSAGE	PAD_NUMBER( ( NET_MAX_PAYLOAD + HEADER_BYTES ), 16 )
 
 extern sizebuf_t net_message;
 
 const int FRAGMENT_MAX_SIZE = 1024;
+
+
+typedef enum netsrc_s
+{
+	NS_CLIENT = 0,
+	NS_SERVER,
+	NS_MULTICAST,    // xxxMO
+	NS_MAX
+} netsrc_t;
+
 
 typedef struct flowstats_s
 {

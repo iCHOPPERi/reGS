@@ -12,6 +12,7 @@
 #include "tier0/platform.h"
 
 #include <cstdarg>
+#include <cmath>
 
 #ifdef _WIN32
 #pragma once
@@ -528,6 +529,7 @@ inline void V_strcat( char *dest, const char *src, int cchDest )
 #define Q_strtowcs				V_strtowcs
 #define Q_wcstostr				V_wcstostr
 #define Q_strcat				V_strcat
+#define Q_min					min
 
 #endif // !defined( VSTDLIB_DLL_EXPORT )
 
