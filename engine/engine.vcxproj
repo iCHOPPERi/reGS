@@ -166,6 +166,7 @@
     <ClCompile Include="snd_dma.cpp" />
     <ClCompile Include="snd_mix.cpp" />
     <ClCompile Include="snd_sdl.cpp" />
+    <ClCompile Include="snd_win.cpp" />
     <ClCompile Include="sv_log.cpp" />
     <ClCompile Include="sv_main.cpp" />
     <ClCompile Include="sv_phys.cpp" />

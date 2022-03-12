@@ -52,7 +52,6 @@ int num_sfx = 0;
 
 void S_Init()
 {
-    /*
     Con_DPrintf("Sound Initialization\n");
     VOX_Init();
     if (COM_CheckParm("-nosound") != 0) {
@@ -61,6 +60,7 @@ void S_Init()
     if (COM_CheckParm("-simsound") != 0) {
         fakedma = true;
     }
+    /* NEED TO REVERSE S_ FUNCS FOR ADDING THESE CONCMDS - ScriptedSnark
     Cmd_AddCommand("play", S_Play);
     Cmd_AddCommand("playvol", S_PlayVol);
     Cmd_AddCommand("speak", S_Say);
@@ -68,6 +68,7 @@ void S_Init()
     Cmd_AddCommand("stopsound", S_StopAllSoundsC);
     Cmd_AddCommand("soundlist", S_SoundList);
     Cmd_AddCommand("soundinfo", S_SoundInfo_f);
+    */
     Cvar_RegisterVariable(&s_show);
     Cvar_RegisterVariable(&nosound);
     Cvar_RegisterVariable(&volume);
@@ -115,9 +116,11 @@ void S_Init()
     if (sound_started != 0) {
         S_StopAllSounds(true);
     }
+    /* ALSO NEED TO IMPLEMENT - ScriptedSnark
     SX_Init();
     Wavstream_Init();
-    return;*/
+    */
+    return;
 }
 
 void S_Shutdown()
@@ -127,7 +130,7 @@ void S_Shutdown()
 
 sfx_t* S_PrecacheSound(const char* name)
 {
-    /*
+ /* TODO: UNCOMMENT THIS CODE WHEN S_ FUNCTIONS WILL BE REVERSED - ScriptedSnark
     int len;
     sfx_t* sfx;
 
@@ -142,7 +145,8 @@ sfx_t* S_PrecacheSound(const char* name)
         }
         sfx = S_FindName(name, NULL);
         return sfx;
-    }*/
+    }
+    */
     return NULL;
 }
 

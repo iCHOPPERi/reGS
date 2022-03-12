@@ -55,6 +55,8 @@ void S_StopAllSounds( bool clear );
 
 void Snd_AcquireBuffer();
 void Snd_ReleaseBuffer();
+void SND_InitScaletable(void);
+int SNDDMA_Init(void);
 
 void SetMouseEnable( int fState );
 
