@@ -63,8 +63,15 @@ typedef struct delta_info_s
 	delta_t* delta;
 } delta_info_t;
 
+void DELTA_FreeDescription(delta_t** ppdesc);
+void DELTA_ClearEncoders(void);
+void DELTA_ClearRegistrations(void);
+void DELTA_ClearDefinitions(void);
+void DELTA_ClearStats(delta_t* p);
+void DELTA_ClearStats_f(void);
+void DELTA_PrintStats(const char* name, delta_t* p);
+void DELTA_DumpStats_f(void);
 void DELTA_Init(void);
-
 void DELTA_Shutdown(void);
 
 #endif //ENGINE_DELTA_H
