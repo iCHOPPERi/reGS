@@ -614,7 +614,7 @@ void _Host_Frame(float time)
 		CL_Move();
 	*/
 
-	ClientDLL_Frame(host_frametime);
+	// ClientDLL_Frame(host_frametime); - CRASHES
 
 	// CL_SetLastUpdate(); - TODO: implement - ScriptedSnark
 
