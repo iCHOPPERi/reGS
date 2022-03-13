@@ -14,7 +14,7 @@ vgui2/.vs
 vgui2/vgui2_surfacelib/.vs
 vgui2/vgui2_surfacelib/Release
 vgui2/vgui2_surfacelib/Debug
-vgui2/controls/Release
+vgui2/controls/Release/
 
 *.obj
 *.dll

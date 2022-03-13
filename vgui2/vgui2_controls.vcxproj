@@ -45,13 +45,13 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IntDir>$(SolutionDir)\vgui2\$(Configuration)\</IntDir>
-    <OutDir>$(SolutionDir)vgui2\controls\Debug</OutDir>
+    <IntDir>$(SolutionDir)\vgui2\controls\$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)vgui2\controls\$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IntDir>$(SolutionDir)\vgui2\$(Configuration)\</IntDir>
-    <OutDir>$(SolutionDir)vgui2\controls\Release</OutDir>
+    <IntDir>$(SolutionDir)\vgui2\controls\$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)vgui2\controls\$(Configuration)\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -66,7 +66,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <OutputFile>../lib/debug/vgui2_controls.lib</OutputFile>
+      <OutputFile>$(SolutionDir)\vgui2\controls\$(Configuration)\vgui2_controls.lib</OutputFile>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -91,7 +91,7 @@
     <Lib>
       <SubSystem>Windows</SubSystem>
       <LinkTimeCodeGeneration>false</LinkTimeCodeGeneration>
-      <OutputFile>$(SolutionDir)\vgui2\$(Configuration)\vgui2_controls.lib</OutputFile>
+      <OutputFile>$(SolutionDir)\vgui2\controls\$(Configuration)\vgui2_controls.lib</OutputFile>
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
