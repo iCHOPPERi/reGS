@@ -14,7 +14,7 @@ cvar_t* cl_righthand = nullptr;
 
 void R_ResetStudio()
 {
-	//TODO: implement - Solokiller
+	pStudioAPI = &studio;
 }
 
 sfx_t* CL_LookupSound( const char* pName )
