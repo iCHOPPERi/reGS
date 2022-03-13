@@ -7,7 +7,7 @@ unsigned char mod_novis[MODEL_MAX_PVS];
 
 void Mod_Init()
 {
-	Q_memset(mod_novis, 255, 1024);
+	Q_memset(mod_novis, 255, MODEL_MAX_PVS);
 }
 
 void CM_FreePAS()
