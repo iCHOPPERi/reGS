@@ -23,8 +23,12 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 *	main control for any streaming sound output device
 */
 
+#define CINTERFACE
+
 #include "quakedef.h"
 #include "sound.h"
+#include <WinSock2.h>
+#include <dsound.h>
 
 cvar_t suitvolume = { "suitvolume", "0.25", FCVAR_ARCHIVE };
 cvar_t s_show = { "s_show", "0", FCVAR_ARCHIVE };
@@ -45,10 +49,33 @@ cvar_t fs_lazy_precache = { "fs_lazy_precache", "0", FCVAR_ARCHIVE };
 
 bool fakedma = false;
 bool snd_initialized = false;
-int sound_started = 0;
+bool sound_started;
 volatile dma_t* shm;
+volatile dma_t sn;
 sfx_t* known_sfx;
 int num_sfx = 0;
+int snd_blocked;
+int soundtime;
+int paintedtime;
+
+extern HANDLE		hData;
+extern HPSTR		lpData, lpData2;
+
+extern HGLOBAL		hWaveHdr;
+extern LPWAVEHDR	lpWaveHdr;
+
+extern HWAVEOUT    hWaveOut;
+
+extern WAVEOUTCAPS	wavecaps;
+
+extern DWORD	gSndBufSize;
+
+extern MMTIME		mmstarttime;
+
+extern LPDIRECTSOUND pDS;
+extern LPDIRECTSOUNDBUFFER pDSBuf, pDSPBuf;
+
+extern HINSTANCE hInstDS;
 
 void S_Init()
 {
@@ -103,7 +130,7 @@ void S_Init()
         shm = (volatile dma_t*) Hunk_AllocName(44, "shm");
         shm->splitbuffer = false;
         shm->samplebits = 16;
-        shm->speed = SOUND_22k;
+        shm->speed = SOUND_DMA_SPEED;
         shm->channels = 2;
         shm->samples = 32768;
         shm->samplepos = 0;
@@ -121,6 +148,22 @@ void S_Init()
     Wavstream_Init();
     */
     return;
+}
+
+void S_Startup(void)
+{
+    if (!snd_initialized)
+        return;
+
+    if (fakedma || SNDDMA_Init())
+    {
+        sound_started = true;
+    }
+    else
+    {
+        Con_Printf("S_Startup: SNDDMA_Init failed.\n");
+        sound_started = false;
+    }
 }
 
 void S_Shutdown()
@@ -167,7 +210,7 @@ sfx_t* S_PrecacheSound(char* name)
     return NULL;
 }
 
-void S_StartDynamicSound(int entnum, int entchannel, sfx_t* sfx, vec3_t origin, float fvol, float attenuation, int flags, int pitch)
+void S_StartDynamicSound(int entnum, int entchannel, sfx_t* sfx, vec_t* origin, float fvol, float attenuation, int flags, int pitch)
 {
 	//TODO: implement - Solokiller
 }
@@ -256,6 +299,126 @@ void __cdecl S_Update(vec_t* origin, vec_t* forward, vec_t* right, vec_t* up)
             SNDDMA_Submit(origin, forward, right, up);
         }
     }*/
+}
+
+void GetSoundtime(void)
+{
+    int        samplepos;
+    static    int        buffers;
+    static    int        oldsamplepos;
+    int        fullsamples;
+
+    if (shm)
+        fullsamples = shm->samples / shm->channels;
+
+    samplepos = SNDDMA_GetDMAPos();
+
+    if (samplepos < oldsamplepos)
+    {
+        buffers++;                    // buffer wrapped
+
+        if (paintedtime > 0x40000000)
+        {
+            // time to chop things off to avoid 32 bit limits
+            buffers = 0;
+            paintedtime = fullsamples;
+            S_StopAllSounds(true);
+        }
+    }
+    oldsamplepos = samplepos;
+
+    if (shm)
+        soundtime = fullsamples * buffers + samplepos / shm->channels;
+}
+
+void S_ClearBuffer(void)
+{
+    int        clear;
+
+    if (!sound_started || !shm || (!shm->buffer && !pDSBuf))
+        return;
+
+    if (shm->samplebits == 8)
+        clear = 128;
+    else
+        clear = 0;
+
+    if (pDSBuf)
+    {
+        DWORD    dwSize;
+        PVOID pData;
+        int        reps;
+        HRESULT    hresult;
+
+        reps = 0;
+
+        while ((hresult = pDSBuf->lpVtbl->Lock(pDSBuf, 0, gSndBufSize, &pData, &dwSize, NULL, NULL, 0)) != DS_OK)
+        {
+            if (hresult != DSERR_BUFFERLOST)
+            {
+                Con_Printf("S_ClearBuffer: DS::Lock Sound Buffer Failed\n");
+                S_Shutdown();
+                return;
+            }
+
+            if (++reps > 10000)
+            {
+                Con_Printf("S_ClearBuffer: DS: couldn't restore buffer\n");
+                S_Shutdown();
+                return;
+            }
+        }
+
+        Q_memset(pData, clear, shm->samples * shm->samplebits / 8);
+
+        pDSBuf->lpVtbl->Unlock(pDSBuf, pData, dwSize, NULL, 0);
+
+    }
+    else
+    {
+        Q_memset(shm->buffer, clear, shm->samplebits * shm->samples / 8);
+    }
+}
+
+void S_Update_(void)
+{
+    unsigned        endtime;
+    int                samps;
+
+    if (!sound_started || (snd_blocked > 0))
+        return;
+
+    // Updates DMA time
+    GetSoundtime();
+
+    // mix ahead of current position
+    if (shm)
+    {
+        endtime = soundtime + _snd_mixahead.value * shm->dmaspeed;
+        samps = shm->samples >> ((char)shm->channels - 1 & 0x1F);
+    }
+
+    if ((int)(endtime - soundtime) > samps) // Cast to int to shut up John Carmack's code warning -Enko
+        endtime = soundtime + samps;
+
+    // if the buffer was lost or stopped, restore it and/or restart it
+    if (pDSBuf)
+    {
+        DWORD    dwStatus;
+
+        if (pDSBuf->lpVtbl->GetStatus(pDSBuf, &dwStatus) != DS_OK)
+            Con_Printf("Couldn't get sound buffer status\n");
+
+        if (dwStatus & DSBSTATUS_BUFFERLOST)
+            pDSBuf->lpVtbl->Restore(pDSBuf);
+
+        if (!(dwStatus & DSBSTATUS_PLAYING))
+            pDSBuf->lpVtbl->Play(pDSBuf, 0, 0, DSBPLAY_LOOPING);
+    }
+
+    // S_PaintChannels(endtime >> 1); - TODO: implement - ScriptedSnark
+
+    SNDDMA_Submit();
 }
 
 void S_StopSound(int entnum, int entchannel)
