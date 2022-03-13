@@ -154,19 +154,25 @@ void Host_Error( const char* error, ... )
 
 void Host_UpdateSounds(void)
 {
-	if (cls.state == ca_dedicated)
+	if (gfBackground)
 		return;
 
+	vec3_t vSoundForward, vSoundRight, vSoundUp;
+
 	// update audio
-	if (cls.state == ca_active)
+	if (cls.signon == SIGNONS)
 	{
-		// TODO: implement h_origin, h_forward, h_right, h_up - ScriptedSnark
-		// S_Update(h_origin, h_forward, h_right, h_up);
+		/* TODO: implement - ScriptedSnark
+		AngleVectors(r_playerViewportAngles, vSoundForward, vSoundRight, vSoundUp);
+		S_Update(r_soundOrigin, vSoundForward, vSoundRight, vSoundUp);
+		*/
 	}
 	else
 	{
 		S_Update(vec3_origin, vec3_origin, vec3_origin, vec3_origin);
 	}
+
+	// S_PrintStats(); - TODO: implement - ScriptedSnark
 }
 
 void CheckGore()

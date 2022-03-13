@@ -7,6 +7,8 @@
 
 #include "server.h"
 
+#define SIGNONS 2
+
 extern jmp_buf host_abortserver;
 
 extern cvar_t developer;
