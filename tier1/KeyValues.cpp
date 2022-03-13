@@ -34,7 +34,7 @@
 #include <tier0/memdbgon.h>
 
 static const char * s_LastFileLoadingFrom = "unknown"; // just needed for error messages
-
+#define ARRAYSIZE(p)		(sizeof(p)/sizeof(p[0]))
 #define KEYVALUES_TOKEN_SIZE	1024
 static char s_pTokenBuf[KEYVALUES_TOKEN_SIZE];
 
