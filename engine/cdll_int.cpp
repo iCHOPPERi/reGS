@@ -314,11 +314,9 @@ void ClientDLL_Init()
 
 	HookServerMsg( "ScreenShake", &V_ScreenShake );
 	HookServerMsg( "ScreenFade", &V_ScreenFade );
-
-	//TODO: can't init the client yet because it'll crash due to missing engine functions - Solokiller
-	/*
 	cl_funcs.pInitFunc( &cl_enginefuncs, CLDLL_INTERFACE_VERSION );
 
+	/*
 	if( cl_funcs.pClientMoveInit )
 		cl_funcs.pClientMoveInit( &g_clmove );
 
