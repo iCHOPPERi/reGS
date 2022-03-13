@@ -575,14 +575,13 @@ void Host_UpdateScreen( void )
 	}
 }
 
-void _Host_Frame( float time )
+void _Host_Frame(float time)
 {
 	static double host_times[6];
 
 	if (setjmp(host_enddemo))
-		return;			// demo finished.
+		return;
 
-	// decide the simulation time
 	if (!Host_FilterTime(time))
 		return;
 
@@ -593,27 +592,85 @@ void _Host_Frame( float time )
 
 	Host_ComputeFPS(host_frametime);
 
-	//TODO: implement - Solokiller
+	// R_SetStackBase();
+	// CL_CheckClientState();
 
 	Cbuf_Execute();
 
 	ClientDLL_UpdateClientData();
 
-	//TODO: implement - Solokiller
+	/* TODO: implement - ScriptedSnark
+	if (sv.active)
+		CL_Move();
+	*/
 
-	//ClientDLL_Frame(host_frametime); TODO: implement
+	host_times[1] = Sys_FloatTime();
+	// SV_Frame(); - TODO: impelement - ScriptedSnark
+	host_times[2] = Sys_FloatTime();
+	// SV_CheckForRcon(); - TODO: implement - ScriptedSnark
 
-	//TODO: implement - Solokiller
+	/* TODO: implement - ScriptedSnark
+	if (!sv.active)
+		CL_Move();
+	*/
+
+	ClientDLL_Frame(host_frametime);
+
+	// CL_SetLastUpdate(); - TODO: implement - ScriptedSnark
+
+	// fetch results from server
+	/* TODO: impelement - ScriptedSnark
+	CL_ReadPackets();
+
+	CL_RedoPrediction();
+
+	CL_VoiceIdle();
+	CL_EmitEntities();
+	CL_CheckForResend();
+
+	while (CL_RequestMissingResources());
+
+	CL_UpdateSoundFade();
+
+	Host_CheckConnectionFailure();
+
+	CL_HTTPUpdate();
+	*/
+	Steam_ClientRunFrame();
+	ClientDLL_CAM_Think();
+	// CL_MoveSpectatorCamera(); - TODO: implement - ScriptedSnark
+
+	host_times[3] = Sys_FloatTime();
 
 	Host_UpdateScreen();
 
-	//TODO: implement - Solokiller
+	host_times[4] = Sys_FloatTime();
 
-	//host_framecount++; TODO: Implement
+	// CL_DecayLights(); - TODO: implement - ScriptedSnark
 
-	// TODO: Implement
+	Host_UpdateSounds();
+
+	host_times[0] = host_times[5];
+	host_times[5] = Sys_FloatTime();
+
+	//
+	// time
+	//
+
+	/* TODO: implement - ScriptedSnark
+	Host_Speeds(host_times);
+
+	host_framecount++;
+
+	CL_AdjustClock();
+
+	if (sv_stats.value == 1.0)
+		Host_UpdateStats();
+
+	if (host_killtime.value != 0.0 && host_killtime.value < sv.time)
+		Host_Quit_f();
+	*/
 }
-
 int Host_Frame( float time, int iState, int* stateInfo )
 {
 	double time1, time2;
