@@ -120,7 +120,6 @@ void CL_ShutDownClientStatic() // probably need to improve if doesn't work
 
 	if (CL_UPDATE_BACKUP != 0)
 	{
-		i = 0;
 		for (i = 0; i < CL_UPDATE_BACKUP; i++)
 		{
 			ent = &cl.frames[i].packet_entities;
