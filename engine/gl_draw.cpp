@@ -56,7 +56,25 @@ void Draw_Init()
 
 void Draw_FillRGBA( int x, int y, int w, int h, int r, int g, int b, int a )
 {
-	//qglDisable(1);
+	g_engdstAddrs.pfnFillRGBA(&x, &y, &w, &h, &r, &g, &b, &a);
+
+	qglDisable(GL_TEXTURE_2D);
+	qglEnable(GL_BLEND);
+
+	qglTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+	qglBlendFunc(GL_SRC_ALPHA, GL_LINES);
+	qglColor4f(r / 255.0, g / 255.0, b / 255.0, a / 255.0);
+
+	qglBegin(GL_RELATIVE_HORIZONTAL_LINE_TO_NV);
+	qglVertex2f(x, y);
+	qglVertex2f(w + x, y);
+	qglVertex2f(w + x, h + y);
+	qglVertex2f(x, h + y);
+	qglEnd();
+
+	qglColor3f(1.0, 1.0, 1.0);
+	qglEnable(GL_TEXTURE_2D);
+	qglDisable(GL_BLEND);
 }
 
 int Draw_Character( int x, int y, int num, unsigned int font )
@@ -108,7 +126,26 @@ void Draw_ResetTextColor()
 
 void Draw_FillRGBABlend( int x, int y, int w, int h, int r, int g, int b, int a )
 {
-	//TODO: implement - Solokiller
+	g_engdstAddrs.pfnFillRGBA(&x, &y, &w, &h, &r, &g, &b, &a);
+
+	qglDisable(GL_TEXTURE_2D);
+	qglEnable(GL_BLEND);
+
+	qglTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+	qglBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	qglColor4f(r / 255.0, g / 255.0, b / 255.0, a / 255.0);
+
+	qglBegin(GL_RELATIVE_HORIZONTAL_LINE_TO_NV);
+	qglVertex2f(x, y);
+	qglVertex2f(w + x, y);
+	qglVertex2f(w + x, h + y);
+	qglVertex2f(x, h + y);
+	qglEnd();
+
+	qglColor3f(1.0, 1.0, 1.0);
+
+	qglEnable(GL_TEXTURE_2D);
+	qglDisable(GL_BLEND);
 }
 
 GLuint GL_GenTexture()
