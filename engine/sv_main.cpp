@@ -7,6 +7,9 @@
 #include "sv_phys.h"
 #include "server.h"
 
+edict_t** g_moved_edict;
+vec3_t* g_moved_from;
+
 server_static_t svs;
 server_t sv;
 
@@ -138,7 +141,13 @@ void SetCStrikeFlags()
 
 void SV_DeallocateDynamicData()
 {
-	//TODO: implement - Solokiller
+	if (g_moved_edict)
+		Mem_Free(g_moved_edict);
+	if (g_moved_from)
+		Mem_Free(g_moved_from);
+
+	g_moved_edict = NULL;
+	g_moved_from = NULL;
 }
 
 void SV_AllocClientFrames()
