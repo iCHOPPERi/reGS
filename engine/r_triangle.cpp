@@ -1,5 +1,9 @@
 #include "quakedef.h"
 #include "r_triangle.h"
+#include <GL/glew.h>
+
+GLfloat flFogDensity;
+bool g_bFogSkybox;
 
 triangleapi_t tri =
 {
@@ -120,5 +124,6 @@ void tri_GL_Color4fRendermode( float x, float y, float z, float w, int rendermod
 
 void R_FogParams( float flDensity, int iFogSkybox )
 {
-	//TODO: implement - Solokiller
+	flFogDensity = flDensity;
+	g_bFogSkybox = iFogSkybox;
 }
