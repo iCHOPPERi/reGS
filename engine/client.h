@@ -27,6 +27,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "APIProxy.h"
 #include "screenfade.h"
 #include "sound.h"
+#include "net_chan.h"
 
 class CSysModule;
 
@@ -65,7 +66,7 @@ struct client_static_t
 
 	// network stuff
 	//TODO: implement - Solokiller
-	//netchan_t netchan;
+	netchan_t netchan;
 
 	sizebuf_t datagram;
 	byte datagram_buf[ MAX_DATAGRAM ];

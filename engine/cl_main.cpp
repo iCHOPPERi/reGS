@@ -112,9 +112,26 @@ void CL_TakeSnapshot_f()
 	Con_Printf("Unable to take a screenshot.\n");
 }
 
-void CL_ShutDownClientStatic()
+void CL_ShutDownClientStatic() // probably need to improve if doesn't work
 {
-	//TODO: implement - Solokiller
+	int client = CL_UPDATE_BACKUP;
+	int i;
+	packet_entities_t* ent;
+
+	if (CL_UPDATE_BACKUP != 0)
+	{
+		i = 0;
+		for (i = 0; i < CL_UPDATE_BACKUP; i++)
+		{
+			ent = &cl.frames[i].packet_entities;
+			if (ent->entities)
+			{
+				Mem_Free(ent->entities);
+			}
+			ent->entities = NULL;
+		}
+	}
+	Q_memset(cl.frames, 0, sizeof(frame_t) * client);
 }
 
 void CL_Shutdown()
@@ -168,8 +185,7 @@ void CL_GetPlayerHulls()
 
 bool UserIsConnectedOnLoopback()
 {
-	//TODO: implement - Solokiller
-	return false;
+	return cls.netchan.remote_address.type == NA_LOOPBACK;
 }
 
 void SetPal( int i )
