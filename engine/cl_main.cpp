@@ -118,18 +118,16 @@ void CL_ShutDownClientStatic() // probably need to improve if doesn't work
 	int i;
 	packet_entities_t* ent;
 
-	if (CL_UPDATE_BACKUP != 0)
+	for (i = 0; i < CL_UPDATE_BACKUP; i++)
 	{
-		for (i = 0; i < CL_UPDATE_BACKUP; i++)
+		ent = &cl.frames[i].packet_entities;
+		if (ent->entities)
 		{
-			ent = &cl.frames[i].packet_entities;
-			if (ent->entities)
-			{
-				Mem_Free(ent->entities);
-			}
-			ent->entities = NULL;
+			Mem_Free(ent->entities);
 		}
+		ent->entities = NULL;
 	}
+
 	Q_memset(cl.frames, 0, sizeof(frame_t) * client);
 }
 
