@@ -5,6 +5,7 @@
 #include "FilePaths.h"
 #include "SystemWrapper.h"
 #include "TokenLine.h"
+#include <gl_rmain.h>
 
 void SystemWrapperCommandForwarder();
 
@@ -91,19 +92,22 @@ void EngineWrapper::ShutDown()
 
 bool EngineWrapper::GetViewOrigin( float* origin )
 {
-	//TODO: implement - Solokiller
+	*origin = r_refdef.vieworg[0];
+	origin[1] = r_refdef.vieworg[1];
+	origin[2] = r_refdef.vieworg[2];
 	return true;
 }
 
 bool EngineWrapper::GetViewAngles( float* angles )
 {
-	//TODO: implement - Solokiller
+	*angles = r_refdef.viewangles[0];
+	angles[1] = r_refdef.viewangles[1];
+	angles[2] = r_refdef.viewangles[2];
 	return true;
 }
 
 int EngineWrapper::GetTraceEntity()
 {
-	//Nothing
 	return 0;
 }
 
@@ -159,7 +163,7 @@ void EngineWrapper::CL_DemoPlaySound( int channel, char* sample, float attenuati
 
 void EngineWrapper::ClientDLL_ReadDemoBuffer( int size, byte* buffer )
 {
-	//TODO: implement - Solokiller
+	//ClientDLL_ReadDemoBuffer(size, buffer);
 }
 
 bool SystemWrapper::Init( IBaseSystem* system, int serial, char* name )
