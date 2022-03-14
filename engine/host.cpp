@@ -32,6 +32,7 @@
 #include "view.h"
 #include "voice.h"
 #include "wad.h"
+#include "../cl_dll/kbutton.h"
 
 quakeparms_t host_parms = {};
 
@@ -101,7 +102,56 @@ void Host_InitLocal()
 
 void Host_WriteConfiguration()
 {
-	//TODO: implement - Solokiller
+	int readonly;
+	FileHandle_t fs;
+	kbutton_t* mlook;
+	kbutton_t* jlook;
+	char nameBuf[4096];
+
+	if (host_initialized && cls.state)
+	{
+		// SetRateRegistrySetting(rate.string); - Only exists on Linux
+		// Sys_SetRegKeyValue("Software\\Valve\\Steam", "Rate", rate.string); - TODO: implement - ScriptedSnark
+		if (Key_CountBindings() <= 1)
+		{
+			Con_Printf("skipping config.cfg output, no keys bound\n");
+			return;
+		}
+		readonly = 0;
+		fs = FS_OpenPathID("config.cfg", "w", "GAMECONFIG");
+		if (!fs)
+		{
+			if (developer.value == 0.0
+				|| !FS_FileExists("../goldsrc/dev_build_all.bat")
+				|| (FS_GetLocalPath("config.cfg", nameBuf, sizeof(nameBuf)),
+					SetFileAttributes(nameBuf, 0x180u),
+					(fs = FS_OpenPathID("config.cfg", "w", "GAMECONFIG")) == 0))
+			{
+				Con_Printf("Couldn't write config.cfg.\n");
+				return;
+			}
+			readonly = 1;
+		}
+		FS_FPrintf(fs, "// This file is overwritten whenever you change your user settings in the game.\n");
+		FS_FPrintf(fs, "// Add custom configurations to the file \"userconfig.cfg\".\n\n");
+		FS_FPrintf(fs, "unbindall\n");
+		Key_WriteBindings(fs);
+		Cvar_WriteVariables(fs);
+		// Info_WriteVars(fs); - TODO: implement - ScriptedSnark
+		mlook = ClientDLL_FindKey("in_mlook");
+		jlook = ClientDLL_FindKey("in_jlook");
+		if (mlook && (mlook->state & 1) != 0)
+			FS_FPrintf(fs, "+mlook\n");
+		if (jlook && (jlook->state & 1) != 0)
+			FS_FPrintf(fs, "+jlook\n");
+		FS_FPrintf(fs, "exec userconfig.cfg\n");
+		FS_Close(fs);
+		if (readonly)
+		{
+			FS_GetLocalPath("config.cfg", nameBuf, 4096);
+			SetFileAttributes(nameBuf, S_IREAD);
+		}
+	}
 }
 
 void Host_Error( const char* error, ... )
