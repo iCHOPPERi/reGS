@@ -3,6 +3,7 @@
 
 #include "pmtrace.h"
 #include "r_efx.h"
+#include "gl_model.h"
 
 void CL_TempEntInit();
 

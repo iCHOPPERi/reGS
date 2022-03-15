@@ -7,6 +7,7 @@
 #include <gl_draw.h>
 
 #define SPR_MAX_SPRITES 256
+unsigned short gSpritePalette[256];
 
 HSPRITE ghCrosshair = 0;
 wrect_t gCrosshairRc = {};
@@ -150,7 +151,8 @@ void SPR_Draw( int frame, int x, int y, const wrect_t* prc )
 {
 	mspriteframe_t* spr;
 
-	((void(__cdecl*)())g_engdstAddrs.pfnSPR_Draw)();
+	g_engdstAddrs.pfnSPR_Draw(&frame, &x, &y, &prc);
+
 	if (gpSprite && vid.width > x && vid.height > y)
 	{
 		spr = R_GetSpriteFrame(gpSprite, frame);

@@ -10,6 +10,12 @@
 
 #include "vgui2/text_draw.h"
 
+int g_currentpalette;
+qboolean giScissorTest;
+GLint scissor_x;
+GLint scissor_y;
+GLsizei scissor_width;
+GLsizei scissor_height;
 cvar_t gl_ansio = { "gl_ansio", "16" };
 
 qpic_t* draw_disc = nullptr;
@@ -215,14 +221,141 @@ void GL_SelectTexture( GLenum target )
 	oldtarget = target;
 }
 
-void Draw_SpriteFrame(mspriteframe_t* pFrame, unsigned short* pPalette, int x, int y, const wrect_t* prcSubRect)
+void GL_PaletteSelect(int paletteIndex)
 {
-	Draw_Frame(pFrame, x, y, prcSubRect);
+	if (g_currentpalette != paletteIndex)
+	{
+		if (qglColorTableEXT)
+		{
+			g_currentpalette = paletteIndex;
+			qglColorTableEXT(GL_SHARED_TEXTURE_PALETTE_EXT, GL_RGB, GL_DYNAMIC_STORAGE_BIT, GL_RGB, GL_UNSIGNED_BYTE, gGLPalette[paletteIndex].colors);
+		}
+	}
+}
+
+void GL_Bind(int texnum)
+{
+	if (currenttexture == texnum)
+		return;
+
+	int i = (texnum >> 16) - 1;
+
+	currenttexture = texnum;
+	qglBindTexture(GL_TEXTURE_2D, texnum);
+
+	if (i >= 0)
+		GL_PaletteSelect(i);
+}
+
+bool ValidateWRect(const wrect_t* prc)
+{
+	if (prc)
+	{
+		if ((prc->left <= prc->right) || (prc->top >= prc->bottom))
+			return false;
+	}
+	else
+		return false;
+
+	return true;
+}
+
+bool IntersectWRect(const wrect_t* prc1, const wrect_t* prc2, wrect_t* prc)
+{
+	wrect_t rc;
+
+	if (!prc)
+		prc = &rc;
+
+	prc->left = max(prc1->left, prc2->left);
+	prc->right = min(prc1->right, prc2->right);
+
+	if (prc->left < prc->right)
+	{
+		prc->top = max(prc1->top, prc2->top);
+		prc->bottom = min(prc1->bottom, prc2->bottom);
+
+		if (prc->top < prc->bottom)
+			return true;
+
+	}
+
+	return false;
+}
+
+void AdjustSubRect(mspriteframe_t* pFrame, float* pfLeft, float* pfRight, float* pfTop, float* pfBottom, int* pw, int* ph, const wrect_t* prcSubRect)
+{
+	wrect_t wrect;
+
+	if (!ValidateWRect(prcSubRect))
+		return;
+
+	wrect.left = 0;
+	wrect.top = 0;
+	wrect.right = *pw;
+	wrect.bottom = *ph;
+
+	if (!IntersectWRect(prcSubRect, &wrect, &wrect))
+		return;
+
+	*pw = wrect.right - wrect.left;
+	*ph = wrect.bottom - wrect.top;
+
+	*pfLeft = (wrect.left + 0.5) * 1.0 / pFrame->width;
+	*pfRight = (wrect.right - 0.5) * 1.0 / pFrame->width;
+
+	*pfTop = (wrect.top + 0.5) * 1.0 / pFrame->height;
+	*pfBottom = (wrect.bottom - 0.5) * 1.0 / pFrame->height;
 }
 
 void Draw_Frame(mspriteframe_t* pFrame, int ix, int iy, const wrect_t* prcSubRect)
 {
-	//TODO: implement - ScriptedSnark
+	float fLeft = 0.0;
+	float fRight = 1.0;
+	float fTop = 0.0;
+	float fBottom = 1.0;
+
+	int iWidth = pFrame->width;
+	int iHeight = pFrame->height;
+
+	float x = (float)ix + 0.5;
+	float y = (float)iy + 0.5;
+
+	VGUI2_ResetCurrentTexture();
+
+	if (giScissorTest)
+	{
+		qglScissor(scissor_x, scissor_y, scissor_width, scissor_height);
+		qglEnable(GL_SCISSOR_TEST);
+	}
+
+	if (prcSubRect)
+		AdjustSubRect(pFrame, &fLeft, &fRight, &fTop, &fBottom, &iWidth, &iHeight, prcSubRect);
+
+	qglDepthMask(GL_FALSE);
+
+	GL_Bind(pFrame->gl_texturenum);
+
+	qglTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+
+	qglBegin(GL_QUADS);
+	qglTexCoord2f(fLeft, fTop);
+	qglVertex2f(x, y);
+	qglTexCoord2f(fRight, fTop);
+	qglVertex2f(iWidth + x, y);
+	qglTexCoord2f(fRight, fBottom);
+	qglVertex2f(iWidth + x, iHeight + y);
+	qglTexCoord2f(fLeft, fBottom);
+	qglVertex2f(x, iHeight + y);
+	qglEnd();
+
+	qglDepthMask(GL_TRUE);
+	qglDisable(GL_SCISSOR_TEST);
+}
+
+void Draw_SpriteFrame(mspriteframe_t* pFrame, unsigned short* pPalette, int x, int y, const wrect_t* prcSubRect)
+{
+	Draw_Frame(pFrame, x, y, prcSubRect);
 }
 
 void Draw_Pic( int x, int y, qpic_t* pic )

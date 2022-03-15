@@ -4,10 +4,17 @@
 #include "qgl.h"
 #include "wad.h"
 #include "gl_model.h"
+#include "../cl_dll/wrect.h"
 
+extern int g_currentpalette;
 extern cvar_t gl_ansio;
-qboolean giScissorTest;
+extern qboolean giScissorTest;
 extern GLenum oldtarget;
+
+extern GLint scissor_x;
+extern GLint scissor_y;
+extern GLsizei scissor_width;
+extern GLsizei scissor_height;
 
 void Draw_Init();
 
@@ -32,6 +39,11 @@ void Draw_FillRGBABlend( int x, int y, int w, int h, int r, int g, int b, int a 
 GLuint GL_GenTexture();
 
 void GL_SelectTexture( GLenum target );
+
+bool ValidateWRect(const wrect_t* prc);
+bool IntersectWRect(const wrect_t* prc1, const wrect_t* prc2, wrect_t* prc);
+
+void AdjustSubRect(mspriteframe_t* pFrame, float* pfLeft, float* pfRight, float* pfTop, float* pfBottom, int* pw, int* ph, const wrect_t* prcSubRect);
 
 void Draw_SpriteFrame(mspriteframe_t* pFrame, unsigned short* pPalette, int x, int y, const wrect_t* prcSubRect);
 
