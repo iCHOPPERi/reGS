@@ -167,7 +167,8 @@ void SPR_EnableScissor( int x, int y, int width, int height )
 
 void SPR_DisableScissor()
 {
-	//TODO: implement - Solokiller
+	g_engdstAddrs.pfnSPR_DisableScissor();
+	DisableScissorTest();
 }
 
 void SPR_Draw( int frame, int x, int y, const wrect_t* prc )
