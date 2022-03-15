@@ -2,6 +2,9 @@
 #include "client.h"
 #include "cl_draw.h"
 #include "gl_model.h"
+#include <vid.h>
+#include <cl_tent.h>
+#include <gl_draw.h>
 
 #define SPR_MAX_SPRITES 256
 
@@ -145,7 +148,17 @@ void SPR_DisableScissor()
 
 void SPR_Draw( int frame, int x, int y, const wrect_t* prc )
 {
-	//TODO: implement - Solokiller
+	mspriteframe_t* spr;
+
+	((void(__cdecl*)())g_engdstAddrs.pfnSPR_Draw)();
+	if (gpSprite && vid.width > x && vid.height > y)
+	{
+		spr = R_GetSpriteFrame(gpSprite, frame);
+		if (spr)
+			Draw_SpriteFrame(spr, gSpritePalette, x, y, prc);
+		else
+			Con_DPrintf("Client.dll SPR_Draw error:  invalid frame\n");
+	}
 }
 
 void SPR_DrawHoles( int frame, int x, int y, const wrect_t* prc )

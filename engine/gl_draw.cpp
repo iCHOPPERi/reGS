@@ -215,6 +215,16 @@ void GL_SelectTexture( GLenum target )
 	oldtarget = target;
 }
 
+void Draw_SpriteFrame(mspriteframe_t* pFrame, unsigned short* pPalette, int x, int y, const wrect_t* prcSubRect)
+{
+	Draw_Frame(pFrame, x, y, prcSubRect);
+}
+
+void Draw_Frame(mspriteframe_t* pFrame, int ix, int iy, const wrect_t* prcSubRect)
+{
+	//TODO: implement - ScriptedSnark
+}
+
 void Draw_Pic( int x, int y, qpic_t* pic )
 {
 	//TODO: implement - Solokiller

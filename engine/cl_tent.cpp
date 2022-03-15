@@ -2,6 +2,7 @@
 #include "client.h"
 #include "cl_tent.h"
 #include <cl_main.h>
+#include <gl_model.h>
 
 static TEMPENTITY gTempEnts[ MAX_TEMP_ENTITIES ];
 
@@ -314,6 +315,29 @@ TEMPENTITY* R_TempSprite( float* pos, float* dir, float scale, int modelIndex, i
 {
 	//TODO: implement - Solokiller
 	return nullptr;
+}
+
+mspriteframe_t* R_GetSpriteFrame(msprite_t* pSprite, int frame)
+{
+	if (!pSprite)
+	{
+		Con_Printf("Sprite:  no pSprite!!!\n");
+		return NULL;
+	}
+
+	if (!pSprite->numframes)
+	{
+		Con_Printf("Sprite:  pSprite has no frames!!!\n");
+		return NULL;
+	}
+
+	if (frame >= pSprite->numframes || frame < 0)
+		Con_DPrintf("Sprite: no such frame %d\n", frame);
+
+	if (pSprite->frames[frame].type == SPR_SINGLE)
+		return pSprite->frames[frame].frameptr;
+
+	return NULL;
 }
 
 void R_AttachTentToPlayer2(int client, model_s* pModel, float zoffset, float life)

@@ -76,6 +76,8 @@ TEMPENTITY* R_DefaultSprite( float* pos, int spriteIndex, float framerate );
 
 TEMPENTITY* R_TempSprite( float* pos, float* dir, float scale, int modelIndex, int rendermode, int renderfx, float a, float life, int flags );
 
+mspriteframe_t* R_GetSpriteFrame(msprite_t* pSprite, int frame);
+
 void R_AttachTentToPlayer( int client, int modelIndex, float zoffset, float life );
 
 void R_AttachTentToPlayer2( int client, model_s* pModel, float zoffset, float life );

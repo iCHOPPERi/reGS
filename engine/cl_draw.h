@@ -8,6 +8,8 @@ struct SPRITELIST
 	int frameCount;
 };
 
+unsigned short gSpritePalette[256];
+
 void SetCrosshair( HSPRITE hspr, wrect_t rc, int r, int g, int b );
 
 void DrawCrosshair( int x, int y );
