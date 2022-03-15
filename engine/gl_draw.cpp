@@ -10,12 +10,9 @@
 
 #include "vgui2/text_draw.h"
 
+#include <vid.h>
+
 int g_currentpalette;
-qboolean giScissorTest;
-GLint scissor_x;
-GLint scissor_y;
-GLsizei scissor_width;
-GLsizei scissor_height;
 cvar_t gl_ansio = { "gl_ansio", "16" };
 
 qpic_t* draw_disc = nullptr;
@@ -42,6 +39,34 @@ struct GL_PALETTE
 
 GL_PALETTE gGLPalette[350];
 static int numgltextures = 0;
+
+static int scissor_x = 0, scissor_y = 0, scissor_width = 0, scissor_height = 0;
+static qboolean giScissorTest = false;
+
+void EnableScissorTest(int x, int y, int width, int height)
+{
+	x = clamp(x, 0, vid.width);
+	y = clamp(y, 0, vid.height);
+	width = clamp(width, 0, vid.width - x);
+	height = clamp(height, 0, vid.height - y);
+
+	scissor_x = x;
+	scissor_width = width;
+	scissor_y = y;
+	scissor_height = height;
+
+	giScissorTest = true;
+}
+
+void DisableScissorTest(void)
+{
+	scissor_x = 0;
+	scissor_width = 0;
+	scissor_y = 0;
+	scissor_height = 0;
+
+	giScissorTest = false;
+}
 
 void Draw_Init()
 {
