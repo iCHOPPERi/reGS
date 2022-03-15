@@ -16,6 +16,9 @@ extern GLint scissor_y;
 extern GLsizei scissor_width;
 extern GLsizei scissor_height;
 
+void EnableScissorTest(int x, int y, int width, int height);
+void DisableScissorTest(void);
+
 void Draw_Init();
 
 void Draw_FillRGBA( int x, int y, int w, int h, int r, int g, int b, int a );

@@ -139,7 +139,8 @@ void SPR_Set( HSPRITE hSprite, int r, int g, int b )
 
 void SPR_EnableScissor( int x, int y, int width, int height )
 {
-	//TODO: implement - Solokiller
+	g_engdstAddrs.pfnSPR_EnableScissor(&x, &y, &width, &height);
+	EnableScissorTest(x, y, width, height);
 }
 
 void SPR_DisableScissor()
