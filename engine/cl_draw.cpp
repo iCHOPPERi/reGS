@@ -20,6 +20,11 @@ static msprite_t* gpSprite = nullptr;
 static int gSpriteCount = 0;
 static SPRITELIST* gSpriteList = nullptr;
 
+msprite_t* SPR_Pointer(SPRITELIST* pList)
+{
+	return (msprite_t*)pList->pSprite->cache.data;
+}
+
 void SetCrosshair( HSPRITE hspr, wrect_t rc, int r, int g, int b )
 {
 	g_engdstAddrs.pfnSetCrosshair( &hspr, &rc, &r, &g, &b );
@@ -128,13 +133,25 @@ int SPR_Height( HSPRITE hSprite, int frame )
 
 int SPR_Width( HSPRITE hSprite, int frame )
 {
-	//TODO: implement - Solokiller
-	return 0;
-}
+	int result;
+	SPRITELIST* sprlist;
+	mspriteframe_t* sprframe;
 
-msprite_t* SPR_Pointer(SPRITELIST* pList)
-{
-	return (msprite_t*)pList->pSprite->cache.data;
+	result = 0;
+	g_engdstAddrs.pfnSPR_Width(&hSprite, &frame);
+	hSprite--;
+
+	if (hSprite < 0 || hSprite >= gSpriteCount)
+		return;
+
+	sprlist = &gSpriteList[hSprite];
+	if (sprlist)
+	{
+		sprframe = R_GetSpriteFrame(SPR_Pointer(sprlist), frame);
+		if (sprframe)
+			result = sprframe->width;
+	}
+	return result;
 }
 
 void SPR_Set( HSPRITE hSprite, int r, int g, int b )
