@@ -132,9 +132,31 @@ int SPR_Width( HSPRITE hSprite, int frame )
 	return 0;
 }
 
+msprite_t* SPR_Pointer(SPRITELIST* pList)
+{
+	return (msprite_t*)pList->pSprite->cache.data;
+}
+
 void SPR_Set( HSPRITE hSprite, int r, int g, int b )
 {
-	//TODO: implement - Solokiller
+	SPRITELIST* sprlist = nullptr;
+
+	g_engdstAddrs.pfnSPR_Set(&hSprite, &r, &g, &b);
+	hSprite--;
+
+	if (hSprite < 0 || hSprite >= gSpriteCount)
+		return;
+
+	sprlist = &gSpriteList[hSprite];
+
+	if (sprlist)
+	{
+		gpSprite = SPR_Pointer(sprlist);
+		if (gpSprite)
+		{
+			qglColor4f(r / 255.0, g / 255.0, b / 255.0, 1.0);
+		}
+	}
 }
 
 void SPR_EnableScissor( int x, int y, int width, int height )
