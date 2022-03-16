@@ -142,7 +142,7 @@ int SPR_Width( HSPRITE hSprite, int frame )
 	hSprite--;
 
 	if (hSprite < 0 || hSprite >= gSpriteCount)
-		return;
+		return result;
 
 	sprlist = &gSpriteList[hSprite];
 	if (sprlist)
