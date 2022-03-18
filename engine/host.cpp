@@ -2,7 +2,7 @@
 
 #include "quakedef.h"
 #include "buildnum.h"
-#include "cdaudio.h"
+#include "cd.h"
 #include "cdll_int.h"
 #include "chase.h"
 #include "cl_main.h"

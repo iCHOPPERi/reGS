@@ -3,6 +3,7 @@
 #include "dll_state.h"
 #include "host_cmd.h"
 #include "server.h"
+#include "cd.h"
 #include <vgui_int.h>
 #include <gl_screen.h>
 
@@ -159,6 +160,13 @@ void Host_Quit_Restart_f()
 
 void Host_InitCommands()
 {
+	if (!g_bIsDedicatedServer)
+	{
+		Cmd_AddCommand("cd", CD_Command_f);
+		Cmd_AddCommand("mp3", MP3_Command_f);
+		//Cmd_AddCommand("_careeraudio", CareerAudio_Command_f); TODO: Implement
+	}
+
 	//TODO: implement - Solokiller
 	Cmd_AddCommand("quit", Host_Quit_f);
 	Cmd_AddCommand("exit", Host_Quit_f);

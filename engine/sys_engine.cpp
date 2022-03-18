@@ -23,7 +23,7 @@
 #include "host.h"
 #include "IEngine.h"
 #include "keys.h"
-//#include "cd.h"
+#include "cd.h"
 #include "IGame.h"
 
 #define MINIMIZED_SLEEP		20
@@ -160,7 +160,7 @@ int CEngine::Frame( void )
 {
 #ifndef SWDS
 	// Update CD & mp3
-	//cdaudio->Frame(); TODO: Implement MSS audio update -Doomsayer
+	cdaudio->Frame();
 #endif
 	
 	// yield the CPU for a little while when paused, minimized, or not the focus

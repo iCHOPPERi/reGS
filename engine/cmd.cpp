@@ -532,7 +532,6 @@ COMMAND EXECUTION
 
 static int cmd_argc;
 static char* cmd_argv[ MAX_ARGS ];
-static const char* cmd_null_string = "";
 static const char* cmd_args = nullptr;
 
 cmd_source_t cmd_source;
@@ -598,12 +597,12 @@ int Cmd_Argc()
 Cmd_Argv
 ============
 */
-const char* Cmd_Argv( int arg )
+char* Cmd_Argv( int arg )
 {
 	g_engdstAddrs.Cmd_Argv( &arg );
 
 	if( ( unsigned ) arg >= ( unsigned ) cmd_argc )
-		return cmd_null_string;
+		return "";
 	return cmd_argv[ arg ];
 }
 

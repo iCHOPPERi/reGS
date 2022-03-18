@@ -174,7 +174,7 @@ bool Cmd_Exists( const char* cmd_name );
 const char* Cmd_CompleteCommand( const char* partial, bool forward );
 
 int	 Cmd_Argc();
-const char* Cmd_Argv( int arg );
+char* Cmd_Argv( int arg );
 const char* Cmd_Args();
 // The functions that execute commands get their parameters with these
 // functions. Cmd_Argv () will return an empty string, not a NULL
