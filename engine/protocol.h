@@ -38,6 +38,15 @@ typedef struct entity_state_s entity_state_t;
 #define	clc_move		2		// [usercmd_t]
 #define	clc_stringcmd	3		// [string] message
 
+// Sound Utilities
+
+// sound flags
+#define SND_SENTENCE		(1<<4)		// set if sound num is actually a sentence num
+#define SND_STOP			(1<<5)		// duplicated in dlls/util.h stop sound
+#define SND_CHANGE_VOL		(1<<6)		// duplicated in dlls/util.h change sound vol
+#define SND_CHANGE_PITCH	(1<<7)		// duplicated in dlls/util.h change sound pitch
+#define SND_SPAWNING		(1<<8)		// duplicated in dlls/util.h we're spawing, used in some cases for ambients 
+
 /*
 ==========================================================
 

@@ -7,6 +7,8 @@
 #include <vgui_int.h>
 #include <gl_screen.h>
 
+bool s_careerAudioPaused = false;
+
 CareerStateType g_careerState = CAREER_NONE;
 
 bool g_iQuitCommandIssued = false;

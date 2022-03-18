@@ -1,6 +1,25 @@
-#ifndef ENGINE_SND_H
-#define ENGINE_SND_H
+/***
+*
+*	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
+*
+*	This product contains software technology licensed from Id
+*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+*	All Rights Reserved.
+*
+*   Use, distribution, and modification of this source code and/or resulting
+*   object code is restricted to non-commercial enhancements to products from
+*   Valve LLC.  All other use, distribution, or modification is prohibited
+*   without written permission from Valve LLC.
+*
+****/
 
+// sound.h -- client sound i/o functions
+
+#ifndef SOUND_H
+#define SOUND_H
+#ifdef _WIN32
+#pragma once
+#endif
 
 #include "FileSystem.h"
 
@@ -99,13 +118,13 @@ struct dma_t
 	int				samplebits;
 	int				speed;
 	int				dmaspeed;
-	unsigned char* buffer;
+	unsigned char*	buffer;
 };
 
 // !!! if this is changed, it much be changed in asm_i386.h too !!!
 struct channel_t
 {
-	sfx_t* sfx;			// sfx number
+	sfx_t*	sfx;			// sfx number
 	int		leftvol;		// 0-255 volume
 	int		rightvol;		// 0-255 volume
 
@@ -157,38 +176,38 @@ struct voxword_t
 	int		fKeepCached;			// 1 if this word was already in cache before sentence referenced it
 	int		samplefrac;				// if pitch shifting, this is position into wav * 256
 	int		timecompress;			// % of wave to skip during playback (causes no pitch shift)
-	sfx_t* sfx;					// name and cache pointer
+	sfx_t*	sfx;					// name and cache pointer
 };
 
 #define CVOXWORDMAX		32
 
-void S_Init(void);
-void S_Startup(void);
-void S_Shutdown(void);
-void S_StartDynamicSound(int entnum, int entchannel, sfx_t* sfx, vec_t* origin, float fvol, float attenuation, int flags, int pitch);
-//void S_StartStaticSound(int entnum, int entchannel, sfx_t* sfxin, vec_t* origin, float fvol, float attenuation, int flags, int pitch);
-void S_StopSound(int entnum, int entchannel);
-void S_StopAllSounds(const bool clear);
-void S_ClearBuffer(void);
-void S_Update(vec_t* origin, vec_t* forward, vec_t* right, vec_t* up);
-//void S_ExtraUpdate(void);
+void S_Init( void );
+void S_Startup( void );
+void S_Shutdown( void );
+void S_StartDynamicSound( int entnum, int entchannel, sfx_t* sfx, vec_t* origin, float fvol, float attenuation, int flags, int pitch );
+void S_StartStaticSound( int entnum, int entchannel, sfx_t* sfxin, vec_t* origin, float fvol, float attenuation, int flags, int pitch );
+void S_StopSound( int entnum, int entchannel );
+void S_StopAllSounds( const bool clear );
+void S_ClearBuffer( void );
+void S_Update( vec_t* origin, vec_t* forward, vec_t* right, vec_t* up );
+void S_ExtraUpdate( void );
 
-sfx_t* S_PrecacheSound(char* name);
-//void S_BeginPrecaching(void);
-//void S_EndPrecaching(void);
-//void S_PaintChannels(int endtime);
+sfx_t* S_PrecacheSound( char* name );
+void S_BeginPrecaching( void );
+void S_EndPrecaching( void );
+void S_PaintChannels( int endtime );
 
 // spatializes a channel
-//void SND_Spatialize(channel_t* ch);
+void SND_Spatialize( channel_t* ch );
 
 // initializes cycling through a DMA buffer and returns information on it
-qboolean SNDDMA_Init(void);
+qboolean SNDDMA_Init( void );
 
 // gets the current DMA position
-int SNDDMA_GetDMAPos(void);
+int SNDDMA_GetDMAPos( void );
 
 // shutdown the DMA xfer.
-void SNDDMA_Shutdown(void);
+void SNDDMA_Shutdown( void );
 
 // ====================================================================
 // User-setable variables
@@ -237,75 +256,75 @@ extern int cszrawsentences;
 extern char* rgpszrawsentence[CVOXFILESENTENCEMAX];
 extern float g_SND_VoiceOverdrive;
 
-sfxcache_t* S_LoadSound(sfx_t* s, channel_t* channel);
-sfx_t* S_FindName(char* name, int* pfInCache);
+sfxcache_t* S_LoadSound( sfx_t* s, channel_t* channel );
+sfx_t* S_FindName( char* name, int* pfInCache );
 
-void SND_InitScaletable(void);
-void SNDDMA_Submit(void);
+void SND_InitScaletable( void );
+void SNDDMA_Submit( void );
 
-void S_AmbientOff(void);
-void S_AmbientOn(void);
+void S_AmbientOff( void );
+void S_AmbientOn( void );
 void S_FreeChannel(channel_t* ch);
 
-void S_PrintStats(void);
-void ResampleSfx(sfx_t* sfx, int inrate, int inwidth, byte* data, int datasize);
+void S_PrintStats( void );
+void ResampleSfx( sfx_t* sfx, int inrate, int inwidth, byte* data, int datasize );
 
-void SetCareerAudioState(int paused);
-void CareerAudio_Command_f(void);
+void SetCareerAudioState( int paused );
+void CareerAudio_Command_f( void );
 
-void SND_PaintChannelFrom8Offs(portable_samplepair_t* paintbuffer, channel_t* ch, sfxcache_t* sc, int count, int offset);
-void SND_PaintChannelFrom16Offs(portable_samplepair_t* paintbuffer, channel_t* ch, short* sfx, int count, int offset);
+void SND_PaintChannelFrom8Offs( portable_samplepair_t* paintbuffer, channel_t* ch, sfxcache_t* sc, int count, int offset );
+void SND_PaintChannelFrom16Offs( portable_samplepair_t* paintbuffer, channel_t* ch, short* sfx, int count, int offset );
 
 //=============================================================================
 
-void S_TransferStereo16(int end);
-void S_TransferPaintBuffer(int endtime);
+void S_TransferStereo16( int end );
+void S_TransferPaintBuffer( int endtime );
 void S_MixChannelsToPaintbuffer(int end, int fPaintHiresSounds, int voiceOnly);
-bool S_CheckWavEnd(channel_t* ch, sfxcache_t** psc, int ltime, int ichan);
+bool S_CheckWavEnd( channel_t* ch, sfxcache_t** psc, int ltime, int ichan );
 
-extern void SND_MoveMouth(channel_t* ch, sfxcache_t* sc, int count);
-extern void SND_MoveMouth16(int entnum, short* pdata, int count);
-extern void SND_CloseMouth(channel_t* ch);
-extern void SND_InitMouth(int entnum, int entchannel);
-extern void SND_ForceInitMouth(int entnum);
-extern void SND_ForceCloseMouth(int entnum);
+extern void SND_MoveMouth( channel_t* ch, sfxcache_t* sc, int count );
+extern void SND_MoveMouth16( int entnum, short* pdata, int count );
+extern void SND_CloseMouth( channel_t* ch );
+extern void SND_InitMouth( int entnum, int entchannel );
+extern void SND_ForceInitMouth( int entnum );
+extern void SND_ForceCloseMouth( int entnum );
 
 // DSP Routines
 
-void SX_Init(void);
-void SX_Free(void);
-void SX_ReloadRoomFX(void);
-void SX_RoomFX(int count, int fFilter, int fTimefx);
+void SX_Init( void );
+void SX_Free( void );
+void SX_ReloadRoomFX( void );
+void SX_RoomFX( int count, int fFilter, int fTimefx );
 
 // WAVE Stream
 
-int Wavstream_Init(void);
-void Wavstream_Close(int i);
-void Wavstream_GetNextChunk(channel_t* ch, sfx_t* s);
+int Wavstream_Init( void );
+void Wavstream_Close( int i );
+void Wavstream_GetNextChunk( channel_t* ch, sfx_t* s );
 
-void Snd_ReleaseBuffer(void);
-void Snd_AcquireBuffer(void);
+void Snd_ReleaseBuffer( void );
+void Snd_AcquireBuffer( void );
 
-void S_BlockSound(void);
-void S_UnblockSound(void);
+void S_BlockSound( void );
+void S_UnblockSound( void );
 
-void SetMouseEnable(qboolean fEnable);
+void SetMouseEnable( qboolean fEnable );
 
-extern void				VOX_Init(void);
-extern void				VOX_Shutdown(void);
-extern char* VOX_GetDirectory(char* szpath, char* psz, int nsize);
-extern void				VOX_SetChanVol(channel_t* ch);
-extern int				VOX_ParseWordParams(char* psz, voxword_t* pvoxword, int fFirst);
-extern void				VOX_ReadSentenceFile(void);
-extern sfxcache_t* VOX_LoadSound(channel_t* pchan, char* pszin);
-extern char* VOX_LookupString(char* pszin, int* psentencenum);
-extern void				VOX_MakeSingleWordSentence(channel_t* ch, int pitch);
-extern void				VOX_TrimStartEndTimes(channel_t* ch, sfxcache_t* sc);
-extern int				VOX_FPaintPitchChannelFrom8Offs(portable_samplepair_t* paintbuffer, channel_t* ch, sfxcache_t* sc, int count, int pitch, int timecompress, int offset);
+extern void				VOX_Init( void );
+extern void				VOX_Shutdown( void );
+extern char*			VOX_GetDirectory( char* szpath, char* psz, int nsize );
+extern void				VOX_SetChanVol( channel_t* ch );
+extern int				VOX_ParseWordParams( char* psz, voxword_t* pvoxword, int fFirst );
+extern void				VOX_ReadSentenceFile( void );
+extern sfxcache_t*		VOX_LoadSound( channel_t* pchan, char* pszin );
+extern char*			VOX_LookupString( char* pszin, int* psentencenum );
+extern void				VOX_MakeSingleWordSentence( channel_t* ch, int pitch );
+extern void				VOX_TrimStartEndTimes( channel_t* ch, sfxcache_t* sc );
+extern int				VOX_FPaintPitchChannelFrom8Offs( portable_samplepair_t* paintbuffer, channel_t* ch, sfxcache_t* sc, int count, int pitch, int timecompress, int offset );
 
 extern "C"
 {
 	extern portable_samplepair_t paintbuffer[(PAINTBUFFER_SIZE + 1) * 2];
 }
 
-#endif //ENGINE_SND_H
+#endif // SOUND_H

@@ -202,6 +202,10 @@ void Host_Error( const char* error, ... )
 	Sys_Error( "Host_Error: recursively entered" );
 }
 
+// TODO: Must be in engine/view.h! -Doomsayer
+extern vec3_t 		r_soundOrigin;
+extern vec3_t 		r_playerViewportAngles;
+
 void Host_UpdateSounds(void)
 {
 	if (gfBackground)
@@ -212,17 +216,15 @@ void Host_UpdateSounds(void)
 	// update audio
 	if (cls.signon == SIGNONS)
 	{
-		/* TODO: implement - ScriptedSnark
 		AngleVectors(r_playerViewportAngles, vSoundForward, vSoundRight, vSoundUp);
 		S_Update(r_soundOrigin, vSoundForward, vSoundRight, vSoundUp);
-		*/
 	}
 	else
 	{
 		S_Update(vec3_origin, vec3_origin, vec3_origin, vec3_origin);
 	}
 
-	// S_PrintStats(); - TODO: implement - ScriptedSnark
+	S_PrintStats();
 }
 
 void CheckGore()

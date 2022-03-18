@@ -1,14 +1,26 @@
-/*
-*	reGS: reverse-engineered GoldSrc engine 
-*	Engine file: snd_win.cpp
-*	Sound code for Windows operating system only.
-*/
+/***
+*
+*	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
+*
+*	This product contains software technology licensed from Id
+*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+*	All Rights Reserved.
+*
+*   Use, distribution, and modification of this source code and/or resulting
+*   object code is restricted to non-commercial enhancements to products from
+*   Valve LLC.  All other use, distribution, or modification is prohibited
+*   without written permission from Valve LLC.
+*
+****/
 #define CINTERFACE
 
 #include "quakedef.h"
 #include "sound.h"
 
+#include "winsani_in.h"
 #include <Windows.h>
+#include "winsani_out.h"
+
 #include <SDL2/SDL_syswm.h>
 #include <mmeapi.h>
 #include <mmsystem.h>
@@ -18,6 +30,7 @@
 
 HRESULT(WINAPI* pDirectSoundCreate)(GUID FAR* lpGUID, LPDIRECTSOUND FAR* lplpDS, IUnknown FAR* pUnkOuter);
 
+// 64K is > 1 second at 16-bit, 22050 Hz
 #define	WAV_BUFFERS             64
 #define	WAV_MASK				(WAV_BUFFERS - 1)
 #define	WAV_BUFFER_SIZE			0x0400
@@ -43,6 +56,12 @@ static int snd_inited;
 static int sample16;
 static int snd_sent, snd_completed;
 
+
+/*
+*	Global variables. Must be visible to window-procedure function
+*	so it can unlock and free the data block after it has been played.
+*/
+
 HANDLE		hData;
 HPSTR		lpData, lpData2;
 
@@ -66,11 +85,11 @@ bool g_fUseDInput = false; // Use direct input?
 
 extern int snd_blocked;
 
-void SetMouseEnable(qboolean fEnable)
+void SetMouseEnable( qboolean fEnable )
 {
 }
 
-void Snd_ReleaseBuffer(void)
+void Snd_ReleaseBuffer( void )
 {
 	if (snd_isdirect)
 	{
@@ -82,7 +101,7 @@ void Snd_ReleaseBuffer(void)
 	}
 }
 
-void Snd_AcquireBuffer(void)
+void Snd_AcquireBuffer( void )
 {
 	if (snd_isdirect)
 	{
@@ -91,8 +110,12 @@ void Snd_AcquireBuffer(void)
 	}
 }
 
-
-void S_BlockSound(void)
+/*
+==================
+S_BlockSound
+==================
+*/
+void S_BlockSound( void )
 {
 	// DirectSound takes care of blocking itself
 	if (snd_iswave)
@@ -104,7 +127,12 @@ void S_BlockSound(void)
 	}
 }
 
-void S_UnblockSound(void)
+/*
+==================
+S_UnblockSound
+==================
+*/
+void S_UnblockSound( void )
 {
 	// DirectSound takes care of blocking itself
 	if (snd_iswave)
@@ -113,7 +141,12 @@ void S_UnblockSound(void)
 	}
 }
 
-void FreeSound(void)
+/*
+==================
+FreeSound
+==================
+*/
+void FreeSound( void )
 {
 	int	i;
 
@@ -184,7 +217,14 @@ void FreeSound(void)
 	}
 }
 
-sndinitstat SNDDMA_InitDirect(void)
+/*
+==================
+SNDDMA_InitDirect
+
+Direct-Sound support
+==================
+*/
+sndinitstat SNDDMA_InitDirect( void )
 {
 	SDL_SysWMinfo	wmInfo;
 
@@ -301,7 +341,7 @@ sndinitstat SNDDMA_InitDirect(void)
 
 	if (!primary_format_set || !COM_CheckParm("-primarysound"))
 	{
-		// create the secondary buffer we'll actually work with
+	// create the secondary buffer we'll actually work with
 		Q_memset(&dsbuf, 0, sizeof(dsbuf));
 		dsbuf.dwSize = sizeof(DSBUFFERDESC);
 		dsbuf.dwFlags = DSBCAPS_CTRLFREQUENCY | DSBCAPS_LOCSOFTWARE;
@@ -366,7 +406,7 @@ sndinitstat SNDDMA_InitDirect(void)
 
 	gSndBufSize = dsbcaps.dwBufferBytes;
 
-	// initialize the buffer
+// initialize the buffer
 	reps = 0;
 
 	while ((hresult = pDSBuf->lpVtbl->Lock(pDSBuf, 0, gSndBufSize, (LPVOID*)&lpData, &dwSize, NULL, NULL, 0)) != DS_OK)
@@ -387,7 +427,7 @@ sndinitstat SNDDMA_InitDirect(void)
 	}
 
 	Q_memset(lpData, 0, dwSize);
-	//		lpData[4] = lpData[5] = 0x7f;	// force a pop for debugging
+//		lpData[4] = lpData[5] = 0x7f;	// force a pop for debugging
 
 	pDSBuf->lpVtbl->Unlock(pDSBuf, lpData, dwSize, NULL, 0);
 
@@ -418,7 +458,7 @@ SNDDM_InitWav
 Crappy windows multimedia base
 ==================
 */
-qboolean SNDDMA_InitWav(void)
+qboolean SNDDMA_InitWav( void )
 {
 	WAVEFORMATEX  format;
 	int				i;
@@ -456,7 +496,7 @@ qboolean SNDDMA_InitWav(void)
 	*/
 	gSndBufSize = WAV_BUFFERS * WAV_BUFFER_SIZE;
 	hData = GlobalAlloc(GMEM_MOVEABLE | GMEM_SHARE, gSndBufSize);
-
+	
 	if (!hData)
 	{
 		Con_SafePrintf("Sound: Out of memory.\n");
@@ -528,7 +568,7 @@ qboolean SNDDMA_InitWav(void)
 	return true;
 }
 
-static bool Win32AtLeastV4 = false;
+extern bool Win32AtLeastV4; // TODO: Add this extern in winquake.h -Doomsayer
 
 /*
 ==================
@@ -538,7 +578,7 @@ Try to find a sound device to mix for.
 Returns false if nothing is found.
 ==================
 */
-qboolean SNDDMA_Init(void)
+qboolean SNDDMA_Init( void )
 {
 	sndinitstat	stat;
 
@@ -608,7 +648,7 @@ inside the recirculating dma buffer, so the mixing code will know
 how many sample are required to fill it up.
 ===============
 */
-int SNDDMA_GetDMAPos(void)
+int SNDDMA_GetDMAPos( void )
 {
 	MMTIME	mmtime;
 	int		s = 0;
@@ -639,7 +679,7 @@ SNDDMA_Submit
 Send sound to device if buffer isn't really the dma buffer
 ===============
 */
-void SNDDMA_Submit(void)
+void SNDDMA_Submit( void )
 {
 	LPWAVEHDR	h;
 	int			wResult;
@@ -698,7 +738,7 @@ SNDDMA_Shutdown
 Reset the sound device for exiting
 ===============
 */
-void SNDDMA_Shutdown(void)
+void SNDDMA_Shutdown( void )
 {
 	FreeSound();
 }

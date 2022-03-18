@@ -498,7 +498,7 @@ void Sys_SetupLegacyAPIs()
 	Launcher_ConsolePrintf = &Legacy_Sys_Printf;
 }
 
-static bool Win32AtLeastV4 = false;
+bool Win32AtLeastV4 = false;
 static bool g_bIsWin95 = false;
 static bool g_bIsWin98 = false;
 

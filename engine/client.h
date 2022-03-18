@@ -308,6 +308,11 @@ extern	client_state_t	cl;
 
 extern playermove_t g_clmove;
 
+extern cvar_t fs_startup_timings;
+extern cvar_t fs_lazy_precache;
+extern cvar_t fs_precache_timings;
+extern cvar_t fs_perf_warnings;
+
 extern cvar_t cl_mousegrab;
 extern cvar_t m_rawinput;
 extern cvar_t rate;

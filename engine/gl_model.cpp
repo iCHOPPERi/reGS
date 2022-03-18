@@ -138,3 +138,9 @@ void Mod_UnloadSpriteTextures(model_t* pModel)
 	}
 	return;
 }
+
+mleaf_t* Mod_PointInLeaf(vec_t* p, model_t* model)
+{
+	// TODO: Implement
+	return nullptr;
+}

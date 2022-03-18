@@ -48,12 +48,16 @@ playermove_t g_clmove;
 
 float g_LastScreenUpdateTime = 0;
 
+cvar_t fs_lazy_precache = { "fs_lazy_precache", "0" };
+cvar_t fs_precache_timings = { "fs_precache_timings", "0" };
+cvar_t fs_perf_warnings = { "fs_perf_warnings", "0" };
+cvar_t fs_startup_timings = { "fs_startup_timings", "0" };
+
 cvar_t cl_showfps = { "cl_showfps", "0", FCVAR_ARCHIVE };
 
 cvar_t cl_mousegrab = { "cl_mousegrab", "1", FCVAR_ARCHIVE };
 cvar_t m_rawinput = { "m_rawinput", "1", FCVAR_ARCHIVE };
 cvar_t rate = { "rate", "30000", FCVAR_USERINFO };
-cvar_t fs_perf_warnings = { "fs_perf_warnings", "0" };
 cvar_t cl_lw = { "cl_lw", "1", FCVAR_ARCHIVE | FCVAR_USERINFO };
 
 static int g_iCurrentTiming = 0;

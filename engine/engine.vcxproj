@@ -34,6 +34,7 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
+    <Import Project="$(VCTargetsPath)\BuildCustomizations\masm.props" />
   </ImportGroup>
   <ImportGroup Label="Shared">
   </ImportGroup>
@@ -71,6 +72,7 @@
       <OptimizeReferences>false</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>psapi.lib;wsock32.lib;Winmm.lib;../external/game_controls.lib;../external/steam_api.lib;../external/vstdlib.lib;../external/tier0.lib;../tier1/Release/tier1.lib;../external/mss32.lib;../vgui2/controls/Release/vgui2_controls.lib;../vgui2/vgui2_surfacelib/Release/vgui2_surfacelib.lib;opengl32.lib;glu32.lib;../external/GLEW/lib/glew32s.lib;../external/SDL2/lib/SDL2.lib;../utils/vgui/lib/win32_vc6/vgui.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -86,6 +88,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>psapi.lib;wsock32.lib;Winmm.lib;../external/game_controls.lib;../external/steam_api.lib;../external/vstdlib.lib;../external/tier0.lib;../tier1/Debug/tier1.lib;../external/mss32.lib;../vgui2/controls/Debug/vgui2_controls.lib;../vgui2/vgui2_surfacelib/Debug/vgui2_surfacelib.lib;opengl32.lib;glu32.lib;../external/GLEW/lib/glew32s.lib;../external/SDL2/lib/SDL2.lib;../utils/vgui/lib/win32_vc6/vgui.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib</AdditionalDependencies>
+      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -164,6 +167,7 @@
     <ClCompile Include="r_triangle.cpp" />
     <ClCompile Include="sequence.cpp" />
     <ClCompile Include="snd_dma.cpp" />
+    <ClCompile Include="snd_mem.cpp" />
     <ClCompile Include="snd_mix.cpp" />
     <ClCompile Include="snd_win.cpp" />
     <ClCompile Include="sv_log.cpp" />
@@ -195,6 +199,7 @@
     <ClCompile Include="vgui_intwrap2.cpp" />
     <ClCompile Include="view.cpp" />
     <ClCompile Include="voice.cpp" />
+    <ClCompile Include="voice_sound_engine_interface.cpp" />
     <ClCompile Include="wad.cpp" />
     <ClCompile Include="world.cpp" />
     <ClCompile Include="zone.cpp" />
@@ -315,7 +320,13 @@
   <ItemGroup>
     <Library Include="..\lib\public\mss32.lib" />
   </ItemGroup>
+  <ItemGroup>
+    <MASM Include="snd_mixa.asm">
+      <FileType>Document</FileType>
+    </MASM>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
+    <Import Project="$(VCTargetsPath)\BuildCustomizations\masm.targets" />
   </ImportGroup>
 </Project>
