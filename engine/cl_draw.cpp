@@ -206,7 +206,18 @@ void SPR_Draw( int frame, int x, int y, const wrect_t* prc )
 
 void SPR_DrawHoles( int frame, int x, int y, const wrect_t* prc )
 {
-	//TODO: implement - Solokiller
+	mspriteframe_t* sprframe;
+	g_engdstAddrs.pfnSPR_DrawHoles(&frame, &x, &y, &prc);
+
+	if (gpSprite && vid.width > x && vid.height > y)
+	{
+		sprframe = R_GetSpriteFrame(gpSprite, frame);
+
+		if (sprframe)
+			Draw_SpriteFrameHoles(sprframe, gSpritePalette, x, y, prc);
+		else
+			Con_DPrintf("Client.dll SPR_DrawHoles error:  invalid frame\n");
+	}
 }
 
 void SPR_DrawAdditive( int frame, int x, int y, const wrect_t* prc )

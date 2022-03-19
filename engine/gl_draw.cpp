@@ -383,6 +383,23 @@ void Draw_SpriteFrame(mspriteframe_t* pFrame, unsigned short* pPalette, int x, i
 	Draw_Frame(pFrame, x, y, prcSubRect);
 }
 
+void Draw_SpriteFrameHoles(mspriteframe_t* pFrame, unsigned __int16* pPalette, int x, int y, const wrect_t* prcSubRect)
+{
+	qglEnable(GL_ALPHA_TEST);
+
+	/* - TODO: implement gl_spriteblend - ScriptedSnark
+	if (gl_spriteblend.value != 0.0)
+	{
+		qglBlendFunc(0x302u, 0x303u);
+		qglEnable(0xBE2u);
+	}
+	*/
+
+	Draw_Frame(pFrame, x, y, prcSubRect);
+	qglDisable(GL_ALPHA_TEST);
+	qglDisable(GL_BLEND);
+}
+
 void Draw_Pic( int x, int y, qpic_t* pic )
 {
 	//TODO: implement - Solokiller
