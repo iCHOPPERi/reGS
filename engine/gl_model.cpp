@@ -159,6 +159,52 @@ void Mod_FillInCRCInfo(bool trackCRC, int model_number)
 	mod_known_info[model_number].initialCRC = 0;
 }
 
+model_t* Mod_FindName(bool trackCRC, const char* name)
+{
+	int	i;
+	model_t* mod, *avail = nullptr;
+
+	if (!name[0])
+		Sys_Error("Mod_FindName: NULL name");
+
+	for (i = 0, mod = mod_known; i < mod_numknown; i++, mod++)
+	{
+		if (!Q_stricmp(mod->name, name))
+			break;
+
+		if (mod->needload == NL_UNREFERENCED)
+		{
+			if (!avail || mod->type != mod_alias && mod->type != mod_studio)
+				avail = mod;
+		}
+	}
+
+	if (i == mod_numknown)
+	{
+		if (mod_numknown < MAX_MOD_KNOWN)
+		{
+			Mod_FillInCRCInfo(trackCRC, mod_numknown);
+			mod_numknown++;
+		}
+		else
+		{
+			if (!avail)
+				Sys_Error("Mod_FindName: mod_numknown >= MAX_KNOWN_MODELS");
+
+			mod = avail;
+			Mod_FillInCRCInfo(trackCRC, avail - mod_known);
+		}
+
+		Q_strncpy(mod->name, name, sizeof(mod->name) - 1);
+		mod->name[sizeof(mod->name) - 1] = 0;
+
+		if (mod->needload != (NL_NEEDS_LOADED | NL_UNREFERENCED))
+			mod->needload = NL_NEEDS_LOADED;
+	}
+
+	return mod;
+}
+
 model_t* Mod_LoadModel(model_t* mod, const bool crash, const bool trackCRC)
 {
 	CRC32_t currentCRC;
