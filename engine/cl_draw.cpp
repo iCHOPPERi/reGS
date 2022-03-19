@@ -2,15 +2,13 @@
 #include "client.h"
 #include "cl_draw.h"
 #include "gl_model.h"
+#include "render.h"
 #include <vid.h>
 #include <cl_tent.h>
 #include <gl_draw.h>
 
 #define SPR_MAX_SPRITES 256
 unsigned short gSpritePalette[256];
-
-qboolean filterMode;
-float filterColorRed, filterColorGreen, filterColorBlue;
 
 HSPRITE ghCrosshair = 0;
 wrect_t gCrosshairRc = {};
@@ -345,5 +343,6 @@ void SetFilterColor( float r, float g, float b )
 
 void SetFilterBrightness( float brightness )
 {
-	//TODO: implement - Solokiller
+	g_engdstAddrs.pfnSetFilterBrightness(&brightness);
+	filterBrightness = brightness;
 }
