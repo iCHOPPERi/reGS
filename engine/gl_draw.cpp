@@ -383,7 +383,7 @@ void Draw_SpriteFrame(mspriteframe_t* pFrame, unsigned short* pPalette, int x, i
 	Draw_Frame(pFrame, x, y, prcSubRect);
 }
 
-void Draw_SpriteFrameHoles(mspriteframe_t* pFrame, unsigned __int16* pPalette, int x, int y, const wrect_t* prcSubRect)
+void Draw_SpriteFrameHoles(mspriteframe_t* pFrame, unsigned short* pPalette, int x, int y, const wrect_t* prcSubRect)
 {
 	qglEnable(GL_ALPHA_TEST);
 
@@ -400,7 +400,7 @@ void Draw_SpriteFrameHoles(mspriteframe_t* pFrame, unsigned __int16* pPalette, i
 	qglDisable(GL_BLEND);
 }
 
-void Draw_SpriteFrameAdditive(mspriteframe_t* pFrame, unsigned __int16* pPalette, int x, int y, const wrect_t* prcSubRect)
+void Draw_SpriteFrameAdditive(mspriteframe_t* pFrame, unsigned short* pPalette, int x, int y, const wrect_t* prcSubRect)
 {
 	qglEnable(GL_BLEND);
 	qglBlendFunc(GL_ONE, GL_ONE);
