@@ -45,6 +45,8 @@ struct mod_known_info_t
 
 mod_known_info_t mod_known_info[MAX_MOD_KNOWN];
 
+byte* mod_base = nullptr;
+
 /*
 ==============================================================================
 
@@ -310,6 +312,18 @@ model_t* Mod_LoadModel(model_t* mod, const bool crash, const bool trackCRC)
 	}
 
 	return mod;
+}
+
+void Mod_LoadLighting(lump_t* l)
+{
+	if (!l->filelen)
+	{
+		loadmodel->lightdata = nullptr;
+		return;
+	}
+
+	loadmodel->lightdata = (color24*)Hunk_AllocName(l->filelen, loadname);
+	Q_memcpy(loadmodel->lightdata, mod_base + l->fileofs, l->filelen);
 }
 
 float RadiusFromBounds(vec_t* mins, vec_t* maxs)
