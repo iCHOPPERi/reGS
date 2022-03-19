@@ -312,6 +312,19 @@ model_t* Mod_LoadModel(model_t* mod, const bool crash, const bool trackCRC)
 	return mod;
 }
 
+float RadiusFromBounds(vec_t* mins, vec_t* maxs)
+{
+	int		i;
+	vec3_t	corner;
+
+	for (i = 0; i < 3; i++)
+	{
+		corner[i] = fabs(mins[i]) > fabs(maxs[i]) ? fabs(mins[i]) : fabs(maxs[i]);
+	}
+
+	return Length(corner);
+}
+
 void Mod_UnloadSpriteTextures(model_t* pModel)
 {
 	void* pvVar1;
