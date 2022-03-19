@@ -8,7 +8,9 @@
 
 #define SPR_MAX_SPRITES 256
 unsigned short gSpritePalette[256];
+
 qboolean filterMode;
+float filterColorRed, filterColorGreen, filterColorBlue;
 
 HSPRITE ghCrosshair = 0;
 wrect_t gCrosshairRc = {};
@@ -335,7 +337,10 @@ void SetFilterMode( int mode )
 
 void SetFilterColor( float r, float g, float b )
 {
-	//TODO: implement - Solokiller
+	g_engdstAddrs.pfnSetFilterColor(&r, &g, &b);
+	filterColorRed = r;
+	filterColorGreen = g;
+	filterColorBlue = b;
 }
 
 void SetFilterBrightness( float brightness )
