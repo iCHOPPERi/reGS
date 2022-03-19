@@ -52,6 +52,26 @@ char* wadpath = nullptr;
 int	mod_numknown;
 model_t	mod_known[1024];
 
+void* Mod_Extradata(model_t* mod)
+{
+	void* result;
+
+	if (!mod)
+		return nullptr;
+
+	result = Cache_Check(&mod->cache);
+
+	if (result)
+		return result;
+
+	// Mod_LoadModel(mod, true, false); - TODO: implement - ScriptedSnark
+
+	if (!mod->cache.data)
+		Sys_Error("Mod_Extradata: caching failed");
+
+	return mod->cache.data;
+}
+
 void Mod_ClearAll()
 {
 	int i;

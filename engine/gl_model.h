@@ -132,6 +132,7 @@ extern	stvert_t	stverts[ MAXALIASVERTS ];
 extern	mtriangle_t	triangles[ MAXALIASTRIS ];
 extern	trivertx_t	*poseverts[ MAXALIASFRAMES ];
 
+void* Mod_Extradata(model_t* mod);
 void Mod_ClearAll();
 
 #endif //ENGINE_GL_MODEL_H
