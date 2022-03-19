@@ -10,6 +10,8 @@ vec3_t r_origin = { 0, 0, 0 };
 
 refdef_t r_refdef = {};
 
+int isFogEnabled = 0;
+
 model_t* R_LoadMapSprite( const char *szFilename )
 {
 	//TODO: implement - Solokiller
@@ -18,5 +20,15 @@ model_t* R_LoadMapSprite( const char *szFilename )
 
 void AllowFog( bool allowed )
 {
-	//TODO: implement - Solokiller
+    if (allowed)
+    {
+        if (isFogEnabled == 1)
+            qglEnable(GL_FOG);
+    }
+    else
+    {
+        isFogEnabled = qglIsEnabled(GL_FOG);
+        if (isFogEnabled == 1)
+            qglDisable(GL_FOG);
+    }
 }
