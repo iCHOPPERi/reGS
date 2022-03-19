@@ -8,6 +8,7 @@
 
 #define SPR_MAX_SPRITES 256
 unsigned short gSpritePalette[256];
+qboolean filterMode;
 
 HSPRITE ghCrosshair = 0;
 wrect_t gCrosshairRc = {};
@@ -328,7 +329,8 @@ model_t* SPR_GetModelPointer( HSPRITE hSprite )
 
 void SetFilterMode( int mode )
 {
-	//TODO: implement - Solokiller
+	g_engdstAddrs.pfnSetFilterMode(&mode);
+	filterMode = mode;
 }
 
 void SetFilterColor( float r, float g, float b )
