@@ -326,6 +326,18 @@ void Mod_LoadLighting(lump_t* l)
 	Q_memcpy(loadmodel->lightdata, mod_base + l->fileofs, l->filelen);
 }
 
+void Mod_LoadVisibility(lump_t* l)
+{
+	if (!l->filelen)
+	{
+		loadmodel->visdata = nullptr;
+		return;
+	}
+
+	loadmodel->visdata = (byte*)Hunk_AllocName(l->filelen, loadname);
+	Q_memcpy(loadmodel->visdata, mod_base + l->fileofs, l->filelen);
+}
+
 float RadiusFromBounds(vec_t* mins, vec_t* maxs)
 {
 	int		i;
