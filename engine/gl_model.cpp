@@ -314,6 +314,45 @@ model_t* Mod_LoadModel(model_t* mod, const bool crash, const bool trackCRC)
 	return mod;
 }
 
+void Mod_LoadEntities(lump_t* l)
+{
+	if (!l->filelen)
+	{
+		loadmodel->entities = nullptr;
+		return;
+	}
+
+	loadmodel->entities = (char*)Hunk_AllocName(l->filelen, loadname);
+	Q_memcpy(loadmodel->entities, mod_base + l->fileofs, l->filelen);
+
+	if (loadmodel->entities)
+	{
+		char* pszInputStream = COM_Parse(loadmodel->entities);
+
+		if (*pszInputStream)
+		{
+			while (com_token[0] != '}')
+			{
+				if (!Q_strcmp(com_token, "wad"))
+				{
+					COM_Parse(pszInputStream);
+
+					if (wadpath)
+						Mem_Free(wadpath);
+
+					wadpath = Mem_Strdup(com_token);
+					return;
+				}
+
+				pszInputStream = COM_Parse(pszInputStream);
+
+				if (!*pszInputStream)
+					return;
+			}
+		}
+	}
+}
+
 void Mod_LoadLighting(lump_t* l)
 {
 	if (!l->filelen)
