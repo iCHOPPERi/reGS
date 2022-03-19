@@ -29,6 +29,21 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "qgl.h"
 #include "gl_mesh.h"
 #include "gl_model.h"
+#include <host.h>
+#include <client.h>
+
+model_t* loadmodel;
+char loadname[32];
+
+struct mod_known_info_t
+{
+	qboolean		shouldCRC;		// Needs a CRC check?
+	qboolean		firstCRCDone;	// True when the first CRC check has been finished
+
+	CRC32_t			initialCRC;
+};
+
+mod_known_info_t mod_known_info[MAX_MOD_KNOWN];
 
 /*
 ==============================================================================
@@ -64,7 +79,7 @@ void* Mod_Extradata(model_t* mod)
 	if (result)
 		return result;
 
-	// Mod_LoadModel(mod, true, false); - TODO: implement - ScriptedSnark
+	Mod_LoadModel(mod, true, false);
 
 	if (!mod->cache.data)
 		Sys_Error("Mod_Extradata: caching failed");
@@ -133,6 +148,168 @@ byte* Mod_DecompressVis(byte* in, model_t* model)
 #endif
 
 	return decompressed;
+}
+
+model_t* Mod_LoadModel(model_t* mod, const bool crash, const bool trackCRC)
+{
+	CRC32_t currentCRC;
+	char tmpName[MAX_PATH];
+
+	FileHandle_t file;
+
+	byte* buf = nullptr;
+	mod_known_info_t* pinfo = nullptr;
+
+	if (mod->type == mod_alias || mod->type == mod_studio)
+	{
+		if (Cache_Check(&mod->cache))
+		{
+			mod->needload = NL_PRESENT;
+			return mod;
+		}
+	}
+	else
+	{
+		if (mod->needload == NL_PRESENT || mod->needload == (NL_NEEDS_LOADED | NL_UNREFERENCED))
+			return mod;
+	}
+
+	// Check for -steam launch param
+	if (COM_CheckParm("-steam") && mod->name[0] == '/')
+	{
+		char* p = mod->name;
+		while (*(++p) == '/')
+			;
+
+		strncpy(tmpName, p, sizeof(tmpName) - 1);
+		tmpName[sizeof(tmpName) - 1] = 0;
+
+		strncpy(mod->name, tmpName, sizeof(mod->name) - 1);
+		mod->name[sizeof(mod->name) - 1] = 0;
+	}
+
+	//
+	// Load the file, check if it exists
+	//
+	file = FS_Open(mod->name, "rb");
+
+	if (!file)
+	{
+		if (crash || developer.value > 1.0)
+			Sys_Error("Mod_NumForName: %s not found", mod->name);
+
+		Con_Printf("Error: could not load file %s\n", mod->name);
+		return nullptr;
+	}
+
+	int length;
+	buf = (byte*)FS_GetReadBuffer(file, &length);
+
+	if (buf)
+	{
+		if (LittleLong(*(uint32*)buf) == 'TSDI')
+		{
+			FS_ReleaseReadBuffer(file, buf);
+			buf = nullptr;
+		}
+	}
+
+	if (!buf)
+	{
+		length = FS_Size(file);
+		buf = (byte*)Hunk_TempAlloc(length + 1);
+		FS_Read(buf, length, file);
+		FS_Close(file);
+
+		if (!buf)
+		{
+			if (crash || developer.value > 1.0)
+				Sys_Error("Mod_NumForName: %s not found", mod->name);
+
+			Con_Printf("Error: could not load file %s\n", mod->name);
+			return nullptr;
+		}
+
+		file = 0;
+	}
+
+	if (trackCRC)
+	{
+		pinfo = &mod_known_info[mod - mod_known];
+
+		if (pinfo->shouldCRC)
+		{
+			CRC32_Init(&currentCRC);
+			CRC32_ProcessBuffer(&currentCRC, buf, length);
+			currentCRC = CRC32_Final(currentCRC);
+
+			if (pinfo->firstCRCDone)
+			{
+				if (currentCRC != pinfo->initialCRC)
+					Sys_Error("%s has been modified since starting the engine.  Consider running system diagnostics to check for faulty hardware.\n", mod->name);
+			}
+			else
+			{
+				pinfo->firstCRCDone = true;
+				pinfo->initialCRC = currentCRC;
+
+				SetCStrikeFlags();
+
+				if (!IsGameSubscribed("czero") && g_bIsCStrike /* && IsCZPlayerModel(currentCRC, mod->name)*/ && cls.state != ca_dedicated)
+				{
+					COM_ExplainDisconnection(true, "Cannot continue with altered model %s, disconnecting.", mod->name);
+					// CL_Disconnect();
+					return nullptr;
+				}
+			}
+		}
+	}
+
+	if (developer.value > 1.0)
+		Con_DPrintf("loading %s\n", mod->name);
+
+	//
+	// allocate a new model
+	//
+	COM_FileBase(mod->name, loadname);
+
+	loadmodel = mod;
+
+	//
+	// fill it in
+	//
+
+	// call the apropriate loader
+	mod->needload = NL_PRESENT;
+
+	/* - TODO: implement - ScriptedSnark
+	switch (LittleLong(*(unsigned*)buf))
+	{
+	case IDPOLYHEADER:
+		Mod_LoadAliasModel(mod, buf);
+		break;
+
+	case IDSPRITEHEADER:
+		Mod_LoadSpriteModel(mod, buf);
+		break;
+
+	case IDSTUDIOHEADER:
+		Mod_LoadStudioModel(mod, buf);
+		break;
+
+	default:
+		DT_LoadDetailMapFile(loadname);
+		Mod_LoadBrushModel(mod, buf);
+		break;
+	}
+	*/
+	if (file)
+	{
+		FS_ReleaseReadBuffer(file, buf);
+		FS_Close(file);
+	}
+
+	return mod;
 }
 
 void Mod_UnloadSpriteTextures(model_t* pModel)

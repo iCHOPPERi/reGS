@@ -4,11 +4,14 @@
 #include "modelgen.h"
 #include "spritegn.h"
 
+#define NL_PRESENT 0
 #define NL_NEEDS_LOADED 1
 #define NL_UNREFERENCED 2
 #define NL_CLIENT 3
 
-extern model_t mod_known[1024];
+#define MAX_MOD_KNOWN 1024
+
+extern model_t mod_known[MAX_MOD_KNOWN];
 extern int mod_numknown;
 
 /*
@@ -134,5 +137,6 @@ extern	trivertx_t	*poseverts[ MAXALIASFRAMES ];
 
 void* Mod_Extradata(model_t* mod);
 void Mod_ClearAll();
+model_t* Mod_LoadModel(model_t* mod, const bool crash, const bool trackCRC);
 
 #endif //ENGINE_GL_MODEL_H
