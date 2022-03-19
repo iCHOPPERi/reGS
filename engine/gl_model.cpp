@@ -205,6 +205,28 @@ model_t* Mod_FindName(bool trackCRC, const char* name)
 	return mod;
 }
 
+void Mod_ChangeGame(void)
+{
+	int i;
+	model_t* mod = nullptr;
+	mod_known_info_t* p = nullptr;
+
+	for (i = 0; i < mod_numknown; i++)
+	{
+		mod = &mod_known[i];
+
+		if (mod->type == mod_studio)
+		{
+			if (Cache_Check(&mod->cache))
+				Cache_Free(&mod->cache);
+		}
+
+		p = &mod_known_info[i];
+		p->firstCRCDone = false;
+		p->initialCRC = 0;
+	}
+}
+
 model_t* Mod_LoadModel(model_t* mod, const bool crash, const bool trackCRC)
 {
 	CRC32_t currentCRC;
