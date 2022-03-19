@@ -141,6 +141,29 @@ void Mod_UnloadSpriteTextures(model_t* pModel)
 
 mleaf_t* Mod_PointInLeaf(vec_t* p, model_t* model)
 {
-	// TODO: Implement
-	return nullptr;
+	mnode_t* node;
+	float d;
+	mplane_t* plane;
+
+	if (!model || !model->nodes)
+		Sys_Error("Mod_PointInLeaf: bad model");
+
+	node = model->nodes;
+
+	while (true)
+	{
+		if (node->contents < 0)
+			return (mleaf_t*)node;
+
+		plane = node->plane;
+
+		d = DotProduct(p, plane->normal) - plane->dist;
+
+		if (d > 0)
+			node = node->children[0];
+		else
+			node = node->children[1];
+	}
+
+	return nullptr;	// never reached
 }
