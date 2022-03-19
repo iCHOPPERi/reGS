@@ -50,6 +50,7 @@ void AdjustSubRect(mspriteframe_t* pFrame, float* pfLeft, float* pfRight, float*
 
 void Draw_SpriteFrame(mspriteframe_t* pFrame, unsigned short* pPalette, int x, int y, const wrect_t* prcSubRect);
 void Draw_SpriteFrameHoles(mspriteframe_t* pFrame, unsigned __int16* pPalette, int x, int y, const wrect_t* prcSubRect);
+void Draw_SpriteFrameAdditive(mspriteframe_t* pFrame, unsigned __int16* pPalette, int x, int y, const wrect_t* prcSubRect);
 void Draw_Pic( int x, int y, qpic_t* pic );
 
 void Draw_BeginDisc();

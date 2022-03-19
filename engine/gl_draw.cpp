@@ -400,6 +400,14 @@ void Draw_SpriteFrameHoles(mspriteframe_t* pFrame, unsigned __int16* pPalette, i
 	qglDisable(GL_BLEND);
 }
 
+void Draw_SpriteFrameAdditive(mspriteframe_t* pFrame, unsigned __int16* pPalette, int x, int y, const wrect_t* prcSubRect)
+{
+	qglEnable(GL_BLEND);
+	qglBlendFunc(GL_ONE, GL_ONE);
+	Draw_Frame(pFrame, x, y, prcSubRect);
+	qglDisable(GL_BLEND);
+}
+
 void Draw_Pic( int x, int y, qpic_t* pic )
 {
 	//TODO: implement - Solokiller
