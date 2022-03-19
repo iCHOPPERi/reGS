@@ -152,6 +152,13 @@ byte* Mod_DecompressVis(byte* in, model_t* model)
 	return decompressed;
 }
 
+void Mod_FillInCRCInfo(bool trackCRC, int model_number)
+{
+	mod_known_info[model_number].firstCRCDone = false;
+	mod_known_info[model_number].shouldCRC = trackCRC;
+	mod_known_info[model_number].initialCRC = 0;
+}
+
 model_t* Mod_LoadModel(model_t* mod, const bool crash, const bool trackCRC)
 {
 	CRC32_t currentCRC;
