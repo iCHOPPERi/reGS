@@ -408,6 +408,24 @@ void Draw_SpriteFrameAdditive(mspriteframe_t* pFrame, unsigned short* pPalette, 
 	qglDisable(GL_BLEND);
 }
 
+void Draw_SpriteFrameGeneric(mspriteframe_t* pFrame, unsigned short* pPalette, int x, int y, const wrect_t* prcSubRect, int src, int dest, int width, int height)
+{
+	int w, h;
+
+	w = pFrame->width;
+	pFrame->width = width;
+	h = pFrame->height;
+	pFrame->height = height;
+
+	qglEnable(GL_BLEND);
+	qglBlendFunc(src, dest);
+	Draw_Frame(pFrame, x, y, prcSubRect);
+	qglDisable(GL_BLEND);
+
+	pFrame->width = w;
+	pFrame->height = h;
+}
+
 void Draw_Pic( int x, int y, qpic_t* pic )
 {
 	//TODO: implement - Solokiller

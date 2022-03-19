@@ -223,11 +223,12 @@ void SPR_DrawHoles( int frame, int x, int y, const wrect_t* prc )
 void SPR_DrawAdditive( int frame, int x, int y, const wrect_t* prc )
 {
 	mspriteframe_t* sprframe;
-
 	g_engdstAddrs.pfnSPR_DrawAdditive(&frame, &x, &y, &prc);
+
 	if (gpSprite && vid.width > x && vid.height > y)
 	{
 		sprframe = R_GetSpriteFrame(gpSprite, frame);
+
 		if (sprframe)
 			Draw_SpriteFrameAdditive(sprframe, gSpritePalette, x, y, prc);
 		else
@@ -237,7 +238,18 @@ void SPR_DrawAdditive( int frame, int x, int y, const wrect_t* prc )
 
 void SPR_DrawGeneric( int frame, int x, int y, const wrect_t* prc, int src, int dest, int width, int height )
 {
-	//TODO: implement - Solokiller
+	mspriteframe_t* sprframe;
+	g_engdstAddrs.pfnSPR_DrawGeneric(&frame, &x, &y, &prc, &src, &dest, &width, &height);
+
+	if (gpSprite && vid.width > x && vid.height > y)
+	{
+		sprframe = R_GetSpriteFrame(gpSprite, frame);
+
+		if (sprframe)
+			Draw_SpriteFrameGeneric(sprframe, gSpritePalette, x, y, prc, src, dest, width, height);
+		else
+			Con_DPrintf("Client.dll SPR_DrawGeneric error: invalid frame\n");
+	}
 }
 
 client_sprite_t* SPR_GetList( char* psz, int* piCount )
