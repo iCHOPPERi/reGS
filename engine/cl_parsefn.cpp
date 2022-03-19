@@ -1,9 +1,11 @@
 #include "quakedef.h"
 #include "cl_parsefn.h"
 
+event_hook_t* g_pEventHooks;
+
 void CL_InitEventSystem()
 {
-	//TODO: implement - Solokiller
+	g_pEventHooks = 0;
 }
 
 void CL_HookEvent( char* name, void( *pfnEvent )( event_args_t* ) )
