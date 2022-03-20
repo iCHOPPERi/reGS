@@ -152,5 +152,6 @@ void Mod_LoadMarksurfaces(lump_t* l);
 void Mod_LoadSurfedges(lump_t* l);
 void Mod_LoadPlanes(lump_t* l);
 float RadiusFromBounds(vec_t* mins, vec_t* maxs);
+void Mod_UnloadSpriteTextures(model_t* pModel);
 
 #endif //ENGINE_GL_MODEL_H
