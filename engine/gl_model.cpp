@@ -535,6 +535,25 @@ void Mod_LoadEdges(lump_t* l)
 	}
 }
 
+void Mod_LoadSurfedges(lump_t* l)
+{
+	int	i, count;
+	int* in, *out;
+	in = (int*)(mod_base + l->fileofs);
+
+	if (l->filelen % sizeof(*in))
+		Sys_Error("MOD_LoadBmodel: funny lump size in %s", loadmodel->name);
+
+	count = l->filelen / sizeof(*in);
+	out = (int*)Hunk_AllocName(count * sizeof(*out), loadname);
+
+	loadmodel->surfedges = out;
+	loadmodel->numsurfedges = count;
+
+	for (i = 0; i < count; i++)
+		out[i] = LittleLong(in[i]);
+}
+
 void Mod_LoadPlanes(lump_t* l)
 {
 	int			i, j;
