@@ -167,8 +167,7 @@ void Host_Error( const char* error, ... )
 	{
 		inerror = true;
 
-		//TODO: implement - Solokiller
-		//SCR_EndLoadingPlaque();
+		SCR_EndLoadingPlaque();
 
 		vsnprintf( string, ARRAYSIZE( string ), error, va );
 
