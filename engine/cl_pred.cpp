@@ -20,7 +20,21 @@ void CL_PushPMStates()
 
 void CL_PopPMStates()
 {
-	//TODO: implement - Solokiller
+    playermove_t* plmove; // edx
+
+    if (!pushed)
+    {
+        Con_Printf("CL_PopPMStates called without stack\n");
+        return;
+    }
+
+    if (pushed)
+    {
+        plmove = pmove;
+        pushed--;
+        pmove->numphysent = oldphysent;
+        plmove->numvisent = oldvisent;
+    }
 }
 
 void CL_RunUsercmd( local_state_t* from, local_state_t* to, usercmd_t* u, bool runfuncs, double* pfElapsed, unsigned int random_seed )
