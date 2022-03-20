@@ -535,6 +535,34 @@ void Mod_LoadEdges(lump_t* l)
 	}
 }
 
+void Mod_LoadMarksurfaces(lump_t* l)
+{
+	int	i, j, count;
+	short* in;
+	msurface_t** out;
+
+	in = (short*)(mod_base + l->fileofs);
+
+	if (l->filelen % sizeof(*in))
+		Sys_Error("MOD_LoadBmodel: funny lump size in %s", loadmodel->name);
+
+	count = l->filelen / sizeof(*in);
+	out = (msurface_t**)Hunk_AllocName(count * sizeof(*out), loadname);
+
+	loadmodel->marksurfaces = out;
+	loadmodel->nummarksurfaces = count;
+
+	for (i = 0; i < count; i++)
+	{
+		j = LittleShort(in[i]);
+
+		if (j >= loadmodel->numsurfaces)
+			Sys_Error("Mod_ParseMarksurfaces: bad surface number");
+
+		out[i] = loadmodel->surfaces + j;
+	}
+}
+
 void Mod_LoadSurfedges(lump_t* l)
 {
 	int	i, count;
