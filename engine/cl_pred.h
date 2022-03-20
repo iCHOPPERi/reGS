@@ -4,6 +4,8 @@
 #include "entity_state.h"
 #include "usercmd.h"
 
+extern int pushed, oldphysent, oldvisent;
+
 void CL_PushPMStates();
 
 void CL_PopPMStates();

@@ -1,9 +1,21 @@
 #include "quakedef.h"
 #include "cl_pred.h"
+#include "pmove.h"
+
+int pushed, oldphysent, oldvisent;
 
 void CL_PushPMStates()
 {
-	//TODO: implement - Solokiller
+    if (pushed)
+    {
+        Con_Printf("CL_PushPMStates called with pushed stack\n");
+    }
+    else
+    {
+        oldphysent = pmove->numphysent;
+        oldvisent = pmove->numvisent;
+        pushed = 1;
+    }
 }
 
 void CL_PopPMStates()
