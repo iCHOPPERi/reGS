@@ -724,3 +724,23 @@ mleaf_t* Mod_PointInLeaf(vec_t* p, model_t* model)
 
 	return nullptr;	// never reached
 }
+
+void Mod_Print(void)
+{
+	int	i;
+	model_t* mod;
+
+	Con_Printf("Cached models:\n");
+
+	for (i = 0, mod = mod_known; i < mod_numknown; i++, mod++)
+	{
+		Con_Printf("%8p : %s", mod->cache.data, mod->name);
+
+		if (mod->needload & NL_UNREFERENCED)
+			Con_Printf(" (!R)");
+		if (mod->needload & NL_NEEDS_LOADED)
+			Con_Printf(" (!P)");
+
+		Con_Printf("\n");
+	}
+}

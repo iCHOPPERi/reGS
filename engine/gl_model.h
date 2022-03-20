@@ -154,5 +154,6 @@ void Mod_LoadPlanes(lump_t* l);
 float RadiusFromBounds(vec_t* mins, vec_t* maxs);
 void Mod_SpriteTextureName(char* pszName, int nNameSize, const char* pcszModelName, int framenum);
 void Mod_UnloadSpriteTextures(model_t* pModel);
+void Mod_Print(void);
 
 #endif //ENGINE_GL_MODEL_H
