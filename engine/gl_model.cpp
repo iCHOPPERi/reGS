@@ -667,26 +667,28 @@ float RadiusFromBounds(vec_t* mins, vec_t* maxs)
 
 void Mod_UnloadSpriteTextures(model_t* pModel)
 {
-	void* pvVar1;
-	int param4;
-	int iVar2;
+	int	i;
 	char name[256];
+	msprite_t* spr = nullptr;
 
-	if (pModel->type == mod_sprite) {
-		pvVar1 = (pModel->cache).data;
-		pModel->needload = true;
-		if ((pvVar1 != (void*)0x0) && (0 < *(int*)((int)pvVar1 + 0xc))) {
-			param4 = 0;
-			do {
-				iVar2 = param4 + 1;
-				snprintf(name, 0x100, "%s_%i", pModel->name, param4);
-				// TODO: impl - xWhitey
-				//GL_UnloadTexture(name);
-				param4 = iVar2;
-			} while (*(int*)((int)pvVar1 + 0xc) != iVar2 && iVar2 <= *(int*)((int)pvVar1 + 0xc));
+	if (!pModel)
+		return;
+
+	if (pModel->type != mod_sprite)
+		return;
+
+	pModel->needload = NL_NEEDS_LOADED;
+
+	spr = (msprite_t*)pModel->cache.data;
+
+	if (spr)
+	{
+		for (i = 0; i < spr->numframes; i++)
+		{
+			sprintf(name, "%s_%i", pModel->name, i);
+			// GL_UnloadTexture(name); - TODO: implement - ScriptedSnark
 		}
 	}
-	return;
 }
 
 mleaf_t* Mod_PointInLeaf(vec_t* p, model_t* model)
