@@ -20,9 +20,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "quakedef.h"
 #include "server.h"
 #include "view.h"
+#include "module.h"
 
 vec3_t		r_soundOrigin;
 vec3_t		r_playerViewportAngles;
+screenshake_t gVShake;
 
 void V_Init()
 {
@@ -42,7 +44,13 @@ void V_CalcShake()
 
 void V_ApplyShake( float* origin, float* angles, float factor )
 {
-	//TODO: implement - Solokiller
+	g_engdstAddrs.V_ApplyShake(&origin, &angles, &factor);
+
+	if (origin)
+		VectorMA(origin, factor, gVShake.appliedOffset, origin);
+
+	if (angles)
+		angles[2] = gVShake.appliedAngle * factor + angles[2];
 }
 
 int V_ScreenShake( const char* pszName, int iSize, void* pbuf )

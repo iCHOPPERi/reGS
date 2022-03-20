@@ -22,6 +22,19 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include "shake.h"
 
+typedef struct screenshake_s
+{
+	float time;
+	float duration;
+	float amplitude;
+	float frequency;
+	float nextShake;
+	vec3_t offset;
+	float angle;
+	vec3_t appliedOffset;
+	float appliedAngle;
+} screenshake_t;
+
 void V_Init();
 
 bool V_CheckGamma();
