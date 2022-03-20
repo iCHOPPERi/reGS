@@ -128,4 +128,13 @@ void Host_ClearSaveDirectory();
 #define MAX_FRAMETIME	0.25
 #define MIN_FRAMETIME	0.001
 
+#undef LittleLong
+#undef LittleShort
+#undef LittleFloat
+#undef LittleDword
+#undef BigLong
+#undef BigShort
+#undef BigFloat
+#undef BigDword
+
 #endif //ENGINE_QUAKEDEF_H
