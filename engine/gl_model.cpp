@@ -535,6 +535,39 @@ void Mod_LoadEdges(lump_t* l)
 	}
 }
 
+void Mod_MakeHull0(void)
+{
+	mnode_t* in, *child;
+	dclipnode_t* out;
+	int	i, j, count;
+	hull_t* hull;
+
+	hull = &loadmodel->hulls[0];
+
+	in = loadmodel->nodes;
+	count = loadmodel->numnodes;
+	out = (dclipnode_t*)Hunk_AllocName(count * sizeof(*out), loadname);
+
+	hull->clipnodes = out;
+	hull->firstclipnode = 0;
+	hull->lastclipnode = count - 1;
+	hull->planes = loadmodel->planes;
+
+	for (i = 0; i < count; i++, out++, in++)
+	{
+		out->planenum = in->plane - loadmodel->planes;
+		for (j = 0; j < 2; j++)
+		{
+			child = in->children[j];
+
+			if (child->contents < 0)
+				out->children[j] = child->contents;
+			else
+				out->children[j] = child - loadmodel->nodes;
+		}
+	}
+}
+
 void Mod_LoadMarksurfaces(lump_t* l)
 {
 	int	i, j, count;

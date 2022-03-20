@@ -147,6 +147,7 @@ void Mod_LoadVisibility(lump_t* l);
 void Mod_LoadVertexes(lump_t* l);
 void Mod_LoadSubmodels(lump_t* l);
 void Mod_LoadEdges(lump_t* l);
+void Mod_MakeHull0(void);
 void Mod_LoadMarksurfaces(lump_t* l);
 void Mod_LoadSurfedges(lump_t* l);
 void Mod_LoadPlanes(lump_t* l);
