@@ -665,6 +665,11 @@ float RadiusFromBounds(vec_t* mins, vec_t* maxs)
 	return Length(corner);
 }
 
+void Mod_SpriteTextureName(char* pszName, int nNameSize, const char* pcszModelName, int framenum)
+{
+	snprintf(pszName, nNameSize, "%s_%i", pcszModelName, framenum);
+}
+
 void Mod_UnloadSpriteTextures(model_t* pModel)
 {
 	int	i;
