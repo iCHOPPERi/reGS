@@ -171,8 +171,30 @@ dlight_t* CL_AllocElight( int key )
 
 model_t* CL_GetModelByIndex( int index )
 {
-	//TODO: implement - Solokiller
-	return nullptr;
+	if (index >= MAX_MODELS)
+		return nullptr;
+
+	model_t* model = cl.model_precache[index]; // ebx
+
+	if (!model)
+		return nullptr;
+
+	if (model->needload == NL_NEEDS_LOADED || model->needload == NL_UNREFERENCED)
+	{
+		if (fs_precache_timings.value == 0.0)
+		{
+			Mod_LoadModel(model, false, false);
+		}
+		else
+		{
+			double start = Sys_FloatTime();
+			Mod_LoadModel(model, false, false);
+			double end = Sys_FloatTime() - start;
+			Con_DPrintf("fs_precache_timings: loaded model %s in time %.3f sec\n", model->name, end);
+		}
+	}
+
+	return model;
 }
 
 void CL_GetPlayerHulls()
