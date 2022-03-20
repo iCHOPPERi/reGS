@@ -535,6 +535,43 @@ void Mod_LoadEdges(lump_t* l)
 	}
 }
 
+void Mod_LoadPlanes(lump_t* l)
+{
+	int			i, j;
+	mplane_t* out;
+	dplane_t* in;
+	int			count;
+	int			bits;
+
+	in = (dplane_t*)(mod_base + l->fileofs);
+
+	if (l->filelen % sizeof(*in))
+		Sys_Error("MOD_LoadBmodel: funny lump size in %s", loadmodel->name);
+
+	count = l->filelen / sizeof(*in);
+	out = (mplane_t*)Hunk_AllocName(count * 2 * sizeof(*out), loadname);
+
+	loadmodel->planes = out;
+	loadmodel->numplanes = count;
+
+	for (i = 0; i < count; i++, in++, out++)
+	{
+		bits = 0;
+
+		for (j = 0; j < 3; j++)
+		{
+			out->normal[j] = LittleFloat(in->normal[j]);
+
+			if (out->normal[j] < 0)
+				bits |= 1 << j;
+		}
+
+		out->dist = LittleFloat(in->dist);
+		out->type = LittleLong(in->type);
+		out->signbits = bits;
+	}
+}
+
 float RadiusFromBounds(vec_t* mins, vec_t* maxs)
 {
 	int		i;
