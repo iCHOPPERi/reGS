@@ -252,7 +252,13 @@ void SV_ResetModInfo()
 
 void SV_ServerShutdown()
 {
-	//TODO: implement - Solokiller
+	// Steam_NotifyOfLevelChange(); - TODO: implement - ScriptedSnark
+	// gGlobalVariables.time = sv.time; - TODO: implement sv.time - ScriptedSnark
+	if (svs.dll_initialized)
+	{
+		if (sv.active)
+			gEntityInterface.pfnServerDeactivate();
+	}
 }
 
 void SV_Init()
