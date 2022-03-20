@@ -45,7 +45,7 @@ void EV_PlaySound( int ent, float* origin, int channel, const char* sample,
 
 void EV_StopSound( int ent, int channel, const char* sample )
 {
-	//TODO: implement - Solokiller
+	EV_PlaySound(ent, vec3_origin, channel, sample, 0.0, 0.0, 32, 100);
 }
 
 int EV_FindModelIndex( const char* pmodel )
