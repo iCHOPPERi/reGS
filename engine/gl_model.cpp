@@ -511,6 +511,30 @@ void Mod_LoadSubmodels(lump_t* l)
 	}
 }
 
+void Mod_LoadEdges(lump_t* l)
+{
+	dedge_t* in;
+	medge_t* out;
+	int i, count;
+
+	in = (dedge_t*)(mod_base + l->fileofs);
+
+	if (l->filelen % sizeof(*in))
+		Sys_Error("MOD_LoadBmodel: funny lump size in %s", loadmodel->name);
+
+	count = l->filelen / sizeof(*in);
+	out = (medge_t*)Hunk_AllocName((count + 1) * sizeof(*out), loadname);
+
+	loadmodel->edges = out;
+	loadmodel->numedges = count;
+
+	for (i = 0; i < count; i++, in++, out++)
+	{
+		out->v[0] = (unsigned short)LittleShort(in->v[0]);
+		out->v[1] = (unsigned short)LittleShort(in->v[1]);
+	}
+}
+
 float RadiusFromBounds(vec_t* mins, vec_t* maxs)
 {
 	int		i;
