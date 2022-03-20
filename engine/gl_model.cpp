@@ -452,6 +452,65 @@ void Mod_LoadVisibility(lump_t* l)
 	Q_memcpy(loadmodel->visdata, mod_base + l->fileofs, l->filelen);
 }
 
+void Mod_LoadVertexes(lump_t* l)
+{
+	dvertex_t* in;
+	mvertex_t* out;
+	int	i, count;
+
+	in = (dvertex_t*)(mod_base + l->fileofs);
+
+	if (l->filelen % sizeof(*in))
+		Sys_Error("MOD_LoadBmodel: funny lump size in %s", loadmodel->name);
+
+	count = l->filelen / sizeof(*in);
+	out = (mvertex_t*)Hunk_AllocName(count * sizeof(*out), loadname);
+
+	loadmodel->vertexes = out;
+	loadmodel->numvertexes = count;
+
+	for (i = 0; i < count; i++, in++, out++)
+	{
+		out->position[0] = LittleFloat(in->point[0]);
+		out->position[1] = LittleFloat(in->point[1]);
+		out->position[2] = LittleFloat(in->point[2]);
+	}
+}
+
+void Mod_LoadSubmodels(lump_t* l)
+{
+	dmodel_t* in;
+	dmodel_t* out;
+	int	i, j, count;
+	in = (dmodel_t*)(mod_base + l->fileofs);
+
+	if (l->filelen % sizeof(*in))
+		Sys_Error("MOD_LoadBmodel: funny lump size in %s", loadmodel->name);
+
+	count = l->filelen / sizeof(*in);
+	out = (dmodel_t*)Hunk_AllocName(count * sizeof(*out), loadname);
+
+	loadmodel->submodels = out;
+	loadmodel->numsubmodels = count;
+
+	for (i = 0; i < count; i++, in++, out++)
+	{
+		for (j = 0; j < 3; j++)
+		{
+			out->mins[j] = LittleFloat(in->mins[j]) - 1;
+			out->maxs[j] = LittleFloat(in->maxs[j]) + 1;
+			out->origin[j] = LittleFloat(in->origin[j]);
+		}
+
+		for (j = 0; j < MAX_MAP_HULLS; j++)
+			out->headnode[j] = LittleLong(in->headnode[j]);
+
+		out->visleafs = LittleLong(in->visleafs);
+		out->firstface = LittleLong(in->firstface);
+		out->numfaces = LittleLong(in->numfaces);
+	}
+}
+
 float RadiusFromBounds(vec_t* mins, vec_t* maxs)
 {
 	int		i;

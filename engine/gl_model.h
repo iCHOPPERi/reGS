@@ -144,6 +144,8 @@ model_t* Mod_LoadModel(model_t* mod, const bool crash, const bool trackCRC);
 void Mod_LoadEntities(lump_t* l);
 void Mod_LoadLighting(lump_t* l);
 void Mod_LoadVisibility(lump_t* l);
+void Mod_LoadVertexes(lump_t* l);
+void Mod_LoadSubmodels(lump_t* l);
 float RadiusFromBounds(vec_t* mins, vec_t* maxs);
 
 #endif //ENGINE_GL_MODEL_H
