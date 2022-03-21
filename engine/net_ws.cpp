@@ -11,6 +11,7 @@
 
 #define	MAX_LOOPBACK 4
 
+int net_configured;
 SOCKET ip_sockets[NS_MAX] = { INV_SOCK, INV_SOCK, INV_SOCK };
 sizebuf_t net_message;
 qboolean noip;
@@ -85,7 +86,54 @@ void NetadrToSockadr(const netadr_t* a, struct sockaddr* s)
 
 void NET_Config( bool multiplayer )
 {
-	//TODO: implement - Solokiller
+	static qboolean old_config;
+
+	if (old_config == multiplayer)
+	{
+		return;
+	}
+
+	old_config = multiplayer;
+
+	if (multiplayer)
+	{
+		//if (!noip)
+			//NET_OpenIP(); - TODO: implement - ScriptedSnark
+		//if (!noipx)
+			// NET_OpenIPX(); - TODO: implement - ScriptedSnark
+
+		static qboolean bFirst = TRUE;
+		if (bFirst)
+		{
+			bFirst = FALSE;
+			// NET_GetLocalAddress(); - TODO: implement - ScriptedSnark
+		}
+	}
+	else
+	{
+		// NET_ThreadLock(); - TODO: implement - ScriptedSnark
+
+		for (int sock = 0; sock < NS_MAX; sock++)
+		{
+			if (ip_sockets[sock] != INV_SOCK)
+			{
+				closesocket(ip_sockets[sock]);
+				ip_sockets[sock] = INV_SOCK;
+			}
+
+			/* - TODO: implement IPX sockets - ScriptedSnark
+			if (ipx_sockets[sock] != INV_SOCK)
+			{
+				closesocket(ipx_sockets[sock]);
+				ipx_sockets[sock] = INV_SOCK;
+			}
+			*/
+		}
+
+		// NET_ThreadUnlock(); - TODO: implement - ScriptedSnark
+	}
+
+	net_configured = multiplayer ? 1 : 0;
 }
 
 void NET_Init()
