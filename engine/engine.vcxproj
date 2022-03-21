@@ -97,9 +97,9 @@
     <ClCompile Include="..\common\ObjectList.cpp" />
     <ClCompile Include="..\common\TokenLine.cpp" />
     <ClCompile Include="..\public\FileSystem_Helpers.cpp" />
+    <ClCompile Include="..\public\interface.cpp" />
     <ClCompile Include="..\public\registry.cpp" />
     <ClCompile Include="..\tier1\CharacterSet.cpp" />
-    <ClCompile Include="..\tier1\interface.cpp" />
     <ClCompile Include="..\tier1\TokenReader.cpp" />
     <ClCompile Include="buildnum.cpp" />
     <ClCompile Include="cd.cpp" />
