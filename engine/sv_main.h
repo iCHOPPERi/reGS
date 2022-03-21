@@ -5,6 +5,8 @@
 
 struct client_frame_t;
 
+extern delta_info_t* g_sv_delta;
+
 extern bool allow_cheats;
 
 extern cvar_t sv_allow_upload;

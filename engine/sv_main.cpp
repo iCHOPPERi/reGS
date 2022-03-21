@@ -6,9 +6,12 @@
 #include "sv_main.h"
 #include "sv_phys.h"
 #include "server.h"
+#include <delta.h>
 
 edict_t** g_moved_edict;
 vec3_t* g_moved_from;
+
+delta_info_t* g_sv_delta;
 
 server_static_t svs;
 server_t sv;
@@ -280,7 +283,20 @@ void SV_Init()
 
 void SV_Shutdown()
 {
-	//TODO: implement - Solokiller
+	delta_info_t* p = g_sv_delta;
+	while (p)
+	{
+		delta_info_t* n = p->next;
+		if (p->delta)
+			DELTA_FreeDescription(&p->delta);
+
+		Mem_Free(p->name);
+		Mem_Free(p->loadfile);
+		Mem_Free(p);
+		p = n;
+	}
+
+	g_sv_delta = NULL;
 }
 
 void SV_SetMaxclients()
