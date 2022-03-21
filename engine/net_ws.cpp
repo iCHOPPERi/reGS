@@ -84,7 +84,7 @@ void NetadrToSockadr(const netadr_t* a, struct sockaddr* s)
 	}
 }
 
-void NET_Config( bool multiplayer )
+void NET_Config( qboolean multiplayer )
 {
 	static qboolean old_config;
 
