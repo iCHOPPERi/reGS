@@ -56,6 +56,22 @@ const GameToAppIDMapItem_t g_GameToAppIDMap[] =
 
 modinfo_t gmodinfo = {};
 
+delta_t* SV_LookupDelta(char* name)
+{
+	delta_info_t* p = g_sv_delta;
+
+	while (p)
+	{
+		if (!Q_stricmp(name, p->name))
+		{
+			return p->delta;
+		}
+		p = p->next;
+	}
+
+	Sys_Error("%s: Couldn't find delta for %s\n", __func__, name);
+}
+
 AppId_t GetGameAppID()
 {
 	char gd[ FILENAME_MAX ];

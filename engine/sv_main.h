@@ -19,6 +19,7 @@ extern cvar_t max_queries_sec;
 extern cvar_t max_queries_sec_global;
 extern cvar_t max_queries_window;
 
+delta_t* SV_LookupDelta(char* name);
 AppId_t GetGameAppID();
 
 bool IsGameSubscribed( const char *game );
