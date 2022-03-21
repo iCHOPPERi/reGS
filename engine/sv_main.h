@@ -2,6 +2,7 @@
 #define ENGINE_SV_MAIN_H
 
 #include "steam/steam_api.h"
+#include "delta.h"
 
 struct client_frame_t;
 

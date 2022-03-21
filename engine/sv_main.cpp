@@ -6,7 +6,6 @@
 #include "sv_main.h"
 #include "sv_phys.h"
 #include "server.h"
-#include <delta.h>
 
 edict_t** g_moved_edict;
 vec3_t* g_moved_from;
