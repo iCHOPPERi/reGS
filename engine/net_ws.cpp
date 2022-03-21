@@ -12,8 +12,16 @@
 #define	MAX_LOOPBACK 4
 
 SOCKET ip_sockets[NS_MAX] = { INV_SOCK, INV_SOCK, INV_SOCK };
-
 sizebuf_t net_message;
+qboolean noip;
+qboolean noipx;
+qboolean use_thread;
+
+unsigned char net_message_buffer[NET_MAX_PAYLOAD];
+unsigned char in_message_buf[NET_MAX_PAYLOAD];
+sizebuf_t in_message;
+
+packetlag_t g_pLagData[NS_MAX];
 
 typedef struct
 {
@@ -29,8 +37,27 @@ typedef struct
 } loopback_t;
 
 static loopback_t	loopbacks[2];
+int net_sleepforever = 1;
 
 extern cvar_t cl_showfps;
+
+cvar_t net_address = { "net_address", "", 0, 0.0f, NULL };
+cvar_t ipname = { "ip", "localhost", 0, 0.0f, NULL };
+cvar_t defport = { "port", "27015", 0, 0.0f, NULL };
+cvar_t ip_clientport = { "ip_clientport", "0", 0, 0.0f, NULL };
+cvar_t clientport = { "clientport", "27005", 0, 0.0f, NULL };
+cvar_t clockwindow = { "clockwindow", "0.5", 0, 0.0f, NULL };
+cvar_t iphostport = { "ip_hostport", "0", 0, 0.0f, NULL };
+cvar_t hostport = { "hostport", "0", 0, 0.0f, NULL };
+cvar_t multicastport = { "multicastport", "27025", 0, 0.0f, NULL };
+cvar_t ipx_hostport = { "ipx_hostport", "0", 0, 0.0f, NULL };
+cvar_t ipx_clientport = { "ipx_clientport", "0", 0, 0.0f, NULL };
+cvar_t fakelag = { "fakelag", "0.0", 0, 0.0f, NULL };
+cvar_t fakeloss = { "fakeloss", "0.0", 0, 0.0f, NULL };
+cvar_t net_graph = { "net_graph", "0", FCVAR_ARCHIVE, 0.0f, NULL };
+cvar_t net_graphwidth = { "net_graphwidth", "150", 0, 0.0f, NULL };
+cvar_t net_scale = { "net_scale", "5", FCVAR_ARCHIVE, 0.0f, NULL };
+cvar_t net_graphpos = { "net_graphpos", "1", FCVAR_ARCHIVE, 0.0f, NULL };
 
 // https://github.com/dreamstalker/rehlds/blob/2f0a402f9d14f05463a3c1457694fe0d57a61012/rehlds/engine/net_ws.cpp#L126
 void NetadrToSockadr(const netadr_t* a, struct sockaddr* s)
@@ -63,7 +90,66 @@ void NET_Config( bool multiplayer )
 
 void NET_Init()
 {
-	//TODO: implement - Solokiller
+	// Cmd_AddCommand("maxplayers", MaxPlayers_f); - TODO: implement - ScriptedSnark
+
+	Cvar_RegisterVariable(&net_address);
+	Cvar_RegisterVariable(&ipname);
+	Cvar_RegisterVariable(&iphostport);
+	Cvar_RegisterVariable(&hostport);
+	Cvar_RegisterVariable(&defport);
+	Cvar_RegisterVariable(&ip_clientport);
+	Cvar_RegisterVariable(&clientport);
+	Cvar_RegisterVariable(&clockwindow);
+	Cvar_RegisterVariable(&multicastport);
+	Cvar_RegisterVariable(&ipx_hostport);
+	Cvar_RegisterVariable(&ipx_clientport);
+	Cvar_RegisterVariable(&fakelag);
+	Cvar_RegisterVariable(&fakeloss);
+	Cvar_RegisterVariable(&net_graph);
+	Cvar_RegisterVariable(&net_graphwidth);
+	Cvar_RegisterVariable(&net_scale);
+	Cvar_RegisterVariable(&net_graphpos);
+
+	if (COM_CheckParm("-netthread"))
+		use_thread = TRUE;
+
+	if (COM_CheckParm("-netsleep"))
+		net_sleepforever = 0;
+
+#ifdef _WIN32
+	if (COM_CheckParm("-noipx"))
+		noipx = TRUE;
+#endif // _WIN32
+
+	if (COM_CheckParm("-noip"))
+		noip = TRUE;
+
+	int port = COM_CheckParm("-port");
+	if (port)
+		Cvar_SetValue("hostport", Q_atof(com_argv[port + 1]));
+
+	int clockwindow_ = COM_CheckParm("-clockwindow");
+	if (clockwindow_)
+		Cvar_SetValue("clockwindow", Q_atof(com_argv[clockwindow_ + 1]));
+
+	net_message.data = (byte*)&net_message_buffer;
+	net_message.maxsize = sizeof(net_message_buffer);
+	net_message.flags = 0;
+	net_message.buffername = "net_message";
+
+	in_message.data = (byte*)&in_message_buf;
+	in_message.maxsize = sizeof(in_message_buf);
+	in_message.flags = 0;
+	in_message.buffername = "in_message";
+
+	for (int i = 0; i < NS_MAX; i++)
+	{
+		g_pLagData[i].pPrev = &g_pLagData[i];
+		g_pLagData[i].pNext = &g_pLagData[i];
+	}
+
+	// NET_AllocateQueues(); - TODO: implement - ScriptedSnark
+	Con_DPrintf("Base networking initialized.\n");
 }
 
 void NET_Shutdown()

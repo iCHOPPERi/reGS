@@ -66,6 +66,46 @@ extern sizebuf_t net_message;
 
 const int FRAGMENT_MAX_SIZE = 1024;
 
+extern cvar_t net_address;
+extern cvar_t ipname;
+extern cvar_t defport;
+extern cvar_t ip_clientport;
+extern cvar_t clientport;
+extern int net_sleepforever;
+extern float gFakeLag;
+extern int net_configured;
+extern netadr_t net_local_ipx_adr;
+extern netadr_t net_local_adr;
+extern netadr_t net_from;
+extern qboolean noip;
+extern qboolean noipx;
+extern sizebuf_t net_message;
+extern cvar_t clockwindow;
+extern qboolean use_thread;
+extern cvar_t iphostport;
+extern cvar_t hostport;
+extern cvar_t ipx_hostport;
+extern cvar_t ipx_clientport;
+extern cvar_t multicastport;
+extern cvar_t fakelag;
+extern cvar_t fakeloss;
+extern cvar_t net_graph;
+extern cvar_t net_graphwidth;
+extern cvar_t net_scale;
+extern cvar_t net_graphpos;
+extern unsigned char net_message_buffer[NET_MAX_PAYLOAD];
+extern unsigned char in_message_buf[NET_MAX_PAYLOAD];
+
+typedef struct packetlag_s
+{
+	unsigned char* pPacketData;
+	int nSize;
+	netadr_t net_from_;
+	float receivedTime;
+	struct packetlag_s* pNext;
+	struct packetlag_s* pPrev;
+} packetlag_t;
+
 typedef struct flowstats_s
 {
 	// Size of message sent/received
@@ -109,6 +149,8 @@ typedef struct fragbufwaiting_s
 	int fragbufcount;
 	fragbuf_t* fragbufs;
 } fragbufwaiting_t;
+
+extern packetlag_t g_pLagData[3];
 
 void NET_Config( bool multiplayer );
 
