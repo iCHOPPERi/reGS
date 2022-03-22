@@ -133,7 +133,7 @@ void NET_Config( qboolean multiplayer )
 	}
 	else
 	{
-		// NET_ThreadLock(); - TODO: implement - ScriptedSnark
+		NET_ThreadLock();
 
 		for (int sock = 0; sock < NS_MAX; sock++)
 		{
@@ -152,7 +152,7 @@ void NET_Config( qboolean multiplayer )
 			*/
 		}
 
-		// NET_ThreadUnlock(); - TODO: implement - ScriptedSnark
+		NET_ThreadUnlock();
 	}
 
 	net_configured = multiplayer ? 1 : 0;
