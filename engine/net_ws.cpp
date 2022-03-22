@@ -11,6 +11,8 @@
 
 #define	MAX_LOOPBACK 4
 
+qboolean net_thread_initialized;
+
 int net_configured;
 SOCKET ip_sockets[NS_MAX] = { INV_SOCK, INV_SOCK, INV_SOCK };
 sizebuf_t net_message;
@@ -23,6 +25,10 @@ unsigned char in_message_buf[NET_MAX_PAYLOAD];
 sizebuf_t in_message;
 
 packetlag_t g_pLagData[NS_MAX];
+
+HANDLE hNetThread;
+DWORD dwNetThreadId;
+CRITICAL_SECTION net_cs;
 
 typedef struct
 {
@@ -59,6 +65,22 @@ cvar_t net_graph = { "net_graph", "0", FCVAR_ARCHIVE, 0.0f, NULL };
 cvar_t net_graphwidth = { "net_graphwidth", "150", 0, 0.0f, NULL };
 cvar_t net_scale = { "net_scale", "5", FCVAR_ARCHIVE, 0.0f, NULL };
 cvar_t net_graphpos = { "net_graphpos", "1", FCVAR_ARCHIVE, 0.0f, NULL };
+
+void NET_ThreadLock()
+{
+	if (use_thread && net_thread_initialized)
+	{
+		EnterCriticalSection(&net_cs);
+	}
+}
+
+void NET_ThreadUnlock()
+{
+	if (use_thread && net_thread_initialized)
+	{
+		LeaveCriticalSection(&net_cs);
+	}
+}
 
 // https://github.com/dreamstalker/rehlds/blob/2f0a402f9d14f05463a3c1457694fe0d57a61012/rehlds/engine/net_ws.cpp#L126
 void NetadrToSockadr(const netadr_t* a, struct sockaddr* s)

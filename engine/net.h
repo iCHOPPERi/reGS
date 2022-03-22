@@ -225,6 +225,8 @@ typedef struct fragbufwaiting_s
 
 extern packetlag_t g_pLagData[3];
 
+void NET_ThreadLock();
+void NET_ThreadUnlock();
 void NET_Config( qboolean multiplayer );
 
 void NET_Shutdown();
