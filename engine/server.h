@@ -28,6 +28,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "pm_info.h"
 #include "eiface.h"
 #include "usercmd.h"
+#include "net_chan.h"
 
 struct server_t
 {
@@ -126,8 +127,7 @@ typedef struct client_s
 	bool has_force_unmodified;			// true = mp_consistency is set and at least one file is forced to be consistent
 
 	//===== NETWORK ============
-	//TODO: implement - Solokiller
-	//netchan_t netchan;
+	netchan_t netchan;
 
 	int chokecount;						// amount of choke since last client message
 	int delta_sequence;					// -1 = no compression
@@ -374,5 +374,7 @@ extern	server_t		sv;		//! local server
 extern playermove_t g_svmove;
 
 extern DLL_FUNCTIONS gEntityInterface;
+
+void SV_FlushRedirect(void);
 
 #endif //ENGINE_SERVER_H

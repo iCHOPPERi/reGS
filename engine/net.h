@@ -21,7 +21,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define ENGINE_NET_H
 
 #include <cstdlib>
-
 #include "tier0/platform.h"
 #include "netadr.h"
 
@@ -96,6 +95,80 @@ extern cvar_t net_graphpos;
 extern unsigned char net_message_buffer[NET_MAX_PAYLOAD];
 extern unsigned char in_message_buf[NET_MAX_PAYLOAD];
 
+const char A2A_PRINT = 'l';
+
+typedef enum svc_commands_e
+{
+	svc_bad,
+	svc_nop,
+	svc_disconnect,
+	svc_event,
+	svc_version,
+	svc_setview,
+	svc_sound,
+	svc_time,
+	svc_print,
+	svc_stufftext,
+	svc_setangle,
+	svc_serverinfo,
+	svc_lightstyle,
+	svc_updateuserinfo,
+	svc_deltadescription,
+	svc_clientdata,
+	svc_stopsound,
+	svc_pings,
+	svc_particle,
+	svc_damage,
+	svc_spawnstatic,
+	svc_event_reliable,
+	svc_spawnbaseline,
+	svc_temp_entity,
+	svc_setpause,
+	svc_signonnum,
+	svc_centerprint,
+	svc_killedmonster,
+	svc_foundsecret,
+	svc_spawnstaticsound,
+	svc_intermission,
+	svc_finale,
+	svc_cdtrack,
+	svc_restore,
+	svc_cutscene,
+	svc_weaponanim,
+	svc_decalname,
+	svc_roomtype,
+	svc_addangle,
+	svc_newusermsg,
+	svc_packetentities,
+	svc_deltapacketentities,
+	svc_choke,
+	svc_resourcelist,
+	svc_newmovevars,
+	svc_resourcerequest,
+	svc_customization,
+	svc_crosshairangle,
+	svc_soundfade,
+	svc_filetxferfailed,
+	svc_hltv,
+	svc_director,
+	svc_voiceinit,
+	svc_voicedata,
+	svc_sendextrainfo,
+	svc_timescale,
+	svc_resourcelocation,
+	svc_sendcvarvalue,
+	svc_sendcvarvalue2,
+	svc_exec,
+	svc_reserve60,
+	svc_reserve61,
+	svc_reserve62,
+	svc_reserve63,
+	// Let's just use an id of the first user message instead of the last svc_*
+	// This change makes code in `PF_MessageEnd_I` forward-compatible with future svc_* additions
+	svc_startofusermessages = svc_exec,
+	svc_endoflist = 255,
+} svc_commands_t;
+
 typedef struct packetlag_s
 {
 	unsigned char* pPacketData;
@@ -152,7 +225,7 @@ typedef struct fragbufwaiting_s
 
 extern packetlag_t g_pLagData[3];
 
-void NET_Config( bool multiplayer );
+void NET_Config( qboolean multiplayer );
 
 void NET_Shutdown();
 

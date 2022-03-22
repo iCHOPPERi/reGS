@@ -18,7 +18,7 @@ bool g_bMajorMapChange = false;
 void Host_InitializeGameDLL()
 {
 	Cbuf_Execute();
-	NET_Config(svs.maxclients > 1);
+	NET_Config((qboolean)svs.maxclients > 1);
 
 	if (svs.dll_initialized)
 	{

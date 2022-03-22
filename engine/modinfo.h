@@ -30,7 +30,6 @@ struct modinfo_t
 extern modinfo_t gmodinfo;
 
 void SV_ResetModInfo();
-
 void DLL_SetModKey( modinfo_t *pinfo, char *pkey, char *pvalue );
 
 #endif //ENGINE_MODINFO_H

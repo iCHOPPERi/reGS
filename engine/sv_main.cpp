@@ -6,11 +6,16 @@
 #include "sv_main.h"
 #include "sv_phys.h"
 #include "server.h"
+#include "host.h"
 
 edict_t** g_moved_edict;
 vec3_t* g_moved_from;
 
 delta_info_t* g_sv_delta;
+redirect_t sv_redirected;
+netadr_t sv_redirectto;
+
+char outputbuf[MAX_ROUTEABLE_PACKET];
 
 server_static_t svs;
 server_t sv;
@@ -265,6 +270,40 @@ void SV_ResetModInfo()
 		com_ignorecolons = false;
 		Mem_Free( pFileData );
 		FS_Close( hLibListFile );
+	}
+}
+
+void SV_FlushRedirect(void)
+{
+	unsigned char* data;
+	sizebuf_t buf;
+
+	if (sv_redirected == RD_PACKET)
+	{
+		int allocLen = Q_strlen(outputbuf) + 22;
+		data = (unsigned char*)_malloca(allocLen);
+
+		buf.buffername = "Redirected Text";
+		buf.data = data;
+		buf.maxsize = Q_strlen(outputbuf) + 7;
+		buf.cursize = 0;
+		buf.flags = 1;
+
+		MSG_WriteLong(&buf, -1);
+		MSG_WriteByte(&buf, A2A_PRINT);
+		MSG_WriteString(&buf, outputbuf);
+		MSG_WriteByte(&buf, 0);
+		NET_SendPacket(NS_SERVER, buf.cursize, buf.data, sv_redirectto);
+		outputbuf[0] = 0;
+	}
+	else
+	{
+		if (sv_redirected == RD_CLIENT)
+		{
+			MSG_WriteByte(&host_client->netchan.message, svc_print);
+			MSG_WriteString(&host_client->netchan.message, outputbuf);
+		}
+		outputbuf[0] = 0;
 	}
 }
 
