@@ -307,6 +307,12 @@ void SV_FlushRedirect(void)
 	}
 }
 
+int SV_SpawnServer(qboolean bIsDemo, char* server, char* startspot)
+{
+	// TODO: implement - ScriptedSnark
+	return 0;
+}
+
 void SV_ServerShutdown()
 {
 	// Steam_NotifyOfLevelChange(); - TODO: implement - ScriptedSnark

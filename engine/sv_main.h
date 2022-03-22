@@ -39,6 +39,8 @@ void SV_AllocClientFrames();
 
 void SV_ClearFrames( client_frame_t** frames );
 
+int SV_SpawnServer(qboolean bIsDemo, char* server, char* startspot);
+
 void SV_ServerShutdown();
 
 void SV_Init();

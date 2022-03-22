@@ -7,6 +7,25 @@
 
 static int32 idum = 0;
 
+qboolean PF_IsDedicatedServer()
+{
+	return g_bIsDedicatedServer;
+}
+
+int PF_IsMapValid_I(char* mapname)
+{
+	int result = 0; // eax
+	char cBuf[260]; // [esp+1Ch] [ebp-110h] BYREF
+
+	if (mapname && *mapname)
+	{
+		snprintf(cBuf, sizeof(cBuf), "maps/%.32s.bsp", mapname);
+		result = FS_FileExists(cBuf);
+	}
+
+	return result;
+}
+
 void SeedRandomNumberGenerator()
 {
 	auto result = -time( nullptr );

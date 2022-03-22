@@ -33,8 +33,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 struct server_t
 {
 	bool active;					// false when server is going down
-	//TODO: implement - Solokiller
-	/*
 	bool paused;
 	bool loadgame;
 
@@ -43,10 +41,7 @@ struct server_t
 
 	int lastcheck;
 	double lastchecktime;
-	*/
 	char name[ 64 ];
-	//TODO: implement - Solokiller
-	/*
 	char oldname[ 64 ];
 	char startspot[ 64 ];
 	char modelname[ 64 ];
@@ -59,13 +54,12 @@ struct server_t
 	resource_t resourcelist[ 1280 ];
 	int num_resources;
 
-	consistency_t consistency_list[ 512 ];
+	//consistency_t consistency_list[ 512 ];
 	int num_consistency;
 
 	char* model_precache[ 512 ];
 	model_t* models[ 512 ];
 	byte model_precache_flags[ 512 ];
-	*/
 	event_t event_precache[ EVENT_MAX_EVENTS ];
 	/*
 	char* sound_precache[ 512 ];

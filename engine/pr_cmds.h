@@ -3,6 +3,9 @@
 
 #include "tier0/platform.h"
 
+qboolean PF_IsDedicatedServer();
+int PF_IsMapValid_I(char* mapname);
+
 void SeedRandomNumberGenerator();
 
 float RandomFloat( float flLow, float flHigh );
