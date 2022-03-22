@@ -224,7 +224,15 @@ void NET_Init()
 
 void NET_Shutdown()
 {
-	//TODO: implement - Solokiller
+	NET_ThreadLock();
+
+	// NET_ClearLaggedList(g_pLagData); - TODO: implement - ScriptedSnark
+	// NET_ClearLaggedList(&g_pLagData[1]); - TODO: implement - ScriptedSnark
+
+	NET_ThreadUnlock();
+
+	NET_Config(FALSE);
+	// NET_FlushQueues(); - TODO: implement - ScriptedSnark
 }
 
 char* NET_ErrorString(int __errnum) {
