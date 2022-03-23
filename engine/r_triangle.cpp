@@ -159,7 +159,7 @@ void tri_WorldTransform( float* screen, float* world )
 
 void tri_GetMatrix( const int pname, float* matrix )
 {
-	//TODO: implement - Solokiller
+	qglGetFloatv(pname, matrix);
 }
 
 int tri_BoxinPVS( float* mins, float* maxs )
