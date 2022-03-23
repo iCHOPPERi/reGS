@@ -123,7 +123,16 @@ void tri_GL_Brightness( float x )
 
 void tri_GL_CullFace( TRICULLSTYLE style )
 {
-	//TODO: implement - Solokiller
+	if (style)
+	{
+		if (style == TRI_NONE)
+			qglDisable(GL_CULL_FACE);
+	}
+	else
+	{
+		qglEnable(GL_CULL_FACE);
+		qglCullFace(GL_FRONT);
+	}
 }
 
 int R_TriangleSpriteTexture( model_t *pSpriteModel, int frame )
