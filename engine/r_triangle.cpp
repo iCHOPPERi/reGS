@@ -1,6 +1,7 @@
 #include "quakedef.h"
 #include "r_triangle.h"
 #include <GL/glew.h>
+#include "qgl.h"
 
 GLfloat flFogDensity;
 bool g_bFogSkybox;
@@ -41,7 +42,7 @@ void tri_GL_Begin( int primitiveCode )
 
 void tri_GL_End()
 {
-	//TODO: implement - Solokiller
+	qglEnd();
 }
 
 void tri_GL_Color4f( float x, float y, float z, float w )
