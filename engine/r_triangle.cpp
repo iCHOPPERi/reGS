@@ -6,6 +6,7 @@
 
 GLfloat flFogDensity;
 bool g_bFogSkybox;
+int gRenderMode;
 
 int g_GL_Modes[7] // TODO: make all these integers as constants in QGL
 {
@@ -44,7 +45,39 @@ triangleapi_t tri =
 
 void tri_GL_RenderMode( int mode )
 {
-	//TODO: implement - Solokiller
+	switch (mode)
+	{
+	case 0:
+		qglDisable(GL_BLEND);
+		qglDepthMask(GL_TRUE);
+		qglShadeModel(GL_FLAT);
+		gRenderMode = mode;
+	case 1:
+	case 2:
+		qglBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		qglEnable(GL_BLEND);
+		qglShadeModel(GL_SMOOTH);
+		gRenderMode = mode;
+		break;
+	case 4:
+		qglEnable(GL_BLEND);
+		qglTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+		qglBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		qglShadeModel(GL_SMOOTH);
+		qglDepthMask(GL_FALSE);
+		gRenderMode = mode;
+		break;
+	case 5:
+		qglBlendFunc(GL_ONE, GL_ONE);
+		qglEnable(GL_BLEND);
+		qglDepthMask(GL_FALSE);
+		qglShadeModel(GL_SMOOTH);
+		gRenderMode = mode;
+		break;
+	default:
+		gRenderMode = mode;
+		break;
+	}
 }
 
 void tri_GL_Begin( int primitiveCode )
