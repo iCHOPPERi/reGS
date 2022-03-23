@@ -1,10 +1,22 @@
 #include "quakedef.h"
 #include "r_triangle.h"
-#include <GL/glew.h>
+#include "GL/glew.h"
 #include "qgl.h"
+#include "vgui2/text_draw.h"
 
 GLfloat flFogDensity;
 bool g_bFogSkybox;
+
+int g_GL_Modes[7] // TODO: make all these integers as constants in QGL
+{
+	4,
+	6,
+	7,
+	9,
+	1,
+	5,
+	8
+};
 
 triangleapi_t tri =
 {
@@ -37,7 +49,8 @@ void tri_GL_RenderMode( int mode )
 
 void tri_GL_Begin( int primitiveCode )
 {
-	//TODO: implement - Solokiller
+	VGUI2_ResetCurrentTexture();
+	qglBegin(g_GL_Modes[primitiveCode]);
 }
 
 void tri_GL_End()
