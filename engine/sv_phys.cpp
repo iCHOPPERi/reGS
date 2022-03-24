@@ -66,3 +66,8 @@ qboolean SV_RunThink(edict_t* ent)
 
     return !ent->free;
 }
+
+void SV_Physics_None(edict_t* ent)
+{
+    SV_RunThink(ent);
+}
