@@ -316,7 +316,7 @@ int SV_SpawnServer(qboolean bIsDemo, char* server, char* startspot)
 void SV_ServerShutdown()
 {
 	// Steam_NotifyOfLevelChange(); - TODO: implement - ScriptedSnark
-	// gGlobalVariables.time = sv.time; - TODO: implement sv.time - ScriptedSnark
+	gGlobalVariables.time = sv.time;
 	if (svs.dll_initialized)
 	{
 		if (sv.active)
