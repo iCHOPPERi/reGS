@@ -219,6 +219,14 @@ bool Mod_ValidateCRC(const char* name, CRC32_t crc)
 	return true;
 }
 
+void Mod_NeedCRC(const char* name, bool needCRC)
+{
+	model_t* mod = Mod_FindName(false, name);
+	mod_known_info_t* p = &mod_known_info[mod - mod_known];
+
+	p->shouldCRC = needCRC;
+}
+
 void Mod_ChangeGame(void)
 {
 	int i;
