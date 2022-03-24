@@ -50,6 +50,8 @@ cvar_t console = { "console", "0.0", FCVAR_ARCHIVE };
 
 static cvar_t host_profile = { "host_profile", "0" };
 
+cvar_t deathmatch = { "deathmatch", "0", FCVAR_SERVER, 0.0f, NULL };
+
 cvar_t fps_max = { "fps_max", "100.0", FCVAR_ARCHIVE };
 cvar_t fps_override = { "fps_override", "0" };
 
@@ -90,8 +92,8 @@ void Host_InitLocal()
 	*/
 	Cvar_RegisterVariable( &developer );
 	//TODO: implement - Solokiller
-	/*
 	Cvar_RegisterVariable( &deathmatch );
+	/*
 	Cvar_RegisterVariable( &coop );
 	Cvar_RegisterVariable( &pausable );
 	Cvar_RegisterVariable( &skill );
