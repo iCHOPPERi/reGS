@@ -158,9 +158,42 @@ void NET_Config( qboolean multiplayer )
 	net_configured = multiplayer ? 1 : 0;
 }
 
+void MaxPlayers_f()
+{
+	if (Cmd_Argc() != 2)
+	{
+		Con_Printf("\"maxplayers\" is \"%u\"\n", svs.maxclients);
+		return;
+
+	}
+
+	if (sv.active)
+	{
+		Con_Printf("maxplayers cannot be changed while a server is running.\n");
+		return;
+	}
+
+
+	int n = Q_atoi(Cmd_Argv(1));
+	if (n < 1)
+		n = 1;
+
+	if (n > svs.maxclientslimit)
+	{
+		n = svs.maxclientslimit;
+		Con_Printf("\"maxplayers\" set to \"%u\"\n", svs.maxclientslimit);
+	}
+	svs.maxclients = n;
+
+	if (n == 1)
+		Cvar_Set("deathmatch", "0");
+	else
+		Cvar_Set("deathmatch", "1");
+}
+
 void NET_Init()
 {
-	// Cmd_AddCommand("maxplayers", MaxPlayers_f); - TODO: implement - ScriptedSnark
+	Cmd_AddCommand("maxplayers", MaxPlayers_f);
 
 	Cvar_RegisterVariable(&net_address);
 	Cvar_RegisterVariable(&ipname);
