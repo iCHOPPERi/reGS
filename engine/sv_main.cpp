@@ -15,6 +15,7 @@
 edict_t** g_moved_edict;
 vec3_t* g_moved_from;
 char* gNullString = "";
+char* pr_strings;
 delta_info_t* g_sv_delta;
 redirect_t sv_redirected;
 netadr_t sv_redirectto;
@@ -477,7 +478,7 @@ int SV_SpawnServer(qboolean bIsDemo, char* server, char* startspot)
 		return 0;
 	}
 
-	Sequence_OnLevelLoad(server);
+	//Sequence_OnLevelLoad(server);
 	ContinueLoadingProgressBar("Server", 4, 0.0);
 	if (gmodinfo.clientcrccheck)
 	{
