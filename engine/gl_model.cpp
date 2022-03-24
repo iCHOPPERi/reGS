@@ -634,6 +634,47 @@ void Mod_SetParent(mnode_t* node, mnode_t* parent)
 	Mod_SetParent(node->children[1], node);
 }
 
+void Mod_LoadNodes(lump_t* l)
+{
+	int	i, j, count, p;
+	dnode_t* in;
+	mnode_t* out;
+	in = (dnode_t*)(mod_base + l->fileofs);
+
+	if (l->filelen % sizeof(dnode_t))
+		Sys_Error("MOD_LoadBmodel: funny lump size in %s", loadmodel->name);
+
+	count = l->filelen / sizeof(*in);
+	out = (mnode_t*)Hunk_AllocName(count * sizeof(*out), loadname);
+	loadmodel->nodes = out;
+	loadmodel->numnodes = count;
+
+	for (i = 0; i < count; i++, in++, out++)
+	{
+		for (j = 0; j < 3; j++)
+		{
+			out->minmaxs[j] = LittleShort(in->mins[j]);
+			out->minmaxs[3 + j] = LittleShort(in->maxs[j]);
+		}
+
+		p = LittleLong(in->planenum);
+		out->plane = loadmodel->planes + p;
+		out->firstsurface = LittleShort(in->firstface);
+		out->numsurfaces = LittleShort(in->numfaces);
+
+		for (j = 0; j < 2; j++)
+		{
+			p = LittleShort(in->children[j]);
+			if (p >= 0)
+				out->children[j] = loadmodel->nodes + p;
+			else
+				out->children[j] = (mnode_t*)(loadmodel->leafs + (-1 - p));
+		}
+	}
+
+	Mod_SetParent(loadmodel->nodes, nullptr);
+}
+
 void Mod_LoadClipnodes(lump_t* l)
 {
 	dclipnode_t* in, *out;
