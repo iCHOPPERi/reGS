@@ -205,6 +205,20 @@ model_t* Mod_FindName(bool trackCRC, const char* name)
 	return mod;
 }
 
+bool Mod_ValidateCRC(const char* name, CRC32_t crc)
+{
+	model_t* mod = Mod_FindName(true, name);
+	mod_known_info_t* p = &mod_known_info[mod - mod_known];
+
+	if (p->firstCRCDone)
+	{
+		if (p->initialCRC != crc)
+			return false;
+	}
+
+	return true;
+}
+
 void Mod_ChangeGame(void)
 {
 	int i;

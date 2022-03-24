@@ -139,6 +139,8 @@ extern	trivertx_t	*poseverts[ MAXALIASFRAMES ];
 void* Mod_Extradata(model_t* mod);
 void Mod_ClearAll();
 void Mod_FillInCRCInfo(bool trackCRC, int model_number);
+model_t* Mod_FindName(bool trackCRC, const char* name);
+bool Mod_ValidateCRC(const char* name, CRC32_t crc);
 void Mod_ChangeGame(void);
 model_t* Mod_LoadModel(model_t* mod, const bool crash, const bool trackCRC);
 void Mod_LoadEntities(lump_t* l);
