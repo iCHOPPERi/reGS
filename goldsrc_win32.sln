@@ -4,6 +4,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 16.0.30621.155
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "engine", "engine\engine.vcxproj", "{CC87A2CF-345D-4C67-98BB-38D3A6D8C80D}"
+	ProjectSection(ProjectDependencies) = postProject
+		{B747882D-653D-4EB9-A111-697511FDDF03} = {B747882D-653D-4EB9-A111-697511FDDF03}
+		{9EDAB5C7-AFB0-4DC6-A9C1-18B9590C59DB} = {9EDAB5C7-AFB0-4DC6-A9C1-18B9590C59DB}
+		{B444E0FA-6FB8-48B9-8388-9D969F6BF001} = {B444E0FA-6FB8-48B9-8388-9D969F6BF001}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "vgui2_controls", "vgui2\vgui2_controls.vcxproj", "{B444E0FA-6FB8-48B9-8388-9D969F6BF001}"
 EndProject
