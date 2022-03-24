@@ -12,6 +12,9 @@
 *   without written permission from Valve LLC.
 *
 ****/
+
+// Reversed by 1Doomsayer
+
 #define CINTERFACE
 
 #include "quakedef.h"
