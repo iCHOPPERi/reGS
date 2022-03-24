@@ -13,6 +13,8 @@
 *
 ****/
 
+// Reversed by 1Doomsayer
+
 // snd_mem.cpp: sound caching
 
 #include "quakedef.h"
