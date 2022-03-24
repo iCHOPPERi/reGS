@@ -1,6 +1,7 @@
 #include "quakedef.h"
 #include "qgl.h"
 #include "gl_rmain.h"
+#include "gl_rmisc.h"
 
 int currenttexture = -1;	// to avoid unnecessary texture sets
 
@@ -53,4 +54,13 @@ float CalcFov(float fov_x, float width, float height) // TODO: improve the code 
     x = height / (width / fov);
 
     return atanf(x) * 360.0 / M_PI;
+}
+
+void R_ForceCVars(qboolean mp)
+{
+    if (mp)
+    {
+        // TODO: implement - ScriptedSnark
+        D_FlushCaches();
+    }
 }
