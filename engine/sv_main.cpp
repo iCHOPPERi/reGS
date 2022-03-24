@@ -7,10 +7,14 @@
 #include "sv_phys.h"
 #include "server.h"
 #include "host.h"
+#include "vgui_int.h"
+#include "cl_main.h"
+#include "host_cmd.h"
+#include "gl_screen.h"
 
 edict_t** g_moved_edict;
 vec3_t* g_moved_from;
-
+char* gNullString = "";
 delta_info_t* g_sv_delta;
 redirect_t sv_redirected;
 netadr_t sv_redirectto;
@@ -25,6 +29,7 @@ playermove_t g_svmove;
 globalvars_t gGlobalVariables = {};
 
 bool allow_cheats = false;
+qboolean g_bOutOfDateRestart;
 
 cvar_t sv_allow_upload = { "sv_allowupload", "1", FCVAR_SERVER };
 cvar_t mapcyclefile = { "mapcyclefile", "mapcycle.txt" };
@@ -35,6 +40,8 @@ cvar_t max_queries_window = { "max_queries_window", "60", FCVAR_PROTECTED | FCVA
 
 int SV_UPDATE_BACKUP = 1 << 3;
 int SV_UPDATE_MASK = SV_UPDATE_BACKUP - 1;
+
+char localmodels[MAX_MODELS][5];
 
 struct GameToAppIDMapItem_t
 {
@@ -309,8 +316,235 @@ void SV_FlushRedirect(void)
 
 int SV_SpawnServer(qboolean bIsDemo, char* server, char* startspot)
 {
-	// TODO: implement - ScriptedSnark
-	return 0;
+	client_t* cl;
+	edict_t* ent;
+	int i;
+	char* pszhost;
+	char oldname[64];
+
+	if (sv.active)
+	{
+		cl = svs.clients;
+		for (i = 0; i < svs.maxclients; i++, cl++)
+		{
+			if (cl->active || cl->spawned || cl->connected)
+			{
+				ent = cl->edict;
+				if (ent == NULL || ent->free)
+					continue;
+
+				if (ent->pvPrivateData)
+					gEntityInterface.pfnClientDisconnect(ent);
+				else
+					Con_Printf("Skipping reconnect on %s, no pvPrivateData\n", cl->name);
+			}
+		}
+	}
+	if (g_bOutOfDateRestart)
+	{
+		g_bOutOfDateRestart = FALSE;
+		Cmd_ExecuteString("quit\n", src_command);
+	}
+
+	Log_Open();
+	Log_Printf("Loading map \"%s\"\n", server);
+	Log_PrintServerVars();
+	NET_Config((qboolean)(svs.maxclients > 1));
+
+	pszhost = (char*)Cvar_VariableString("hostname");
+	if (pszhost && *pszhost == '\0')
+	{
+		if (gEntityInterface.pfnGetGameDescription != NULL)
+			Cvar_Set("hostname", gEntityInterface.pfnGetGameDescription());
+		else
+			Cvar_Set("hostname", "Half-Life");
+	}
+
+	scr_centertime_off = 0.0f;
+	if (startspot)
+		Con_DPrintf("Spawn Server %s: [%s]\n", server, startspot);
+	else
+		Con_DPrintf("Spawn Server %s\n", server);
+
+	g_LastScreenUpdateTime = 0.0f;
+	svs.spawncount = ++gHostSpawnCount;
+
+	/* - TODO: implement - ScriptedSnark
+	if (coop.value != 0.0f)
+		Cvar_SetValue("deathmatch", 0.0f);
+	*/
+
+	/*
+	current_skill = (int)(skill.value + 0.5f);
+	if (current_skill < 0)
+		current_skill = 0;
+	else if (current_skill > 3)
+		current_skill = 3;
+	*/
+	//Cvar_SetValue("skill", current_skill);
+	ContinueLoadingProgressBar("Server", 2, 0.0f);
+
+	//HPAK_CheckSize("custom");
+	oldname[0] = 0;
+	Q_strncpy(oldname, sv.name, sizeof(oldname) - 1);
+	oldname[sizeof(oldname) - 1] = 0;
+	Host_ClearMemory(FALSE);
+
+	cl = svs.clients;
+	for (i = 0; i < svs.maxclientslimit; i++, cl++)
+		SV_ClearFrames(&cl->frames);
+
+	//SV_UPDATE_BACKUP = (svs.maxclients == 1) ? SINGLEPLAYER_BACKUP : MULTIPLAYER_BACKUP;
+	//SV_UPDATE_MASK = (SV_UPDATE_BACKUP - 1);
+
+	SV_AllocClientFrames();
+	Q_memset(&sv, 0, sizeof(server_t));
+
+	Q_strncpy(sv.oldname, oldname, sizeof(oldname) - 1);
+	sv.oldname[sizeof(oldname) - 1] = 0;
+	Q_strncpy(sv.name, server, sizeof(sv.name) - 1);
+	sv.name[sizeof(sv.name) - 1] = 0;
+
+	if (startspot)
+	{
+		Q_strncpy(sv.startspot, startspot, sizeof(sv.startspot) - 1);
+		sv.startspot[sizeof(sv.startspot) - 1] = 0;
+	}
+	else
+		sv.startspot[0] = 0;
+
+	pr_strings = gNullString;
+	gGlobalVariables.pStringBase = gNullString;
+
+	if (svs.maxclients == 1)
+		Cvar_SetValue("sv_clienttrace", 1.0);
+
+	sv.max_edicts = COM_EntsForPlayerSlots(svs.maxclients);
+
+	SV_DeallocateDynamicData();
+	//SV_ReallocateDynamicData();
+
+	gGlobalVariables.maxEntities = sv.max_edicts;
+
+	sv.edicts = (edict_t*)Hunk_AllocName(sizeof(edict_t) * sv.max_edicts, "edicts");
+	sv.baselines = (entity_state_s*)Hunk_AllocName(sizeof(entity_state_t) * sv.max_edicts, "baselines");
+
+	sv.datagram.buffername = "Server Datagram";
+	sv.datagram.data = sv.datagram_buf;
+	sv.datagram.maxsize = sizeof(sv.datagram_buf);
+	sv.datagram.cursize = 0;
+
+	sv.reliable_datagram.buffername = "Server Reliable Datagram";
+	sv.reliable_datagram.data = sv.reliable_datagram_buf;
+	sv.reliable_datagram.maxsize = sizeof(sv.reliable_datagram_buf);
+	sv.reliable_datagram.cursize = 0;
+
+	sv.spectator.buffername = "Server Spectator Buffer";
+	sv.spectator.data = sv.spectator_buf;
+	sv.spectator.maxsize = sizeof(sv.spectator_buf);
+
+	sv.multicast.buffername = "Server Multicast Buffer";
+	sv.multicast.data = sv.multicast_buf;
+	sv.multicast.maxsize = sizeof(sv.multicast_buf);
+
+	sv.signon.buffername = "Server Signon Buffer";
+	sv.signon.data = sv.signon_data;
+	sv.signon.maxsize = sizeof(sv.signon_data);
+	sv.signon.cursize = 0;
+
+	sv.num_edicts = svs.maxclients + 1;
+
+	cl = svs.clients;
+	for (i = 1; i < svs.maxclients; i++, cl++)
+		cl->edict = &sv.edicts[i];
+
+	gGlobalVariables.maxClients = svs.maxclients;
+	sv.time = 1.0f;
+	sv.state = ss_loading;
+	sv.paused = FALSE;
+	gGlobalVariables.time = 1.0f;
+
+	//R_ForceCVars((qboolean)(svs.maxclients > 1));
+	ContinueLoadingProgressBar("Server", 3, 0.0f);
+
+	Q_snprintf(sv.modelname, sizeof(sv.modelname), "maps/%s.bsp", server);
+	//sv.worldmodel = Mod_ForName(sv.modelname, FALSE, FALSE);
+
+	if (!sv.worldmodel)
+	{
+		Con_Printf("Couldn't spawn server %s\n", sv.modelname);
+		sv.active = FALSE;
+		return 0;
+	}
+
+	Sequence_OnLevelLoad(server);
+	ContinueLoadingProgressBar("Server", 4, 0.0);
+	if (gmodinfo.clientcrccheck)
+	{
+		char szDllName[64];
+		Q_snprintf(szDllName, sizeof(szDllName), "cl_dlls//client.dll");
+		COM_FixSlashes(szDllName);
+		if (!MD5_Hash_File(sv.clientdllmd5, szDllName, FALSE, FALSE, NULL))
+		{
+			Con_Printf("Couldn't CRC client side dll:  %s\n", szDllName);
+			sv.active = FALSE;
+			return 0;
+		}
+	}
+	ContinueLoadingProgressBar("Server", 6, 0.0);
+
+	if (svs.maxclients <= 1)
+		sv.worldmapCRC = 0;
+	else
+	{
+		CRC32_Init(&sv.worldmapCRC);
+		if (!CRC_MapFile(&sv.worldmapCRC, sv.modelname))
+		{
+			Con_Printf("Couldn't CRC server map:  %s\n", sv.modelname);
+			sv.active = FALSE;
+			return 0;
+		}
+		//CM_CalcPAS(g_psv.worldmodel);
+	}
+
+	sv.models[1] = sv.worldmodel;
+	//SV_ClearWorld();
+	sv.model_precache_flags[1] |= RES_FATALIFMISSING;
+	sv.model_precache[1] = sv.modelname;
+
+
+	sv.sound_precache[0] = pr_strings;
+	sv.model_precache[0] = pr_strings;
+	sv.generic_precache[0] = pr_strings;
+
+	for (i = 1; i < sv.worldmodel->numsubmodels; i++)
+	{
+		sv.model_precache[i + 1] = localmodels[i];
+		//sv.models[i + 1] = Mod_ForName(localmodels[i], FALSE, FALSE);
+		sv.model_precache_flags[i + 1] |= RES_FATALIFMISSING;
+	}
+
+	Q_memset(&sv.edicts->v, 0, sizeof(entvars_t));
+
+	sv.edicts->free = FALSE;
+	sv.edicts->v.modelindex = 1;
+	sv.edicts->v.model = (size_t)sv.worldmodel - (size_t)pr_strings;
+	sv.edicts->v.solid = SOLID_BSP;
+	sv.edicts->v.movetype = MOVETYPE_PUSH;
+
+	/*
+	if (coop.value == 0.0f)
+		gGlobalVariables.deathmatch_ = deathmatch.value;
+	else
+		gGlobalVariables.coop_ = coop.value;
+	*/
+	gGlobalVariables.serverflags = svs.serverflags;
+	gGlobalVariables.mapname = (size_t)sv.name - (size_t)pr_strings;
+	gGlobalVariables.startspot = (size_t)sv.startspot - (size_t)pr_strings;
+	//allow_cheats = sv_cheats.value;
+	//SV_SetMoveVars();
+
+	return 1;
 }
 
 void SV_ServerShutdown()

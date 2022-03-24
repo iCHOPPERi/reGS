@@ -4,9 +4,11 @@
 #include "host_cmd.h"
 #include "server.h"
 #include "cd.h"
-#include <vgui_int.h>
-#include <gl_screen.h>
+#include "vgui_int.h"
+#include "gl_screen.h"
 #include "pr_cmds.h"
+
+int gHostSpawnCount;
 
 bool s_careerAudioPaused = false;
 

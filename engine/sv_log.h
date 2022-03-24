@@ -8,6 +8,7 @@ extern cvar_t mp_logecho;
 extern cvar_t mp_logfile;
 
 void Log_Printf( const char* fmt, ... );
+void Log_PrintServerVars();
 
 void Log_Close();
 

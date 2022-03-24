@@ -25,6 +25,8 @@ struct modinfo_t
 	MOD_GAMEPLAY_TYPE_E type;
 
 	int num_edicts;
+
+	qboolean clientcrccheck;
 };
 
 extern modinfo_t gmodinfo;

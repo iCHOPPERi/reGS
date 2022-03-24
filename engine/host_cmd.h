@@ -3,6 +3,8 @@
 
 #include "GameUI/CareerDefs.h"
 
+
+extern int gHostSpawnCount;
 extern CareerStateType g_careerState;
 
 extern bool g_iQuitCommandIssued;

@@ -4,7 +4,7 @@
 #include "wad.h"
 
 extern int clearnotify;
-
+extern float scr_centertime_off;
 extern float scr_con_current;
 extern float scr_fov_value;
 
