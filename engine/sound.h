@@ -15,6 +15,8 @@
 
 // sound.h -- client sound i/o functions
 
+// Reversed by 1Doomsayer
+
 #ifndef SOUND_H
 #define SOUND_H
 #ifdef _WIN32
