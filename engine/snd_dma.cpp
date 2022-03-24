@@ -14,6 +14,8 @@
 ****/
 #define CINTERFACE
 
+// Reversed by Doomsayer1
+
 // snd_dma.cpp - Main control for any streaming sound output device
 
 #include "quakedef.h"
