@@ -83,7 +83,7 @@ void SPR_Shutdown()
 					ppmVar1 = &__ptr->pSprite + iVar2;
 					if (*ppmVar1 != NULL) {
 						// TODO: impl - xWhitey
-						//Mod_UnloadSpriteTextures(*ppmVar1);
+						Mod_UnloadSpriteTextures(*ppmVar1);
 						ppmVar1 = (model_t**)(&gSpriteList->pSprite + iVar2);
 						__ptr = gSpriteList;
 					}
