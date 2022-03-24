@@ -22,6 +22,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "dll_state.h"
 #include "sound.h"
 #include "vgui_int.h"
+#include "client.h"
 
 //TODO: this code assumes 256 keys max all over the place. Cleanup - Solokiller
 //TODO: define key lines - Solokiller
@@ -1059,7 +1060,7 @@ void Key_Event(int key, bool down)
 	// during demo playback, most keys bring up the main menu
 	//
 	//TODO: implement - Solokiller
-	if ( /*cls.demoplayback && && cls.spectator &&*/ down && consolekeys[key] && key_dest == key_game)
+	if ( cls.demoplayback && cls.spectator && down && consolekeys[key] && key_dest == key_game)
 	{
 		Con_ToggleConsole_f();
 		return;
