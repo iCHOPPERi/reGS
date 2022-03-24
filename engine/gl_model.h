@@ -154,6 +154,7 @@ void Mod_LoadSubmodels(lump_t* l);
 void Mod_LoadEdges(lump_t* l);
 void CalcSurfaceExtents(msurface_t* s);
 void Mod_SetParent(mnode_t* node, mnode_t* parent);
+void Mod_LoadClipnodes(lump_t* l);
 void Mod_MakeHull0(void);
 void Mod_LoadMarksurfaces(lump_t* l);
 void Mod_LoadSurfedges(lump_t* l);
