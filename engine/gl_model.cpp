@@ -914,7 +914,7 @@ void Mod_LoadBrushModel(model_t* mod, void* buffer)
 	Mod_LoadMarksurfaces(&header->lumps[LUMP_MARKSURFACES]);
 	Mod_LoadVisibility(&header->lumps[LUMP_VISIBILITY]);
 	//Mod_LoadLeafs(&header->lumps[LUMP_LEAFS]);
-	//Mod_LoadNodes(&header->lumps[LUMP_NODES]);
+	Mod_LoadNodes(&header->lumps[LUMP_NODES]);
 	Mod_LoadClipnodes(&header->lumps[LUMP_CLIPNODES]);
 	Mod_LoadSubmodels(&header->lumps[LUMP_MODELS]);
 
