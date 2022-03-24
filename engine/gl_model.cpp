@@ -692,7 +692,6 @@ void Mod_LoadClipnodes(lump_t* l)
 	}
 }
 
-
 void Mod_MakeHull0(void)
 {
 	mnode_t* in, *child;
@@ -821,6 +820,126 @@ float RadiusFromBounds(vec_t* mins, vec_t* maxs)
 	}
 
 	return Length(corner);
+}
+
+void Mod_LoadBrushModel(model_t* mod, void* buffer)
+{
+	int	i, j, k;
+	dheader_t* header;
+	dmodel_t* bm;
+
+	loadmodel->type = mod_brush;
+
+	header = (dheader_t*)buffer;
+
+	i = LittleLong(header->version);
+
+	if (i != Q1BSP_VERSION && i != BSPVERSION)
+	{
+		if (cls.state != ca_dedicated)
+		{
+			COM_ExplainDisconnection(true, "Mod_LoadBrushModel: %s has wrong version number (%i should be %i)\n", mod, i, BSPVERSION);
+			//CL_Disconnect();
+		}
+		return;
+	}
+
+	mod_base = (byte*)buffer;
+
+	for (i = 0; i < sizeof(dheader_t) / 4; i++)
+		((int*)header)[i] = LittleLong(((int*)header)[i]);
+
+	Mod_LoadVertexes(&header->lumps[LUMP_VERTEXES]);
+	Mod_LoadEdges(&header->lumps[LUMP_EDGES]);
+	Mod_LoadSurfedges(&header->lumps[LUMP_SURFEDGES]);
+
+	if (!Q_stricmp(com_gamedir, "bshift"))
+	{
+		Mod_LoadEntities(&header->lumps[LUMP_ENTITIES + 1]);
+		//Mod_LoadTextures(&header->lumps[LUMP_TEXTURES]);
+		Mod_LoadLighting(&header->lumps[LUMP_LIGHTING]);
+		Mod_LoadPlanes(&header->lumps[LUMP_PLANES - 1]);
+	}
+	else
+	{
+		Mod_LoadEntities(&header->lumps[LUMP_ENTITIES]);
+		//Mod_LoadTextures(&header->lumps[LUMP_TEXTURES]);
+		Mod_LoadLighting(&header->lumps[LUMP_LIGHTING]);
+		Mod_LoadPlanes(&header->lumps[LUMP_PLANES]);
+	}
+
+	//Mod_LoadTexinfo(&header->lumps[LUMP_TEXINFO]);
+	//Mod_LoadFaces(&header->lumps[LUMP_FACES]);
+	Mod_LoadMarksurfaces(&header->lumps[LUMP_MARKSURFACES]);
+	Mod_LoadVisibility(&header->lumps[LUMP_VISIBILITY]);
+	//Mod_LoadLeafs(&header->lumps[LUMP_LEAFS]);
+	//Mod_LoadNodes(&header->lumps[LUMP_NODES]);
+	Mod_LoadClipnodes(&header->lumps[LUMP_CLIPNODES]);
+	Mod_LoadSubmodels(&header->lumps[LUMP_MODELS]);
+
+	for (k = 0; k < mod->numsurfaces; k++)
+	{
+		if (mod->surfaces[k].numedges + mod->surfaces[k].firstedge > mod->numsurfedges)
+			Sys_Error("MOD_LoadBrushModel: more surfedges referenced than loaded in %s", mod->name);
+	}
+
+	for (k = 0; k < mod->numleafs; k++)
+	{
+		if (mod->leafs[k].nummarksurfaces + mod->leafs[k].firstmarksurface - mod->marksurfaces > mod->nummarksurfaces)
+			Sys_Error("MOD_LoadBrushModel: more marksurfaces referenced than loaded in %s", mod->name);
+	}
+
+	for (k = 0; k < mod->numnodes; k++)
+	{
+		if (mod->nodes[k].firstsurface + mod->nodes[k].numsurfaces > mod->numsurfaces)
+			Sys_Error("MOD_LoadBrushModel: more surfaces referenced than loaded in %s", mod->name);
+	}
+
+	for (k = 0; k < mod->numsubmodels; k++)
+	{
+		if (mod->submodels[k].firstface + mod->submodels[k].numfaces > mod->numsurfaces)
+			Sys_Error("MOD_LoadBrushModel: more faces referenced than loaded in %s", mod->name);
+	}
+
+	Mod_MakeHull0();
+	mod->numframes = 2;
+	mod->flags = 0;
+
+	for (i = 0; i < mod->numsubmodels; i++)
+	{
+		bm = &mod->submodels[i];
+
+		mod->hulls[0].firstclipnode = bm->headnode[0];
+		for (j = 1; j < MAX_MAP_HULLS; j++)
+		{
+			mod->hulls[j].firstclipnode = bm->headnode[j];
+			mod->hulls[j].lastclipnode = mod->numclipnodes - 1;
+		}
+
+		mod->firstmodelsurface = bm->firstface;
+		mod->nummodelsurfaces = bm->numfaces;
+		mod->maxs[0] = bm->maxs[0];
+		mod->maxs[2] = bm->maxs[2];
+		mod->maxs[1] = bm->maxs[1];
+		mod->mins[0] = bm->mins[0];
+		mod->mins[1] = bm->mins[1];
+		mod->mins[2] = bm->mins[2];
+		mod->radius = RadiusFromBounds(mod->mins, mod->maxs);
+		mod->numleafs = bm->visleafs;
+
+		if (i < mod->numsubmodels - 1)
+		{
+			char name[10];
+
+			snprintf(name, sizeof(name), "*%i", i + 1);
+			loadmodel = Mod_FindName(false, name);
+			*loadmodel = *mod;
+			Q_strncpy(loadmodel->name, name, sizeof(loadmodel->name) - 1);
+			loadmodel->name[sizeof(loadmodel->name) - 1] = 0;
+
+			mod = loadmodel;
+		}
+	}
 }
 
 void Mod_SpriteTextureName(char* pszName, int nNameSize, const char* pcszModelName, int framenum)

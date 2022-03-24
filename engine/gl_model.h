@@ -160,6 +160,7 @@ void Mod_LoadMarksurfaces(lump_t* l);
 void Mod_LoadSurfedges(lump_t* l);
 void Mod_LoadPlanes(lump_t* l);
 float RadiusFromBounds(vec_t* mins, vec_t* maxs);
+void Mod_LoadBrushModel(model_t* mod, void* buffer);
 void Mod_SpriteTextureName(char* pszName, int nNameSize, const char* pcszModelName, int framenum);
 void Mod_UnloadSpriteTextures(model_t* pModel);
 void Mod_Print(void);

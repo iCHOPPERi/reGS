@@ -43,6 +43,7 @@
 //=============================================================================
 
 
+#define Q1BSP_VERSION 29
 #define BSPVERSION	30
 #define	TOOLVERSION	2
 
