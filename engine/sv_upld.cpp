@@ -214,8 +214,7 @@ void SV_Customization( client_t* pPlayer, resource_t* pResource, bool bSkipPlaye
 			!host_client->fakeclient &&
 			( pPlayer != host_client || !bSkipPlayer ) )
 		{
-			//TODO: implement - Solokiller
-			/*
+
 			MSG_WriteByte( &host_client->netchan.message, 46 );
 			MSG_WriteByte( &host_client->netchan.message, i );
 			MSG_WriteByte( &host_client->netchan.message, pResource->type );
@@ -226,7 +225,6 @@ void SV_Customization( client_t* pPlayer, resource_t* pResource, bool bSkipPlaye
 
 			if( pResource->ucFlags & RES_CUSTOM )
 				SZ_Write( &host_client->netchan.message, pResource->rgucMD5_hash, 16 );
-				*/
 		}
 	}
 }
