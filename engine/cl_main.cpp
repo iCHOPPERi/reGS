@@ -30,6 +30,15 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "pmove.h"
 #include "tmessage.h"
 #include <gl_vidnt.h>
+#include "vgui_int.h"
+#include "host_cmd.h"
+#include "cl_servercache.h"
+
+int num_servers;
+server_cache_t cached_servers[16];
+int msg_buckets[64];
+int total_data[64];
+netadr_t g_GameServerAddress;
 
 client_static_t cls;
 client_state_t	cl;
@@ -93,6 +102,90 @@ void PrintStartupTimings()
 	}
 }
 
+void CL_Connect_f(void) // This function crashes the game due to exception in client.dll (TODO: FIX - ScriptedSnark)
+{
+	char name[MAX_PATH];
+	CareerStateType prevcareer = CAREER_NONE;
+
+	const char* args = nullptr;
+
+	if (Cmd_Argc() < 2)
+	{
+		Con_Printf("Usage:  connect <server>\n");
+		return;
+	}
+
+	SetCStrikeFlags();
+
+	if ((g_bIsCStrike || g_bIsCZero) && cmd_source != src_command)
+	{
+		Con_Printf("Connect only works from the console.\n");
+		return;
+	}
+
+	args = Cmd_Args();
+
+	if (!args)
+		return;
+
+	Q_strncpy(name, args, sizeof(name));
+	name[sizeof(name) - 1] = 0;
+
+	/* - TODO: implement demo playback - ScriptedSnark
+	if (cls.demoplayback)
+		CL_StopPlayback();
+	*/
+
+	prevcareer = g_careerState;
+
+	// CL_Disconnect(); - TODO: implement - ScriptedSnark
+
+	if (prevcareer == CAREER_LOADING)
+		g_careerState = CAREER_LOADING;
+
+	StartLoadingProgressBar("Connecting", 12);
+	SetLoadingProgressBarStatusText("#GameUI_EstablishingConnection");
+
+	int num = Q_atoi(name);  // In case it's an index.
+
+	if ((num > 0) && (num <= num_servers) && !Q_strstr(cls.servername, "."))
+	{
+		Q_strncpy(name, NET_AdrToString(cached_servers[num - 1].adr), sizeof(name));
+		name[sizeof(name) - 1] = 0;
+	}
+
+	Q_memset(msg_buckets, 0, sizeof(msg_buckets));
+	Q_memset(total_data, 0, sizeof(total_data));
+
+	Q_strncpy(cls.servername, name, sizeof(cls.servername) - 1);
+	cls.servername[sizeof(cls.servername) - 1] = 0;
+
+	cls.state = ca_connecting;
+	cls.connect_time = -99999;
+
+	cls.connect_retry = 0;
+
+	cls.passive = false;
+	cls.spectator = false;
+	cls.isVAC2Secure = false;
+
+	cls.GameServerSteamID = 0;
+
+	cls.build_num = 0;
+
+	Q_memset(&g_GameServerAddress, 0, sizeof(netadr_t));
+	cls.challenge = 0;
+
+	gfExtendedError = false;
+	g_LastScreenUpdateTime = 0.0;
+
+	if (Q_strnicmp(cls.servername, "local", 5))
+	{
+		// allow remote
+		NET_Config(true);
+	}
+}
+
 void CL_TakeSnapshot_f()
 {
 	int i; // ebx
@@ -147,6 +240,7 @@ void CL_Init()
 	//TODO: implement - Solokiller
 	TextMessageInit();
 	//TODO: implement - Solokiller
+	Cmd_AddCommand/*WithFlags*/("connect", CL_Connect_f/*, 8*/); // TODO: implement slowhacking protection - ScriptedSnark
 	Cmd_AddCommand("snapshot", CL_TakeSnapshot_f);
 	Cvar_RegisterVariable( &rate );
 	Cvar_RegisterVariable( &cl_lw );

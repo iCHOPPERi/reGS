@@ -233,4 +233,6 @@ void NET_Shutdown();
 
 void NET_Init();
 
+char* NET_AdrToString(netadr_t a);
+
 #endif //ENGINE_NET_H

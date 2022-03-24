@@ -224,6 +224,7 @@
     <ClInclude Include="cl_parsefn.h" />
     <ClInclude Include="cl_pmove.h" />
     <ClInclude Include="cl_pred.h" />
+    <ClInclude Include="cl_servercache.h" />
     <ClInclude Include="cl_spectator.h" />
     <ClInclude Include="cl_tent.h" />
     <ClInclude Include="cmd.h" />
