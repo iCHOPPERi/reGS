@@ -144,6 +144,7 @@ bool Mod_ValidateCRC(const char* name, CRC32_t crc);
 void Mod_NeedCRC(const char* name, bool needCRC);
 void Mod_ChangeGame(void);
 model_t* Mod_LoadModel(model_t* mod, const bool crash, const bool trackCRC);
+model_t* Mod_ForName(const char* name, bool crash, bool trackCRC);
 void Mod_LoadEntities(lump_t* l);
 void Mod_LoadLighting(lump_t* l);
 void Mod_LoadVisibility(lump_t* l);

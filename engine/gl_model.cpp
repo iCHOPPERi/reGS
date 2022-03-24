@@ -411,6 +411,17 @@ model_t* Mod_LoadModel(model_t* mod, const bool crash, const bool trackCRC)
 	return mod;
 }
 
+model_t* Mod_ForName(const char* name, bool crash, bool trackCRC)
+{
+	model_t* mod;
+	mod = Mod_FindName(trackCRC, name);
+
+	if (!mod)
+		return nullptr;
+
+	return Mod_LoadModel(mod, crash, trackCRC);
+}
+
 void Mod_LoadEntities(lump_t* l)
 {
 	if (!l->filelen)
