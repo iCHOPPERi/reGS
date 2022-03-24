@@ -123,7 +123,7 @@ void HPAK_CheckIntegrity(char* pakname)
 
 	COM_DefaultExtension(name, HASHPAK_EXTENSION);
 	COM_FixSlashes(name);
-	// HPAK_ValidatePak(name); - TODO: implement - ScriptedSnark
+	HPAK_ValidatePak(name);
 }
 
 qboolean HPAK_FindResource(hash_pack_directory_t* pDir, unsigned char* hash, struct resource_s* pResourceEntry)
