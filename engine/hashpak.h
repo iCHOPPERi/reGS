@@ -3,6 +3,15 @@
 
 #include "custom.h"
 
+typedef struct hash_pack_queue_s
+{
+	char* pakname;
+	resource_t resource;
+	int datasize;
+	void* data;
+	hash_pack_queue_s* next;
+} hash_pack_queue_t;
+
 void HPAK_FlushHostQueue();
 
 void HPAK_Init();

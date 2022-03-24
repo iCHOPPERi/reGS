@@ -1,11 +1,18 @@
 #include "quakedef.h"
 #include "hashpak.h"
 
-qboolean gp_hpak_queue;
+hash_pack_queue_t* gp_hpak_queue = NULL;
 
 void HPAK_FlushHostQueue()
 {
-	//TODO: implement - Solokiller
+	for (hash_pack_queue_t* p = gp_hpak_queue; gp_hpak_queue != NULL; p = gp_hpak_queue)
+	{
+		gp_hpak_queue = p->next;
+		HPAK_AddLump(0, p->pakname, &p->resource, p->data, 0);
+		Mem_Free(p->pakname);
+		Mem_Free(p->data);
+		Mem_Free(p);
+	}
 }
 
 void HPAK_Init()
