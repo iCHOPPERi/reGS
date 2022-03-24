@@ -113,11 +113,10 @@ void Con_Printf( const char* fmt, ... )
 	if( sv_redirected != RD_NONE )
 	{
 		const size_t uiLength = Q_strlen( msg );
-		//TODO: implement - Solokiller
-		/*
+
 		if( ( Q_strlen( outputbuf ) + uiLength ) >= NET_MAX_FRAG_BUFFER )
 			SV_FlushRedirect();
-		*/
+
 		strncat( outputbuf, msg, NET_MAX_FRAG_BUFFER - 1 );
 	}
 	else
