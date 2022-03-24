@@ -44,7 +44,7 @@ void HPAK_FlushHostQueue();
 
 void HPAK_Init();
 
-void HPAK_CheckIntegrity( const char* pakname );
+void HPAK_CheckIntegrity( char* pakname );
 
 void HPAK_AddLump( bool bUseQueue, const char* pakname, resource_t* pResource, void* pData, FileHandle_t fpSource );
 qboolean HPAK_FindResource(hash_pack_directory_t* pDir, unsigned char* hash, struct resource_s* pResourceEntry);

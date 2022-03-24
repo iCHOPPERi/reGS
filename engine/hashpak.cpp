@@ -31,9 +31,14 @@ void HPAK_Init()
 	*/
 }
 
-void HPAK_CheckIntegrity( const char* pakname )
+void HPAK_CheckIntegrity(char* pakname)
 {
-	//TODO: implement - Solokiller
+	char name[256];
+	Q_snprintf(name, sizeof(name), "%s", pakname);
+
+	COM_DefaultExtension(name, HASHPAK_EXTENSION);
+	COM_FixSlashes(name);
+	// HPAK_ValidatePak(name); - TODO: implement - ScriptedSnark
 }
 
 qboolean HPAK_FindResource(hash_pack_directory_t* pDir, unsigned char* hash, struct resource_s* pResourceEntry)
