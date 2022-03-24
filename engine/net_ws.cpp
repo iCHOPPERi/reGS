@@ -158,6 +158,14 @@ void NET_Config( qboolean multiplayer )
 	net_configured = multiplayer ? 1 : 0;
 }
 
+void NET_RemoveFromPacketList(packetlag_t* pPacket)
+{
+	pPacket->pPrev->pNext = pPacket->pNext;
+	pPacket->pNext->pPrev = pPacket->pPrev;
+	pPacket->pPrev = 0;
+	pPacket->pNext = 0;
+}
+
 void MaxPlayers_f()
 {
 	if (Cmd_Argc() != 2)
