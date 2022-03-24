@@ -101,6 +101,7 @@
     <ClCompile Include="..\public\registry.cpp" />
     <ClCompile Include="..\tier1\CharacterSet.cpp" />
     <ClCompile Include="..\tier1\TokenReader.cpp" />
+    <ClCompile Include="bitmap_win.cpp" />
     <ClCompile Include="buildnum.cpp" />
     <ClCompile Include="cd.cpp" />
     <ClCompile Include="cdll_exp.cpp" />
@@ -207,6 +208,7 @@
     <ClInclude Include="..\common\Miles\MSS.H" />
     <ClInclude Include="anorms.h" />
     <ClInclude Include="APIProxy.h" />
+    <ClInclude Include="bitmap_win.h" />
     <ClInclude Include="buildnum.h" />
     <ClInclude Include="cd.h" />
     <ClInclude Include="cdll_exp.h" />
