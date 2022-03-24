@@ -41,14 +41,14 @@ void SV_RemoveFromResourceList( resource_t* pResource )
 
 void SV_ClearResourceList( resource_t* pList )
 {
-	for( resource_t* pResource = pList->pNext, *pNext;
-		 pResource != pList;
-		 pResource = pNext )
-	{
-		pNext = pResource->pNext;
-		SV_RemoveFromResourceList( pResource );
+	resource_t* p, * n;
 
-		Mem_Free( pResource );
+	for (p = pList->pNext; p && p != pList; p = n)
+	{
+		n = p->pNext;
+
+		SV_RemoveFromResourceList(p);
+		Mem_Free(p);
 	}
 
 	pList->pPrev = pList;
