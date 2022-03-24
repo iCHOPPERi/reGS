@@ -573,6 +573,17 @@ void Mod_LoadEdges(lump_t* l)
 	}
 }
 
+void Mod_SetParent(mnode_t* node, mnode_t* parent)
+{
+	node->parent = parent;
+
+	if (node->contents < 0)
+		return;
+
+	Mod_SetParent(node->children[0], node);
+	Mod_SetParent(node->children[1], node);
+}
+
 void Mod_MakeHull0(void)
 {
 	mnode_t* in, *child;
