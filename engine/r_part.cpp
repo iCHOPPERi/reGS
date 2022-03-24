@@ -180,7 +180,10 @@ BEAM* R_BeamRing( int startEnt, int endEnt,
 
 void R_GetPackedColor( short* packed, short color )
 {
-	//TODO: implement - Solokiller
+	if (packed)
+		*packed = 0;
+	else
+		Con_Printf("R_GetPackedColor called without packed!\n");
 }
 
 short R_LookupColor( byte r, byte g, byte b )
