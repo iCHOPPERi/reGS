@@ -422,6 +422,11 @@ model_t* Mod_ForName(const char* name, bool crash, bool trackCRC)
 	return Mod_LoadModel(mod, crash, trackCRC);
 }
 
+void Mod_MarkClient(model_t* pModel)
+{
+	pModel->needload = (NL_NEEDS_LOADED | NL_UNREFERENCED);
+}
+
 void Mod_LoadEntities(lump_t* l)
 {
 	if (!l->filelen)
