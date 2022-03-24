@@ -31,6 +31,91 @@ void HPAK_Init()
 	*/
 }
 
+void HPAK_ValidatePak(char* fullpakname)
+{
+	hash_pack_header_t header;
+	hash_pack_directory_t directory;
+	hash_pack_entry_t* entry;
+	char szFileName[MAX_PATH];
+	FileHandle_t fp;
+	byte* pData;
+	byte md5[16];
+	MD5Context_t ctx;
+
+	HPAK_FlushHostQueue();
+	fp = FS_Open(fullpakname, "rb");
+
+	if (!fp)
+		return;
+
+	FS_Read(&header, sizeof(hash_pack_header_t), fp);
+
+	if (header.version != HASHPAK_VERSION || Q_strncmp(header.szFileStamp, "HPAK", sizeof(header.szFileStamp)) != 0)
+	{
+		Con_Printf("%s is not a PAK file, deleting\n", fullpakname);
+		FS_Close(fp);
+		FS_RemoveFile(fullpakname, 0);
+		return;
+	}
+
+	FS_Seek(fp, header.nDirectoryOffset, FILESYSTEM_SEEK_HEAD);
+	FS_Read(&directory, 4, fp);
+
+	if (directory.nEntries < 1 || (unsigned int)directory.nEntries > MAX_FILE_ENTRIES)
+	{
+		Con_Printf("ERROR: HPAK %s had bogus # of directory entries:  %i, deleting\n", fullpakname, directory.nEntries);
+		FS_Close(fp);
+		FS_RemoveFile(fullpakname, 0);
+		return;
+	}
+
+	directory.p_rgEntries = (hash_pack_entry_t*)Mem_Malloc(sizeof(hash_pack_entry_t) * directory.nEntries);
+	FS_Read(directory.p_rgEntries, sizeof(hash_pack_entry_t) * directory.nEntries, fp);
+
+	for (int nCurrent = 0; nCurrent < directory.nEntries; nCurrent++)
+	{
+		entry = &directory.p_rgEntries[nCurrent];
+		COM_FileBase(entry->resource.szFileName, szFileName);
+
+		if ((unsigned int)entry->nFileLength >= MAX_FILE_SIZE)
+		{
+			Con_Printf("Mismatched data in HPAK file %s, deleting\n", fullpakname);
+			Con_Printf("Unable to MD5 hash data lump %i, size invalid:  %i\n", nCurrent + 1, entry->nFileLength);
+
+			FS_Close(fp);
+			FS_RemoveFile(fullpakname, 0);
+			Mem_Free(directory.p_rgEntries);
+			return;
+		}
+
+		pData = (byte*)Mem_Malloc(entry->nFileLength + 1);
+
+		Q_memset(pData, 0, entry->nFileLength);
+		FS_Seek(fp, entry->nOffset, FILESYSTEM_SEEK_HEAD);
+		FS_Read(pData, entry->nFileLength, fp);
+		Q_memset(&ctx, 0, sizeof(MD5Context_t));
+
+		MD5Init(&ctx);
+		MD5Update(&ctx, pData, entry->nFileLength);
+		MD5Final(md5, &ctx);
+
+		if (pData)
+			Mem_Free(pData);
+
+		if (Q_memcmp(entry->resource.rgucMD5_hash, md5, sizeof(md5)) != 0)
+		{
+			Con_Printf("Mismatched data in HPAK file %s, deleting\n", fullpakname);
+			FS_Close(fp);
+			FS_RemoveFile(fullpakname, 0);
+			Mem_Free(directory.p_rgEntries);
+			return;
+		}
+	}
+
+	FS_Close(fp);
+	Mem_Free(directory.p_rgEntries);
+}
+
 void HPAK_CheckIntegrity(char* pakname)
 {
 	char name[256];
