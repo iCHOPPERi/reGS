@@ -13,7 +13,8 @@
 *
 ****/
 
-// Reversed by 1Doomsayer
+// Reverse-Engineered by Doomsayer
+// https://github.com/1Doomsayer
 
 // snd_mem.cpp: sound caching
 
