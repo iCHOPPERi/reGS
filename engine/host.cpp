@@ -156,6 +156,31 @@ void Host_WriteConfiguration()
 	}
 }
 
+void SV_BroadcastPrintf(char* fmt, ...)
+{
+	va_list argptr;
+	char string[1024];
+
+	va_start(argptr, fmt);
+	Q_vsnprintf(string, ARRAYSIZE(string) - 1, fmt, argptr);
+	va_end(argptr);
+
+	string[ARRAYSIZE(string) - 1] = 0;
+
+	for (int i = 0; i < svs.maxclients; i++)
+	{
+		client_t* cl = &svs.clients[i];
+
+		if ((cl->active || cl->spawned) && !cl->fakeclient)
+		{
+			MSG_WriteByte(&cl->netchan.message, svc_print);
+			MSG_WriteString(&cl->netchan.message, string);
+		}
+	}
+
+	Con_DPrintf("%s", string);
+}
+
 void Host_Error( const char* error, ... )
 {
 	static bool inerror = false;

@@ -25,6 +25,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include "quakedef.h"
 #include "cdll_int.h"
+#include "host.h"
 
 cvar_t* cvar_vars = nullptr;
 const char* cvar_null_string = "";
@@ -247,14 +248,12 @@ void Cvar_DirectSet( cvar_t* var, const char* value )
 			if( var->flags & FCVAR_PROTECTED )
 			{
 				Log_Printf( "Server cvar \"%s\" = \"%s\"\n", var->name, "***PROTECTED***" );
-				//TODO: implement - Solokiller
-				//SV_BroadcastPrintf( "\"%s\" changed to \"%s\"\n", var->name, "***PROTECTED***" );
+				SV_BroadcastPrintf( "\"%s\" changed to \"%s\"\n", var->name, "***PROTECTED***" );
 			}
 			else
 			{
 				Log_Printf( "Server cvar \"%s\" = \"%s\"\n", var->name, pszNewValue );
-				//TODO: implement - Solokiller
-				//SV_BroadcastPrintf( "\"%s\" changed to \"%s\"\n", var->name, v3 );
+				SV_BroadcastPrintf( "\"%s\" changed to \"%s\"\n", var->name, pszNewValue );
 			}
 		}
 

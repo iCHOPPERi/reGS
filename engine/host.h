@@ -17,6 +17,9 @@ extern double host_frametime;
 
 extern client_t* host_client;
 
+
+void SV_BroadcastPrintf(char* fmt, ...);
+
 int Host_Frame( float time, int iState, int* stateInfo );
 
 bool Host_IsServerActive();
