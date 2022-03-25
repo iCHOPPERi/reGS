@@ -293,17 +293,17 @@ char* UTIL_GetBaseDir()
 
 void SetEngineDLL( const char** ppEngineDLL )
 {
-	*ppEngineDLL = "SnarkEngine.dll";
+	*ppEngineDLL = "hw.dll";
 
-	const char* pEngineDLLSetting = registry->ReadString( "EngineDLL", "SnarkEngine.dll" );
-	if( _stricmp( pEngineDLLSetting, "SnarkEngine.dll" ) )
+	const char* pEngineDLLSetting = registry->ReadString( "EngineDLL", "hw.dll" );
+	if( _stricmp( pEngineDLLSetting, "hw.dll" ) )
 	{
 		if( !_stricmp( pEngineDLLSetting, "sw.dll" ) )
 			*ppEngineDLL = "sw.dll";
 	}
 	else
 	{
-		*ppEngineDLL = "SnarkEngine.dll";
+		*ppEngineDLL = "hw.dll";
 	}
 
 	if( cmdline->CheckParm( "-soft", nullptr )
@@ -314,7 +314,7 @@ void SetEngineDLL( const char** ppEngineDLL )
 	else if( cmdline->CheckParm( "-gl", nullptr )
 			 || cmdline->CheckParm( "-d3d", nullptr ) )
 	{
-		*ppEngineDLL = "SnarkEngine.dll";
+		*ppEngineDLL = "hw.dll";
 	}
 
 	registry->WriteString( "EngineDLL", *ppEngineDLL );
@@ -326,7 +326,7 @@ bool OnVideoModeFailed()
 	registry->WriteInt( "ScreenHeight", 640 );
 	registry->WriteInt( "ScreenWidth", 480 );
 
-	registry->WriteString( "EngineDLL", "SnarkEngine.dll" );
+	registry->WriteString( "EngineDLL", "hw.dll" );
 
 	return MessageBoxA(
 		NULL, 
@@ -434,9 +434,9 @@ int CALLBACK WinMain(
 	{
 		registry->WriteInt( "CrashInitializingVideoMode", 0 );
 
-		const char* pszEngineDLL = registry->ReadString( "EngineDLL", "SnarkEngine.dll" );
+		const char* pszEngineDLL = registry->ReadString( "EngineDLL", "hw.dll" );
 
-		if( !_stricmp( pszEngineDLL, "SnarkEngine.dll" ) )
+		if( !_stricmp( pszEngineDLL, "hw.dll" ) )
 		{
 			const char* pszCaption = "Video mode change failure";
 			const char* pszMessage;
@@ -452,7 +452,7 @@ int CALLBACK WinMain(
 			else
 			{
 				//TODO: Shouldn't this be sw.dll? - Solokiller
-				registry->WriteString( "EngineDLL", "SnarkEngine.dll" );
+				registry->WriteString( "EngineDLL", "hw.dll" );
 
 				pszMessage = 
 					"The game has detected that the previous attempt to start in openGL video mode failed.\n"
