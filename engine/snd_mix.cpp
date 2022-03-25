@@ -16,7 +16,8 @@
 
 // snd_mix.cpp -- portable code to mix sounds for snd_dma.cpp
 
-// Reversed by Doomsayer1
+// Reverse-Engineered by Doomsayer
+// https://github.com/1Doomsayer
 
 #include "quakedef.h"
 #include "sound.h"

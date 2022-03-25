@@ -14,7 +14,8 @@
 ****/
 #define CINTERFACE
 
-// Reversed by Doomsayer1
+// Reverse-Engineered by Doomsayer
+// https://github.com/1Doomsayer
 
 // snd_dma.cpp - Main control for any streaming sound output device
 

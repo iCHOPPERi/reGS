@@ -13,7 +13,8 @@
 *
 ****/
 
-// Reversed by 1Doomsayer
+// Reverse-Engineered by Doomsayer
+// https://github.com/1Doomsayer
 
 #define CINTERFACE
 
