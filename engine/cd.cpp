@@ -13,6 +13,9 @@
 *
 ****/
 
+// Reverse-Engineered by Doomsayer
+// https://github.com/1Doomsayer
+
 // cd.cpp - CD Audio & MP3 Playback
 
 #include <windows.h>
