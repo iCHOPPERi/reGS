@@ -26,4 +26,4 @@ Currently this project supports only Windows.
 2. Open Visual Studio.
 3. On the starting screen, click "Clone or check out code".
 4. Enter `https://github.com/ScriptedSnark/reGS.git` and press the Clone button. Wait for the process to finish.
-5. You can build the workspace using Build→Build All. If you want to build only engine or something else, right click on wanted project (for example, `launcher`) and select Build.
+5. Change Debug to Release (debug build currently doesn't work). You can build the workspace using Build→Build All. If you want to build only engine or something else, right click on wanted project (for example, `launcher`) and select Build.
