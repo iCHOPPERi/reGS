@@ -6,7 +6,7 @@ This is the repository of reGS source code. It was private before. Why I open-so
 
 ## Goal
 
-We want to keep compatibility with original GoldSrc parts (network/GameUI and other libraries). Also, we try to fix bugs of the original engine and its components.
+We want to keep compatibility with original GoldSrc parts (network/GameUI and other libraries). Also, we are trying to fix bugs of the original engine and its components.
 Third, improve GoldSrc by adding some features and improving already existing (for example, Miles Sound System to FMOD, OpenGL shaders).
 
 ## Credits
