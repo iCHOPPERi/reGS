@@ -378,6 +378,8 @@ typedef struct server_static_s
 extern	server_static_t	svs;	//! persistent server info
 extern	server_t		sv;		//! local server
 
+extern cvar_t motdfile;
+
 extern playermove_t g_svmove;
 
 extern DLL_FUNCTIONS gEntityInterface;

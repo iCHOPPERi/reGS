@@ -566,6 +566,7 @@ void SV_Init()
 	//TODO: implement - Solokiller
 	Cvar_RegisterVariable( &sv_allow_upload );
 	//TODO: implement - Solokiller
+	Cvar_RegisterVariable(&motdfile);
 	Cvar_RegisterVariable( &mapcyclefile );
 	//TODO: implement - Solokiller
 	Cvar_RegisterVariable( &servercfgfile );

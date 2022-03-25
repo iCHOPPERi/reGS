@@ -18,6 +18,8 @@ bool g_iQuitCommandIssued = false;
 
 bool g_bMajorMapChange = false;
 
+cvar_t motdfile = { "motdfile", "motd.txt", 0, 0.0f, NULL };
+
 void Host_InitializeGameDLL()
 {
 	Cbuf_Execute();
@@ -47,6 +49,58 @@ void Host_InitializeGameDLL()
 	Cbuf_Execute();
 }
 
+void Host_Motd_f(void)
+{
+	int length;
+	FileHandle_t pFile;
+	char* pFileList;
+	char* next;
+
+	pFileList = motdfile.string;
+	if (*pFileList == '/' || Q_strstr(pFileList, ":") || Q_strstr(pFileList, "..") || Q_strstr(pFileList, "\\"))
+	{
+		Con_Printf("Unable to open %s (contains illegal characters)\n", pFileList);
+		return;
+	}
+
+	if (Q_stricmp(COM_LastFileExtension(motdfile.string), "txt"))
+	{
+		Con_Printf("Invalid motdfile name %s (wrong file extension, must be .txt)\n", motdfile.string);
+		return;
+	}
+
+	pFile = FS_Open(pFileList, "rb");
+	if (!pFile)
+	{
+		Con_Printf("Unable to open %s\n", pFileList);
+		return;
+	}
+	length = FS_Size(pFile);
+	if (length > 0)
+	{
+		char* buf = (char*)Mem_Malloc(length + 1);
+		if (buf)
+		{
+			FS_Read(buf, length, pFile);
+			buf[length] = 0;
+			char* now = buf;
+			Con_Printf("motd:");
+			next = strchr(now, '\n');
+			while (next != NULL)
+			{
+				*next = 0;
+				Con_Printf("%s\n", now);
+				now = next + 1;
+				next = strchr(now, '\n');
+			}
+
+			Con_Printf("%s\n", now);
+
+			Mem_Free(buf);
+		}
+	}
+	FS_Close(pFile);
+}
 
 void Host_ClearSaveDirectory()
 {

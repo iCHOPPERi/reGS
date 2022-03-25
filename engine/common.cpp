@@ -461,6 +461,21 @@ void COM_Shutdown()
 	//Nothing
 }
 
+char* COM_LastFileExtension(const char* in) // simple func by xWhitey & ScriptedSnark
+{
+	char* result = "";
+	int length = strlen(in);
+
+	if (in[length - 4] != '.')
+		return "";
+
+	strcat(result, &in[length - 3]);
+	strcat(result, &in[length - 2]);
+	strcat(result, &in[length - 1]);
+
+	return result;
+}
+
 void COM_FileBase( const char *in, char *out )
 {
 	if( !in )

@@ -108,6 +108,8 @@ void COM_InitArgv( int argc, const char** argv );
 void COM_Init();
 void COM_Shutdown();
 
+char* COM_LastFileExtension(const char* in);
+
 void COM_FileBase( const char *in, char *out );
 
 bool COM_SetupDirectories();
