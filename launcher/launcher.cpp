@@ -20,6 +20,9 @@
 #include "../public/interface.h"
 #include "../public/IRegistry.h"
 
+#define HARDWARE_RENDERER_ENGINE "hw.dll"
+#define SOFTWARE_RENDERER_ENGINE "sw.dll"
+
 //TODO: Linux version doesn't use registry so don't include it - Solokiller
 
 bool TextMode = false;
@@ -293,28 +296,28 @@ char* UTIL_GetBaseDir()
 
 void SetEngineDLL( const char** ppEngineDLL )
 {
-	*ppEngineDLL = "hw.dll";
+	*ppEngineDLL = HARDWARE_RENDERER_ENGINE;
 
-	const char* pEngineDLLSetting = registry->ReadString( "EngineDLL", "hw.dll" );
-	if( _stricmp( pEngineDLLSetting, "hw.dll" ) )
+	const char* pEngineDLLSetting = registry->ReadString( "EngineDLL", HARDWARE_RENDERER_ENGINE );
+	if( _stricmp( pEngineDLLSetting, HARDWARE_RENDERER_ENGINE ) )
 	{
-		if( !_stricmp( pEngineDLLSetting, "sw.dll" ) )
-			*ppEngineDLL = "sw.dll";
+		if( !_stricmp( pEngineDLLSetting, SOFTWARE_RENDERER_ENGINE ) )
+			*ppEngineDLL = SOFTWARE_RENDERER_ENGINE;
 	}
 	else
 	{
-		*ppEngineDLL = "hw.dll";
+		*ppEngineDLL = HARDWARE_RENDERER_ENGINE;
 	}
 
 	if( cmdline->CheckParm( "-soft", nullptr )
 		|| cmdline->CheckParm( "-software", nullptr ) )
 	{
-		*ppEngineDLL = "sw.dll";
+		*ppEngineDLL = SOFTWARE_RENDERER_ENGINE;
 	}
 	else if( cmdline->CheckParm( "-gl", nullptr )
 			 || cmdline->CheckParm( "-d3d", nullptr ) )
 	{
-		*ppEngineDLL = "hw.dll";
+		*ppEngineDLL = HARDWARE_RENDERER_ENGINE;
 	}
 
 	registry->WriteString( "EngineDLL", *ppEngineDLL );
@@ -326,7 +329,7 @@ bool OnVideoModeFailed()
 	registry->WriteInt( "ScreenHeight", 640 );
 	registry->WriteInt( "ScreenWidth", 480 );
 
-	registry->WriteString( "EngineDLL", "hw.dll" );
+	registry->WriteString( "EngineDLL", HARDWARE_RENDERER_ENGINE );
 
 	return MessageBoxA(
 		NULL, 
@@ -434,9 +437,9 @@ int CALLBACK WinMain(
 	{
 		registry->WriteInt( "CrashInitializingVideoMode", 0 );
 
-		const char* pszEngineDLL = registry->ReadString( "EngineDLL", "hw.dll" );
+		const char* pszEngineDLL = registry->ReadString( "EngineDLL", HARDWARE_RENDERER_ENGINE );
 
-		if( !_stricmp( pszEngineDLL, "hw.dll" ) )
+		if( !_stricmp( pszEngineDLL, HARDWARE_RENDERER_ENGINE ) )
 		{
 			const char* pszCaption = "Video mode change failure";
 			const char* pszMessage;
@@ -452,7 +455,7 @@ int CALLBACK WinMain(
 			else
 			{
 				//TODO: Shouldn't this be sw.dll? - Solokiller
-				registry->WriteString( "EngineDLL", "hw.dll" );
+				registry->WriteString( "EngineDLL", HARDWARE_RENDERER_ENGINE );
 
 				pszMessage = 
 					"The game has detected that the previous attempt to start in openGL video mode failed.\n"
