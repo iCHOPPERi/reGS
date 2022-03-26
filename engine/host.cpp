@@ -554,8 +554,7 @@ void Host_Shutdown()
 
 		realtime = 0;
 
-		//TODO: implement - Solokiller
-		//sv.time = 0;
+		sv.time = 0;
 		cl.time = 0;
 	}
 }
