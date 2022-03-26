@@ -821,8 +821,35 @@ float hudGetClientTime()
 
 model_t* CL_LoadModel( const char* modelname, int* index )
 {
-	//TODO: implement - Solokiller
-	return nullptr;
+	model_s* mdl = cl.model_precache[1]; // eax
+	int id = 1; // ebx
+
+	g_engdstAddrs.CL_LoadModel(&modelname, &index);
+
+	if (!mdl)
+	{
+		if (index)
+			*index = -1;
+
+		return 0;
+	}
+
+	while (Q_stricmp(modelname, mdl->name))
+	{
+		mdl = cl.model_precache[id++];
+		if (!mdl)
+		{
+			if (index)
+				*index = -1;
+
+			return 0;
+		}
+	}
+
+	if (index)
+		*index = id;
+
+	return CL_GetModelByIndex(id);
 }
 
 int CL_CreateVisibleEntity( int type, cl_entity_t* ent )
