@@ -156,6 +156,23 @@ void Host_WriteConfiguration()
 	}
 }
 
+void SV_ClientPrintf(char* fmt, ...)
+{
+	char string[1024]; // [esp+10h] [ebp-40Ch] BYREF
+	va_list __varargs; // [esp+424h] [ebp+8h] BYREF
+
+	va_start(__varargs, fmt);
+
+	if (host_client->fakeclient == false)
+	{
+		Q_vsnprintf(string, ARRAYSIZE(string) - 1, fmt, __varargs);
+		MSG_WriteByte(&host_client->netchan.message, svc_print);
+		MSG_WriteString(&host_client->netchan.message, string);
+	}
+
+	va_end(__varargs, fmt);
+}
+
 void SV_BroadcastPrintf(char* fmt, ...)
 {
 	va_list argptr;
