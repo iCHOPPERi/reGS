@@ -75,6 +75,8 @@ bool VID_Init( unsigned short* palette );
 
 model_t* R_LoadMapSprite( const char *szFilename );
 
+void GL_Dump_f();
+
 void R_InitTextures();
 
 void R_Init();

@@ -15,6 +15,11 @@ extern int TEXTURE2_SGIS;
 
 extern int gl_mtexable;
 
+extern const char* gl_vendor;
+extern const char* gl_renderer;
+extern const char* gl_version;
+extern const char* gl_extensions;
+
 extern const char* gl_renderer;
 
 float GetXMouseAspectRatioAdjustment();
