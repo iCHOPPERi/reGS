@@ -1,10 +1,41 @@
 #include "quakedef.h"
 #include "r_part.h"
+#include "client.h"
+
+particle_t* free_particles;
+particle_t* active_particles;
 
 particle_t* R_AllocParticle( void( *callback )( particle_t*, float ) )
 {
-	//TODO: implement - Solokiller
-	return nullptr;
+	particle_s* particles = free_particles; // eax
+
+	if (!free_particles)
+	{
+		Con_Printf("Not enough free particles\n");
+		return particles;
+	}
+
+	if (free_particles)
+	{
+		free_particles->type = pt_clientcustom;
+		free_particles = free_particles->next;
+		active_particles = particles;
+		particles->next = active_particles;
+		particles->die = cl.time;
+		particles->color = 0;
+		particles->callback = callback;
+		particles->deathfunc = 0;
+		particles->ramp = 0.0;
+		particles->org[0] = vec3_origin[0];
+		particles->org[1] = vec3_origin[1];
+		particles->org[2] = vec3_origin[2];
+		particles->vel[0] = vec3_origin[0];
+		particles->vel[1] = vec3_origin[1];
+		particles->packedColor = 0;
+		particles->vel[2] = vec3_origin[2];
+	}
+
+	return particles;
 }
 
 void R_BlobExplosion( vec_t* org )
