@@ -18,6 +18,8 @@ bool g_iQuitCommandIssued = false;
 
 bool g_bMajorMapChange = false;
 
+char szDirectory[260];
+
 cvar_t motdfile = { "motdfile", "motd.txt", 0, 0.0f, NULL };
 
 void Host_InitializeGameDLL()
@@ -106,7 +108,37 @@ void Host_Motd_f(void)
 
 void Host_ClearSaveDirectory()
 {
-	//TODO: implement - Solokiller
+	const char* i; // esi
+	char szName[260]; // [esp+2Ch] [ebp-110h] BYREF
+
+	Q_memset(szDirectory, 0, 260);
+	Q_snprintf(szDirectory, sizeof(szDirectory), "SAVE/");
+	Q_snprintf(szName, sizeof(szName), "%s", szDirectory);
+	Q_strncat(szName, "*.HL?", sizeof(szName) - Q_strlen(szName) - 1);
+	COM_FixSlashes(szName);
+
+	if (Sys_FindFirstPathID(szName, "GAMECONFIG"))
+	{
+		Sys_FindClose();
+
+		Q_memset(szDirectory, 0, 260);
+		Q_snprintf(szDirectory, sizeof(szDirectory), "SAVE/");
+		Q_snprintf(szName, sizeof(szName), "%s", szDirectory);
+
+		COM_FixSlashes(szName);
+		FS_CreateDirHierarchy(szName, "GAMECONFIG");
+		Q_strncat(szName, "*.HL?", 259 - strlen(szName));
+
+		for (i = Sys_FindFirstPathID(szName, "GAMECONFIG"); i; i = Sys_FindNext(0))
+		{
+			Q_memset(szDirectory, 0, 260);
+			Q_snprintf(szDirectory, sizeof(szDirectory), "SAVE/");
+			Q_snprintf(szName, sizeof(szName), "%s%s", szDirectory, i);
+			FS_RemoveFile(szName, "GAMECONFIG");
+		}
+	}
+
+	Sys_FindClose();
 }
 
 void Host_Map(qboolean bIsDemo, char* mapstring, char* mapName, qboolean loadGame)
