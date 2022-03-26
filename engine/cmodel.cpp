@@ -1,5 +1,6 @@
 #include "quakedef.h"
 #include "cmodel.h"
+#include "gl_model.h"
 
 unsigned char* gPAS;
 unsigned char* gPVS;
@@ -29,6 +30,22 @@ unsigned char* CM_LeafPAS(int leafnum)
 	}
 
 	return mod_novis;
+}
+
+unsigned char* Mod_LeafPVS(mleaf_t* leaf, model_t* model)
+{
+	if (leaf == model->leafs)
+	{
+		return mod_novis;
+	}
+
+	if (!gPVS)
+	{
+		return Mod_DecompressVis(leaf->compressed_vis, model);
+	}
+
+	int leafnum = leaf - model->leafs;
+	return CM_LeafPVS(leafnum);
 }
 
 void CM_FreePAS()

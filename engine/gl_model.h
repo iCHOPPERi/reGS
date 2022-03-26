@@ -138,6 +138,7 @@ extern	trivertx_t	*poseverts[ MAXALIASFRAMES ];
 
 void* Mod_Extradata(model_t* mod);
 void Mod_ClearAll();
+byte* Mod_DecompressVis(byte* in, model_t* model);
 void Mod_FillInCRCInfo(bool trackCRC, int model_number);
 model_t* Mod_FindName(bool trackCRC, const char* name);
 bool Mod_ValidateCRC(const char* name, CRC32_t crc);
