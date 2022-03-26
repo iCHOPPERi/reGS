@@ -188,24 +188,31 @@ void CL_Connect_f(void) // This function crashes the game due to exception in cl
 
 void CL_TakeSnapshot_f()
 {
-	int i; // ebx
-	FileHandle_t v2; // eax
-	char base[64]; // [esp+20h] [ebp-8Ch] BYREF
-	char filename[64]; // [esp+60h] [ebp-4Ch] BYREF
+	model_s* in;
+	int i;
+	FileHandle_t file;
+	char base[64];
+	char filename[64];
 
-	Q_strcpy(base, "Snapshot");
+	if (cl.num_entities && (in = cl_entities->model) != 0)
+		COM_FileBase(in->name, base);
+	else
+		Q_strcpy(base, "Snapshot");
 
-	for (i = 0; i != 1000; ++i)
+	for (i = 0; i != 1000; i++)
 	{
-		snprintf(filename, 0x40u, "%s%04d.bmp", base, i);
-		v2 = FS_OpenPathID(filename, "r", "GAMECONFIG");
-		if (!v2)
+		Q_snprintf(filename, sizeof(filename), "%s%04d.bmp", base, i);
+		file = FS_OpenPathID(filename, "r", "GAMECONFIG");
+
+		if (!file)
 		{
 			VID_TakeSnapshot(filename);
 			return;
 		}
-		FS_Close(v2);
+
+		FS_Close(file);
 	}
+
 	Con_Printf("Unable to take a screenshot.\n");
 }
 
