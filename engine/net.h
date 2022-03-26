@@ -244,6 +244,8 @@ void NET_Config( qboolean multiplayer );
 
 void NET_Shutdown();
 
+void NET_StartThread();
+
 void NET_AllocateQueues();
 
 void NET_Init();

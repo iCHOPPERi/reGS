@@ -167,6 +167,15 @@ void NET_RemoveFromPacketList(packetlag_t* pPacket)
 	pPacket->pNext = 0;
 }
 
+void NET_StartThread()
+{
+	if (use_thread)
+	{
+		if (net_thread_initialized == false)
+			net_thread_initialized = true;
+	}
+}
+
 void NET_AllocateQueues()
 {
 	for (int i = 0; i < NUM_MSG_QUEUES; i++)
@@ -178,7 +187,7 @@ void NET_AllocateQueues()
 		normalqueue = p;
 	}
 
-	// NET_StartThread(); - TODO: implement - ScriptedSnark
+	NET_StartThread();
 }
 
 void MaxPlayers_f()
@@ -274,7 +283,7 @@ void NET_Init()
 		g_pLagData[i].pNext = &g_pLagData[i];
 	}
 
-	// NET_AllocateQueues(); - TODO: implement - ScriptedSnark
+	NET_AllocateQueues();
 	Con_DPrintf("Base networking initialized.\n");
 }
 
