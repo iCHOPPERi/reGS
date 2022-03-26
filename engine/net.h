@@ -169,6 +169,15 @@ typedef enum svc_commands_e
 	svc_endoflist = 255,
 } svc_commands_t;
 
+typedef struct net_messages_s
+{
+	net_messages_s* next;
+	qboolean preallocated;
+	unsigned char* buffer;
+	netadr_t from;
+	int buffersize;
+} net_messages_t;
+
 typedef struct packetlag_s
 {
 	unsigned char* pPacketData;
@@ -188,6 +197,9 @@ typedef struct flowstats_s
 } flowstats_t;
 
 const int MAX_LATENT = 32;
+
+const int NUM_MSG_QUEUES = 40;
+const int MSG_QUEUE_SIZE = 1536;
 
 typedef struct flow_s
 {
@@ -224,12 +236,15 @@ typedef struct fragbufwaiting_s
 } fragbufwaiting_t;
 
 extern packetlag_t g_pLagData[3];
+extern net_messages_t* normalqueue;
 
 void NET_ThreadLock();
 void NET_ThreadUnlock();
 void NET_Config( qboolean multiplayer );
 
 void NET_Shutdown();
+
+void NET_AllocateQueues();
 
 void NET_Init();
 

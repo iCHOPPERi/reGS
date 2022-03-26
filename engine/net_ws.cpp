@@ -45,6 +45,7 @@ typedef struct
 
 static loopback_t	loopbacks[2];
 int net_sleepforever = 1;
+net_messages_t* normalqueue;
 
 extern cvar_t cl_showfps;
 
@@ -164,6 +165,20 @@ void NET_RemoveFromPacketList(packetlag_t* pPacket)
 	pPacket->pNext->pPrev = pPacket->pPrev;
 	pPacket->pPrev = 0;
 	pPacket->pNext = 0;
+}
+
+void NET_AllocateQueues()
+{
+	for (int i = 0; i < NUM_MSG_QUEUES; i++)
+	{
+		net_messages_t* p = (net_messages_t*)Mem_ZeroMalloc(sizeof(net_messages_t));
+		p->buffer = (unsigned char*)Mem_ZeroMalloc(MSG_QUEUE_SIZE);
+		p->preallocated = TRUE;
+		p->next = normalqueue;
+		normalqueue = p;
+	}
+
+	// NET_StartThread(); - TODO: implement - ScriptedSnark
 }
 
 void MaxPlayers_f()
