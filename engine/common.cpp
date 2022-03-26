@@ -26,6 +26,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "bspfile.h"
 #include "cdll_int.h"
 #include "modinfo.h"
+#include <string>
 
 char gpszProductString[ 32 ] = {};
 char gpszVersionString[ 32 ] = {};
@@ -461,17 +462,20 @@ void COM_Shutdown()
 	//Nothing
 }
 
-char* COM_LastFileExtension(const char* in) // simple func by xWhitey & ScriptedSnark
+char* COM_LastFileExtension(const char* in) // simple func by xWhitey & ScriptedSnark - DOESN'T WORK FINE
 {
-	char* result = "";
+	std::string strResult;
+	char result[3];
 	int length = strlen(in);
 
-	if (in[length - 4] != '.')
-		return "";
+	if (in[length - 4] != '.') return "";
 
-	strcat(result, &in[length - 3]);
-	strcat(result, &in[length - 2]);
-	strcat(result, &in[length - 1]);
+	strResult += in[length - 3];
+	strResult += in[length - 2];
+	strResult += in[length - 1];
+	strcpy(result, strResult.c_str());
+
+	Con_Printf("COM_LastFileExtension: %s\n", result);
 
 	return result;
 }

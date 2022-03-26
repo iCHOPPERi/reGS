@@ -63,11 +63,13 @@ void Host_Motd_f(void)
 		return;
 	}
 
+	/* - TODO: fix this check
 	if (Q_stricmp(COM_LastFileExtension(motdfile.string), "txt"))
 	{
 		Con_Printf("Invalid motdfile name %s (wrong file extension, must be .txt)\n", motdfile.string);
 		return;
 	}
+	*/
 
 	pFile = FS_Open(pFileList, "rb");
 	if (!pFile)
@@ -354,6 +356,7 @@ void Host_InitCommands()
 	Cmd_AddCommand("exit", Host_Quit_f);
     Cmd_AddCommand("map", Host_Map_f);
 	Cmd_AddCommand("maps", Host_Maps_f);
+	Cmd_AddCommand("motd", Host_Motd_f);
 	//TODO: implement - Solokiller
 	Cmd_AddCommand("_restart", Host_Quit_Restart_f);
 	Cmd_AddCommand("_sethdmodels", Host_SetHDModels_f);
