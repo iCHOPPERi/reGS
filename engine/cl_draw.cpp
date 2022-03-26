@@ -128,8 +128,27 @@ int SPR_Frames( HSPRITE hSprite )
 
 int SPR_Height( HSPRITE hSprite, int frame )
 {
-	//TODO: implement - Solokiller
-	return 0;
+	int result;
+	SPRITELIST* sprlist;
+	mspriteframe_t* sprframe;
+
+	result = 0;
+	g_engdstAddrs.pfnSPR_Height(&hSprite, &frame);
+	hSprite--;
+
+	if (hSprite < 0 || hSprite >= gSpriteCount)
+		return result;
+
+	sprlist = &gSpriteList[hSprite];
+
+	if (sprlist)
+	{
+		sprframe = R_GetSpriteFrame(SPR_Pointer(sprlist), frame);
+		if (sprframe)
+			result = sprframe->height;
+	}
+
+	return result;
 }
 
 int SPR_Width( HSPRITE hSprite, int frame )
