@@ -25,6 +25,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 *	models are the only shared resource between a client and server running
 *	on the same machine.
 */
+
+// Thanks to 1Doomsyaer (https://github.com/1Doomsayer) for helping with complex funcs!
+
 #include "quakedef.h"
 #include "qgl.h"
 #include "gl_mesh.h"
@@ -104,52 +107,6 @@ void Mod_ClearAll()
 				mod->cache.data = nullptr;
 		}
 	}
-}
-
-byte* Mod_DecompressVis(byte* in, model_t* model)
-{
-	// #define MAX_MAP_LEAFS 32767
-	// i just copypasted this thing from quake - xWhitey
-	static byte	decompressed[32767 / 8];
-	int		c;
-	byte* out;
-	int		row;
-
-	row = (model->numleafs + 7) >> 3;
-	out = decompressed;
-
-#if 0
-	memcpy(out, in, row);
-#else
-	if (!in)
-	{	// no vis info, so make all visible
-		while (row)
-		{
-			*out++ = 0xff;
-			row--;
-		}
-		return decompressed;
-	}
-
-	do
-	{
-		if (*in)
-		{
-			*out++ = *in++;
-			continue;
-		}
-
-		c = in[1];
-		in += 2;
-		while (c)
-		{
-			*out++ = 0;
-			c--;
-		}
-	} while (out - decompressed < row);
-#endif
-
-	return decompressed;
 }
 
 void Mod_FillInCRCInfo(bool trackCRC, int model_number)

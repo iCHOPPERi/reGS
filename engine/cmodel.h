@@ -6,6 +6,7 @@ extern unsigned char* gPVS;
 const int MODEL_MAX_PVS = 1024;
 
 void Mod_Init();
+byte* Mod_DecompressVis(byte* in, model_t* model);
 unsigned char* Mod_LeafPVS(mleaf_t* leaf, model_t* model);
 unsigned char* CM_LeafPVS(int leafnum);
 unsigned char* CM_LeafPAS(int leafnum);

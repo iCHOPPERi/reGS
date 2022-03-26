@@ -12,6 +12,52 @@ void Mod_Init()
 	Q_memset(mod_novis, 255, MODEL_MAX_PVS);
 }
 
+byte* Mod_DecompressVis(byte* in, model_t* model)
+{
+	// #define MAX_MAP_LEAFS 32767
+	// i just copypasted this thing from quake - xWhitey
+	static byte	decompressed[32767 / 8];
+	int		c;
+	byte* out;
+	int		row;
+
+	row = (model->numleafs + 7) >> 3;
+	out = decompressed;
+
+#if 0
+	memcpy(out, in, row);
+#else
+	if (!in)
+	{	// no vis info, so make all visible
+		while (row)
+		{
+			*out++ = 0xff;
+			row--;
+		}
+		return decompressed;
+	}
+
+	do
+	{
+		if (*in)
+		{
+			*out++ = *in++;
+			continue;
+		}
+
+		c = in[1];
+		in += 2;
+		while (c)
+		{
+			*out++ = 0;
+			c--;
+		}
+	} while (out - decompressed < row);
+#endif
+
+	return decompressed;
+}
+
 unsigned char* CM_LeafPVS(int leafnum)
 {
 	if (gPVS)
