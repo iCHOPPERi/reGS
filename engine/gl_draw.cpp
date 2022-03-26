@@ -326,11 +326,11 @@ void AdjustSubRect(mspriteframe_t* pFrame, float* pfLeft, float* pfRight, float*
 	*pw = wrect.right - wrect.left;
 	*ph = wrect.bottom - wrect.top;
 
-	*pfLeft = (wrect.left + 0.5) * 1.0 / pFrame->width;
-	*pfRight = (wrect.right - 0.5) * 1.0 / pFrame->width;
+	*pfLeft = (wrect.left) * 1.0 / pFrame->width;
+	*pfRight = (wrect.right) * 1.0 / pFrame->width;
 
-	*pfTop = (wrect.top + 0.5) * 1.0 / pFrame->height;
-	*pfBottom = (wrect.bottom - 0.5) * 1.0 / pFrame->height;
+	*pfTop = (wrect.top) * 1.0 / pFrame->height;
+	*pfBottom = (wrect.bottom) * 1.0 / pFrame->height;
 }
 
 void Draw_Frame(mspriteframe_t* pFrame, int ix, int iy, const wrect_t* prcSubRect)
@@ -343,8 +343,8 @@ void Draw_Frame(mspriteframe_t* pFrame, int ix, int iy, const wrect_t* prcSubRec
 	int iWidth = pFrame->width;
 	int iHeight = pFrame->height;
 
-	float x = (float)ix + 0.5;
-	float y = (float)iy + 0.5;
+	float x = (float)ix;
+	float y = (float)iy;
 
 	VGUI2_ResetCurrentTexture();
 
