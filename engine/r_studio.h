@@ -11,7 +11,7 @@ extern r_studio_interface_t* pStudioAPI;
 extern cvar_t* cl_righthand;
 
 void R_ResetStudio();
-
+int ModelFrameCount(model_t* model);
 sfx_t* CL_LookupSound( const char* pName );
 
 #endif //ENGINE_R_STUDIO_H

@@ -1,6 +1,7 @@
 #include "quakedef.h"
 #include "client.h"
 #include "r_studio.h"
+#include "gl_model.h"
 
 //TODO: implement and add functions here - Solokiller
 engine_studio_api_t engine_studio_api;
@@ -15,6 +16,11 @@ cvar_t* cl_righthand = nullptr;
 void R_ResetStudio()
 {
 	pStudioAPI = &studio;
+}
+
+int ModelFrameCount(model_t* model)
+{
+	//TODO: implement - ScriptedSnark
 }
 
 sfx_t* CL_LookupSound( const char* pName )
