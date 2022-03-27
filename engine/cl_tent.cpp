@@ -158,8 +158,21 @@ TEMPENTITY* CL_TempEntAllocHigh( vec_t* org, model_t* model )
 
 TEMPENTITY* CL_AllocCustomTempEntity( float* origin, model_t* model, int high, void( *callback )( TEMPENTITY*, float, float ) )
 {
-	//TODO: implement - Solokiller
-	return nullptr;
+	TEMPENTITY* tempent; // eax
+
+	if (high)
+		tempent = efx.CL_TempEntAllocHigh(origin, model);
+	else
+		tempent = efx.CL_TempEntAlloc(origin, model);
+
+	if (tempent)
+	{
+		tempent->flags |= FTENT_CLIENTCUSTOM;
+		tempent->callback = callback;
+		tempent->die = cl.time;
+	}
+
+	return tempent;
 }
 
 void R_BloodSprite( vec_t* org, int colorindex, int modelIndex, int modelIndex2, float size )
