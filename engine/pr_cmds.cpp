@@ -19,7 +19,7 @@ int PF_IsMapValid_I(char* mapname)
 
 	if (mapname && *mapname)
 	{
-		snprintf(cBuf, sizeof(cBuf), "maps/%.32s.bsp", mapname);
+		Q_snprintf(cBuf, sizeof(cBuf), "maps/%.32s.bsp", mapname);
 		result = FS_FileExists(cBuf);
 	}
 
