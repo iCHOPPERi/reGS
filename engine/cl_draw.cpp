@@ -122,8 +122,22 @@ HSPRITE SPR_Load( const char* pTextureName )
 
 int SPR_Frames( HSPRITE hSprite )
 {
-	//TODO: implement - Solokiller
-	return 0;
+	int result; // eax
+	SPRITELIST* sprlist; // edx
+
+	result = 0;
+	g_engdstAddrs.pfnSPR_Frames(&hSprite);
+	hSprite--;
+
+	if (hSprite < 0 || hSprite >= gSpriteCount)
+		return result;
+
+	sprlist = &gSpriteList[hSprite];
+
+	if (sprlist)
+		result = sprlist->frameCount;
+
+	return result;
 }
 
 int SPR_Height( HSPRITE hSprite, int frame )
