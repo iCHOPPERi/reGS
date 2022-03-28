@@ -17,5 +17,7 @@ vgui2/vgui2_surfacelib/Debug
 vgui2/controls/Release/
 tier1/Release/
 tier1/Debug/
+dlls/Release/
+dlls/Debug/
 *.obj
 *.dll
