@@ -20,9 +20,13 @@ jobs:
     - name: Prepare artifacts
       run: |
         mkdir "./bin/valve/dlls"
+        mkdir "./bin/pdb"
         mv engine/Release/hw.dll .\bin
+        mv engine/Release/hw.pdb .\bin\pdb
         mv launcher/Release/hl.exe .\bin
+        mv launcher/Release/hl.pdb .\bin\pdb
         mv dlls/Release/hl.dll .\bin\valve\dlls
+        mv dlls/Release/hl.pdb .\bin\valve\dlls
     - name: Deploy
       uses: actions/upload-artifact@v3
       with:
