@@ -21,6 +21,7 @@ void R_ResetStudio()
 int ModelFrameCount(model_t* model)
 {
 	//TODO: implement - ScriptedSnark
+	return 0;
 }
 
 sfx_t* CL_LookupSound( const char* pName )
