@@ -124,6 +124,7 @@
     <ClCompile Include="console.cpp" />
     <ClCompile Include="crc.cpp" />
     <ClCompile Include="cvar.cpp" />
+    <ClCompile Include="czmodelcheck.cpp" />
     <ClCompile Include="decals.cpp" />
     <ClCompile Include="delta.cpp" />
     <ClCompile Include="DemoPlayerWrapper.cpp" />
