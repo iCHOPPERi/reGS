@@ -1,0 +1,30 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 0 1 * *' # Monthly
+
+jobs:
+  build:
+    runs-on: windows-2019
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        submodules: recursive
+    - uses: microsoft/setup-msbuild@v1.0.3
+    - name: Build
+      run: msbuild /m /t:Build /p:Configuration=Release goldsrc_win32.sln
+    - name: Prepare artifacts
+      run: |
+        mkdir "./bin/valve/dlls"
+        mv engine/Release/hw.dll .\bin
+        mv launcher/Release/hl.exe .\bin
+        mv dlls/Release/hl.dll .\bin\valve\dlls
+    - name: Deploy
+      uses: actions/upload-artifact@v3
+      with:
+        name: goldsrc_win32
+        path: bin
