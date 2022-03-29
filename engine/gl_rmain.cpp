@@ -62,7 +62,6 @@ float CalcFov(float fov_x, float width, float height) // TODO: improve the code 
     return atanf(x) * 360.0 / M_PI;
 }
 
-
 void R_ForceCVars(qboolean mp)
 {
     if (mp)

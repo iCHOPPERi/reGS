@@ -1012,8 +1012,7 @@ void Cmd_ForwardToServer()
 {
 	if( Q_stricmp( Cmd_Argv( 0 ), "cmd" ) || Q_stricmp( Cmd_Argv( 1 ), "dlfile" ) )
 	{
-		//TODO: implement - Solokiller
-		//Cmd_ForwardToServerInternal( &cls.netchan.message );
+		Cmd_ForwardToServerInternal( &cls.netchan.message );
 	}
 }
 
