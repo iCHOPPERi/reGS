@@ -19,6 +19,12 @@ model_t* R_LoadMapSprite( const char *szFilename )
 	return nullptr;
 }
 
+void R_SetStackBase()
+{
+    // Nothing
+    // Maybe it has implementation on Win32 build? - TODO: investigate - ScriptedSnark
+}
+
 void AllowFog( bool allowed )
 {
     if (allowed)
@@ -55,6 +61,7 @@ float CalcFov(float fov_x, float width, float height) // TODO: improve the code 
 
     return atanf(x) * 360.0 / M_PI;
 }
+
 
 void R_ForceCVars(qboolean mp)
 {

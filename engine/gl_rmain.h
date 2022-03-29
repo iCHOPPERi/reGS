@@ -11,6 +11,8 @@ extern vec3_t r_origin;
 
 extern refdef_t r_refdef;
 
+void R_SetStackBase();
+
 void AllowFog( bool allowed );
 
 #endif //ENGINE_GL_RMAIN_H

@@ -33,6 +33,7 @@
 #include "voice.h"
 #include "wad.h"
 #include "../cl_dll/kbutton.h"
+#include "gl_rmain.h"
 
 quakeparms_t host_parms = {};
 
@@ -687,7 +688,7 @@ void _Host_Frame(float time)
 
 	Host_ComputeFPS(host_frametime);
 
-	// R_SetStackBase();
+	R_SetStackBase();
 	// CL_CheckClientState();
 
 	Cbuf_Execute();
