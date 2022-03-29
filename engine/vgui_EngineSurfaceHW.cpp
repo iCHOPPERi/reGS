@@ -6,6 +6,8 @@
 #include "sys_getmodes.h"
 #include "vgui_EngineSurface.h"
 #include "vgui_int.h"
+#include "gl_screen.h"
+#include "glHud.h"
 
 #include <tier1/UtlRBTree.h>
 
@@ -894,5 +896,63 @@ void EngineSurface::drawUpdateRegionTextureBGRA( int nTextureID, int x, int y, c
 
 void VGui_ViewportPaintBackground( int* extents )
 {
-	//TODO: implement - Solokiller
+	GLint v1; // ebp
+	GLint v2; // edi
+	GLsizei v3; // esi
+	GLsizei v4; // ebx
+	int exts; // ecx
+	Rect_t rect; // [esp+28h] [ebp-34h] BYREF
+	Rect_t pnt; // [esp+38h] [ebp-24h] BYREF
+
+	g_engdstAddrs.VGui_ViewportPaintBackground(&extents);
+	GLFinishHud();
+
+	v1 = glx;
+	v2 = gly;
+	v3 = glwidth;
+	v4 = glheight;
+
+	SDL_GetWindowPosition(pmainwindow, &pnt.x, &pnt.y);
+
+	if (VideoMode_IsWindowed())
+		SDL_GetWindowSize(pmainwindow, &rect.width, &rect.height);
+	else
+		VideoMode_GetCurrentVideoMode(&rect.width, &rect.height, 0);
+
+	exts = extents[3];
+	glx = *extents - pnt.x;
+	gly = glheight + pnt.y - exts;
+	glwidth = extents[2] - *extents;
+	glheight = exts - extents[1];
+
+	//SCR_CalcRefdef(); - TODO: implement - ScriptedSnark
+	//V_RenderView(); - TODO: implement - ScriptedSnark
+	GLBeginHud();
+
+	if (cls.state == ca_active && cls.signon == ca_connecting)
+	{
+		AllowFog(false);
+		ClientDLL_HudRedraw(cl.intermission == 1);
+		AllowFog(true);
+	}
+
+	if (/*scr_drawloading == false &&*/ (cl.intermission != 1 || key_dest))
+		SCR_DrawConsole();
+
+	SCR_DrawLoading();
+
+	/* - TODO: implement Sbar_Draw - ScriptedSnark
+	if (cls.state == ca_active && cls.signon == 2)
+		Sbar_Draw();
+	*/
+
+	GLFinishHud();
+
+	glx = v1;
+	gly = v2;
+	glwidth = v3;
+	glheight = v4;
+
+	//SCR_CalcRefdef(); - TODO: implement - ScriptedSnark
+	GLBeginHud();
 }
