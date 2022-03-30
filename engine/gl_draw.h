@@ -43,6 +43,8 @@ GLuint GL_GenTexture();
 
 void GL_SelectTexture( GLenum target );
 
+void GL_Bind(int texnum);
+
 bool ValidateWRect(const wrect_t* prc);
 bool IntersectWRect(const wrect_t* prc1, const wrect_t* prc2, wrect_t* prc);
 

@@ -3,6 +3,8 @@
 #include "GL/glew.h"
 #include "qgl.h"
 #include "vgui2/text_draw.h"
+#include "cl_tent.h"
+#include "gl_draw.h"
 
 GLfloat flFogDensity;
 bool g_bFogSkybox;
@@ -18,6 +20,8 @@ int g_GL_Modes[7] // TODO: make all these integers as constants in QGL
 	5,
 	8
 };
+
+float gGlR, gGlG, gGlB, gGlW;
 
 triangleapi_t tri =
 {
@@ -137,8 +141,20 @@ void tri_GL_CullFace( TRICULLSTYLE style )
 
 int R_TriangleSpriteTexture( model_t *pSpriteModel, int frame )
 {
-	//TODO: implement - Solokiller
-	return false;
+	mspriteframe_t* sprframe = R_GetSpriteFrame((msprite_t*)pSpriteModel->cache.data, frame); // eax
+
+	VGUI2_ResetCurrentTexture();
+	
+	if (!sprframe)
+		return 0;
+
+	if (sprframe)
+	{
+		GL_Bind(sprframe->gl_texturenum);
+		return 1;
+	}
+
+	return 0;
 }
 
 int tri_ScreenTransform( float* world, float* screen )
