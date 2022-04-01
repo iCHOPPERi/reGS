@@ -20,8 +20,18 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "quakedef.h"
 #include "pmove.h"
 
-vec3_t player_mins[ 4 ];
-vec3_t player_maxs[ 4 ];
+vec_t player_mins[4][3] = {
+		{ -16.0f, -16.0f, -36.0f, },
+		{ -16.0f, -16.0f, -18.0f, },
+		{ 0.0f, 0.0f, 0.0f, },
+		{ -32.0f, -32.0f, -32.0f, }
+};
+vec_t player_maxs[4][3] = {
+		{ 16.0f, 16.0f, 36.0f, },
+		{ 16.0f, 16.0f, 18.0f, },
+		{ 0.0f, 0.0f, 0.0f, },
+		{ 32.0f, 32.0f, 32.0f, }
+};
 
 playermove_t* pmove = nullptr;
 

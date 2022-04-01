@@ -7,6 +7,7 @@
 #include "vgui_int.h"
 #include "gl_screen.h"
 #include "pr_cmds.h"
+#include "pmove.h"
 
 int gHostSpawnCount;
 
@@ -21,6 +22,16 @@ bool g_bMajorMapChange = false;
 char szDirectory[260];
 
 cvar_t motdfile = { "motdfile", "motd.txt", 0, 0.0f, NULL };
+
+void SV_GetPlayerHulls()
+{
+	if (gEntityInterface.pfnGetHullBounds(0, (float*)player_mins, (float*)player_maxs)
+		&& gEntityInterface.pfnGetHullBounds(1, player_mins[1], player_maxs[1])
+		&& gEntityInterface.pfnGetHullBounds(2, player_mins[2], player_maxs[2]))
+	{
+		gEntityInterface.pfnGetHullBounds(3, player_mins[3], player_maxs[3]);
+	}
+}
 
 void Host_InitializeGameDLL()
 {

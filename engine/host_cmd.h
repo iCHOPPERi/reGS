@@ -19,6 +19,8 @@ typedef struct _UserMsg
 	pfnUserMsgHook pfn;
 } UserMsg;
 
+void SV_GetPlayerHulls();
+
 void Host_Map_f(void);
 void Host_InitCommands();
 
