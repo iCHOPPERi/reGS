@@ -122,7 +122,7 @@ void tri_GL_Vertex3f( float x, float y, float z )
 
 void tri_GL_Brightness( float x )
 {
-	//TODO: implement - Solokiller
+	qglColor4f(gGlB * x * gGlW, gGlG * x * gGlW, gGlW * (x * gGlR), 1.0);
 }
 
 void tri_GL_CullFace( TRICULLSTYLE style )
