@@ -107,7 +107,7 @@ void tri_GL_Color4ub( byte r, byte g, byte b, byte a )
 
 void tri_GL_TexCoord2f( float u, float v )
 {
-	//TODO: implement - Solokiller
+	qglTexCoord2f(u, v);
 }
 
 void tri_GL_Vertex3fv( float* worldPnt )
