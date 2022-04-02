@@ -117,7 +117,7 @@ void tri_GL_Vertex3fv( float* worldPnt )
 
 void tri_GL_Vertex3f( float x, float y, float z )
 {
-	//TODO: implement - Solokiller
+	qglVertex3f(x, y, z);
 }
 
 void tri_GL_Brightness( float x )
