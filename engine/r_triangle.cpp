@@ -112,7 +112,7 @@ void tri_GL_TexCoord2f( float u, float v )
 
 void tri_GL_Vertex3fv( float* worldPnt )
 {
-	//TODO: implement - Solokiller
+	qglVertex3fv(worldPnt);
 }
 
 void tri_GL_Vertex3f( float x, float y, float z )
