@@ -2,8 +2,14 @@
 #define ENGINE_R_TRI_H
 
 #include "triangleapi.h"
+#include "GL/glew.h"
 
 extern triangleapi_t tri;
+
+extern GLfloat flFogDensity;
+extern float flFinalFogColor[4];
+extern GLfloat flFogEnd;
+extern GLfloat flFogStart;
 
 void tri_GL_RenderMode( int mode );
 
@@ -30,6 +36,8 @@ int R_TriangleSpriteTexture( model_t *pSpriteModel, int frame );
 int tri_ScreenTransform( float* world, float* screen );
 
 void R_RenderFog( float* flFogColor, float flStart, float flEnd, int bOn );
+
+void R_RenderFinalFog();
 
 void tri_WorldTransform( float* screen, float* world );
 

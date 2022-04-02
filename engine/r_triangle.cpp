@@ -1,12 +1,14 @@
 #include "quakedef.h"
 #include "r_triangle.h"
-#include "GL/glew.h"
 #include "qgl.h"
 #include "vgui2/text_draw.h"
 #include "cl_tent.h"
 #include "gl_draw.h"
 
 GLfloat flFogDensity;
+float flFinalFogColor[4];
+GLfloat flFogEnd;
+GLfloat flFogStart;
 bool g_bFogSkybox;
 int gRenderMode;
 
@@ -157,6 +159,7 @@ int R_TriangleSpriteTexture( model_t *pSpriteModel, int frame )
 	return 0;
 }
 
+
 int tri_ScreenTransform( float* world, float* screen )
 {
 	//TODO: implement - Solokiller
@@ -166,6 +169,18 @@ int tri_ScreenTransform( float* world, float* screen )
 void R_RenderFog( float* flFogColor, float flStart, float flEnd, int bOn )
 {
 	//TODO: implement - Solokiller
+}
+
+void R_RenderFinalFog()
+{
+	// if (gD3DMode != 1) - Well, it's not necessary, because D3D renderer is not supported by latest GoldSrc version - ScriptedSnark
+	qglEnable(GL_FOG);
+	qglFogi(GL_FOG_MODE, 2049); // TODO: define 2049 - ScriptedSnark
+	qglFogf(GL_FOG_DENSITY, flFogDensity);
+	qglHint(GL_FOG_HINT, GL_NICEST);
+	qglFogfv(GL_FOG_COLOR, flFinalFogColor);
+	qglFogf(GL_FOG_START, flFogStart);
+	qglFogf(GL_FOG_END, flFogEnd);
 }
 
 void tri_WorldTransform( float* screen, float* world )
