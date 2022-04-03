@@ -201,8 +201,8 @@ void GL_UnloadTexture(char* identifier) {
 				if (((gltextures->servercount + 1) & MAX_CACHED_PICS) != 0) {
 					return;
 				}
-				qglDeleteTextures(1, (GLuint*)dest);
-				if (dest->paletteIndex > -1) {
+				qglDeleteTextures(1, (GLuint*)gltextures);
+				if (gltextures->paletteIndex > -1) {
 					if (gGLPalette[gltextures->paletteIndex].referenceCount < 2) {
 						if (gltextures->paletteIndex < 350) {
 							gGLPalette[gltextures->paletteIndex].tag = -1;
@@ -418,7 +418,34 @@ void Draw_SpriteFrameGeneric(mspriteframe_t* pFrame, unsigned short* pPalette, i
 
 void Draw_Pic( int x, int y, qpic_t* pic )
 {
-	//TODO: implement - Solokiller
+	int tempVariable;
+	if (pic != NULL) {
+		VGUI2_ResetCurrentTexture();
+		qglEnable(GL_TEXTURE_2D);
+		qglDisable(GL_BLEND);
+		qglDisable(GL_DEPTH_TEST);
+		qglEnable(GL_ALPHA_TEST);
+		qglTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+		qglColor4f(1.0, 1.0, 1.0, 1.0);
+		if (*pic->data != currenttexture) {
+			tempVariable = (*pic->data >> 16) - 1;
+			currenttexture = *pic->data;
+			qglBindTexture(GL_TEXTURE_2D, *pic->data);
+			if (tempVariable >= 0 && tempVariable != g_currentpalette) {
+				g_currentpalette = tempVariable;
+				qglColorTableEXT(GL_SHARED_TEXTURE_PALETTE_EXT, GL_RGB, GL_ACCUM, GL_RGB, GL_UNSIGNED_BYTE, gGLPalette[tempVariable].colors);
+			}
+		}
+		qglBegin(GL_QUADS);
+		qglTexCoord2f(pic[1].width, pic[1].height);
+		qglVertex2f(x, y);
+		qglTexCoord2f(*pic[1].data, pic[1].height);
+		qglVertex2f(pic->width + x, y);
+		qglTexCoord2f(*pic[1].data, pic[2].width);
+		qglVertex2f(pic->width + x, pic->height + y);
+		qglTexCoord2f(pic[1].width, pic[2].width);
+		qglVertex2f(x, pic->height + y);
+	}
 }
 
 void Draw_BeginDisc()
