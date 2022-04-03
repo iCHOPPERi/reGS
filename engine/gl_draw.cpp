@@ -17,7 +17,6 @@ cvar_t gl_ansio = { "gl_ansio", "16" };
 
 qpic_t* draw_disc = nullptr;
 
-// I don't really understand what flag is used on
 #define	MAX_CACHED_PICS		128
 
 typedef struct
