@@ -40,3 +40,17 @@ void GLFinishHud()
 	qglEnable( GL_CULL_FACE );
 	qglEnable( GL_BLEND );
 }
+
+void DrawWedge(float centerx, float centery, float angle1, float angle2, float radius) {
+	double forSin = 0, forCos = 0;
+
+	qglBegin(GL_TRIANGLES);
+	qglVertex2f(centerx, centery);
+	forSin = sin(angle1 * 0.0174532925199433);
+	forCos = cos(angle1 * 0.0174532925199433);
+	qglVertex2f(centerx - forSin * radius, centery - forCos * radius);
+	forSin = sin(angle2 * 0.0174532925199433);
+	forCos = cos(angle2 * 0.0174532925199433);
+	qglVertex2f(centerx - radius * forSin, centery - forCos * radius);
+	qglEnd();
+}
