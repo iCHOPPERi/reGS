@@ -17,6 +17,9 @@ cvar_t gl_ansio = { "gl_ansio", "16" };
 
 qpic_t* draw_disc = nullptr;
 
+// I don't really understand what flag is used on
+#define	MAX_CACHED_PICS		128
+
 typedef struct
 {
 	int texnum;
@@ -190,45 +193,32 @@ GLuint GL_GenTexture()
 
 GLenum oldtarget = TEXTURE0_SGIS;
 
-void GL_UnloadTexture(char* identifier)
-{/* --------- THIS CODE IS REVERSED BY GHIDRA | TODO: NORMALIZE THE CODE - ScriptedSnark ---------
-	int iVar1;
-	uint uVar2;
-	gltexture_t* dest;
-	int iVar3;
-
-	if (numgltextures > 0) {
-		dest = gltextures;
-		iVar3 = 0;
+void GL_UnloadTexture(char* identifier) {
+	int idx;
+	if (numgltextures > 0) {	
 		do {
-			iVar1 = Q_strcmp(identifier, dest->identifier);
-			if (iVar1 == 0) {
-				if ((*(byte*)((int)&dest->servercount + 1) & 128) != 0) {
+			if (Q_strcmp(identifier, gltextures->identifier) == 0) {
+				if (((gltextures->servercount + 1) & MAX_CACHED_PICS) != 0) {
 					return;
 				}
-				(*qglDeleteTextures)(1, (GLuint*)dest);
-				uVar2 = (uint)dest->paletteIndex;
-				if (-1 < (int)uVar2) {
-					if (gGLPalette[uVar2].referenceCount < 2) {
-						if (uVar2 < 350) {
-							gGLPalette[uVar2].tag = -1;
-							gGLPalette[uVar2].referenceCount = 0;
+				qglDeleteTextures(1, (GLuint*)dest);
+				if (dest->paletteIndex > -1) {
+					if (gGLPalette[gltextures->paletteIndex].referenceCount < 2) {
+						if (gltextures->paletteIndex < 350) {
+							gGLPalette[gltextures->paletteIndex].tag = -1;
+							gGLPalette[gltextures->paletteIndex].referenceCount = 0;
 						}
 					}
 					else {
-						gGLPalette[uVar2].referenceCount = gGLPalette[uVar2].referenceCount + -1;
+						gGLPalette[gltextures->paletteIndex].referenceCount -= 1;
 					}
 				}
-				Q_memset(dest, 0, 84);
-				dest->servercount = -1;
-				return;
+				// There should be "dest" variable with "RtlSecureZeroMemory(dest, sizeof(gltexture_t));", but dest is useless here (???) - xWhitey
+				gltextures->servercount = -1; // ((DWORD) dest) + 2 == dest->servercount
 			}
-			iVar3 = iVar3 + 1;
-			dest = dest + 1;
-		} while (iVar3 < numgltextures);
+			idx += 1;
+		} while (idx < numgltextures);
 	}
-	return;
-	*/
 }
 
 void GL_SelectTexture( GLenum target )

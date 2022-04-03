@@ -99,12 +99,25 @@ void tri_GL_End()
 
 void tri_GL_Color4f( float x, float y, float z, float w )
 {
-	//TODO: implement - Solokiller
+	if (gRenderMode == GL_TRIANGLES) {
+		qglColor4ub(x * 255.9, y * 255.9, z * 255.9, w * 255.0);
+	} else {
+		qglColor4f(x * w, y * w, z * w, 1.0);
+	}
+	gGlB = z;
+	gGlR = x;
+	gGlG = y;
+	gGlW = w;
 }
 
 void tri_GL_Color4ub( byte r, byte g, byte b, byte a )
 {
-	//TODO: implement - Solokiller
+	gGlR = r * 0.00392156862745098;
+	gGlG = g * 0.00392156862745098;
+	gGlB = b * 0.00392156862745098;
+	gGlW = a * 0.00392156862745098;
+	// IDA says there should be "1.0" instead of alpha, idk - xWhitey
+	qglColor4f(r * 0.00392156862745098, g * 0.00392156862745098, b * 0.00392156862745098, 1.0);
 }
 
 void tri_GL_TexCoord2f( float u, float v )
