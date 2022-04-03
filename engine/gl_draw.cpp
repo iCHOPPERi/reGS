@@ -380,8 +380,8 @@ void Draw_SpriteFrameHoles(mspriteframe_t* pFrame, unsigned short* pPalette, int
 	/* - TODO: implement gl_spriteblend - ScriptedSnark
 	if (gl_spriteblend.value != 0.0)
 	{
-		qglBlendFunc(0x302u, 0x303u);
-		qglEnable(0xBE2u);
+		qglBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		qglEnable(GL_BLEND);
 	}
 	*/
 
@@ -433,7 +433,7 @@ void Draw_Pic( int x, int y, qpic_t* pic )
 			qglBindTexture(GL_TEXTURE_2D, *pic->data);
 			if (tempVariable >= 0 && tempVariable != g_currentpalette) {
 				g_currentpalette = tempVariable;
-				qglColorTableEXT(GL_SHARED_TEXTURE_PALETTE_EXT, GL_RGB, GL_ACCUM, GL_RGB, GL_UNSIGNED_BYTE, gGLPalette[tempVariable].colors);
+				qglColorTableEXT(GL_SHARED_TEXTURE_PALETTE_EXT, GL_RGB, GL_DYNAMIC_STORAGE_BIT, GL_RGB, GL_UNSIGNED_BYTE, gGLPalette[tempVariable].colors);
 			}
 		}
 		qglBegin(GL_QUADS);
