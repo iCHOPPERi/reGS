@@ -3,6 +3,7 @@
 #include "cl_tent.h"
 #include <cl_main.h>
 #include <gl_model.h>
+#include <pr_cmds.h>
 
 static TEMPENTITY gTempEnts[ MAX_TEMP_ENTITIES ];
 
@@ -267,7 +268,21 @@ void R_SparkEffect( float* pos, int count, int velocityMin, int velocityMax )
 
 void R_SparkShower( float* pos )
 {
-	//TODO: implement - Solokiller
+	TEMPENTITY* tmpent = efx.CL_TempEntAllocNoModel(pos);
+
+	if (tmpent)
+	{
+		tmpent->entity.baseline.origin[0] = RandomFloat(-300.0, 300.0);
+		tmpent->entity.baseline.origin[1] = RandomFloat(-300.0, 300.0);
+		tmpent->flags |= FTENT_SPARKSHOWER; // If it doesn't work correctly - use "0x20028u" instead "FTENT_SPARKSHOWER" - ScriptedSnark
+		tmpent->entity.baseline.angles[0] = 0.0;
+		tmpent->entity.baseline.angles[1] = 0.0;
+		tmpent->entity.baseline.angles[2] = 0.0;
+		tmpent->entity.baseline.origin[2] = RandomFloat(-200.0, 200.0);
+		tmpent->die = cl.time + 0.5;
+		tmpent->entity.curstate.framerate = RandomFloat(0.5, 1.5);
+		tmpent->entity.curstate.scale = cl.time;
+	}
 }
 
 void R_Spray( vec_t* pos, vec_t* dir, int modelIndex, int count, int speed, int spread, int rendermode )
