@@ -68,37 +68,25 @@ void SPR_Init()
 
 void SPR_Shutdown()
 {
-	model_t** ppmVar1;
-	SPRITELIST* __ptr;
-	int iVar2;
-	int iVar3;
+	int idx;
 
-	if (host_initialized != false) {
-		if (gSpriteList != NULL) {
-			__ptr = gSpriteList;
+	if (host_initialized) {
+		if (gSpriteList) {
 			if (gSpriteCount > 0) {
-				iVar2 = 0; 
-				iVar3 = 0;
+				idx = 0;
 				do {
-					ppmVar1 = &__ptr->pSprite + iVar2;
-					if (*ppmVar1 != NULL) {
-						// TODO: impl - xWhitey
-						Mod_UnloadSpriteTextures(*ppmVar1);
-						ppmVar1 = (model_t**)(&gSpriteList->pSprite + iVar2);
-						__ptr = gSpriteList;
+					if (gSpriteList->pSprite) {
+						Mod_UnloadSpriteTextures(gSpriteList[idx].pSprite);
 					}
-					if (ppmVar1[1] != (model_t*)0x0) {
-						Mem_Free(ppmVar1[1]);
-						__ptr = gSpriteList;
+					if (gSpriteList[idx].pName) {
+						Mem_Free(gSpriteList[idx].pName);
 					}
-					iVar3 = iVar3 + 1;
-					iVar2 = iVar2 + 12;
-				} while (iVar3 < gSpriteCount);
+					++idx;
+				} while (idx < gSpriteCount);
 			}
-			Mem_Free(__ptr);
 		}
-		gpSprite = NULL;
-		gSpriteList = NULL;
+		gpSprite = nullptr;
+		gSpriteList = nullptr;
 		gSpriteCount = 0;
 		ghCrosshair = 0;
 	}
@@ -107,23 +95,63 @@ void SPR_Shutdown()
 
 void SPR_Shutdown_NoModelFree()
 {
-	//TODO: implement - Solokiller
-	gpSprite = nullptr;
-	gSpriteList = nullptr;
-	gSpriteCount = 0;
-	ghCrosshair = 0;
+	SPRITELIST* p;
+	int idx;
+
+	if (host_initialized) {
+		p = gSpriteList;
+		if (gSpriteList) {
+			if (gSpriteCount > 0) {
+				idx = 0;
+				do {
+					if (gSpriteList[idx].pName) {
+						Mem_Free(gSpriteList[idx].pName);
+					}
+					++idx;
+				} while (idx < gSpriteCount);
+			}
+		}
+		gSpriteList = nullptr;
+		gpSprite = nullptr;
+		gSpriteCount = 0;
+		ghCrosshair = 0;
+	}
 }
 
 HSPRITE SPR_Load( const char* pTextureName )
 {
-	//TODO: implement - Solokiller
+	int idx;
+
+	g_engdstAddrs.pfnSPR_Load(&pTextureName);
+	if (pTextureName && gSpriteList && gSpriteCount > 0) {
+		idx = 0;
+		while (true) {
+			if (!gSpriteList[idx].pSprite) {
+				gSpriteList[idx].pName = (char*)Mem_Malloc(Q_strlen(pTextureName) + 1);
+				Q_strcpy(gSpriteList[idx].pName, pTextureName);
+			}
+			if (!Q_stricmp(pTextureName, gSpriteList[idx].pName)) break;
+
+			++idx;
+
+			if (gSpriteCount <= idx)
+				Sys_Error("cannot allocate more than 256 HUD sprites\n");
+		}
+		//gSpriteMipMap = false;
+		gSpriteList[idx].pSprite = Mod_ForName(pTextureName, false, true);
+		//gSpriteMipMap = true;
+		if (gSpriteList[idx].pSprite) {
+			//gSpriteList[idx].frameCount = ModelFrameCount(gSpriteList[idx].pSprite);
+		}
+	}
+
 	return 0;
 }
 
 int SPR_Frames( HSPRITE hSprite )
 {
-	int result; // eax
-	SPRITELIST* sprlist; // edx
+	int result;
+	SPRITELIST* sprlist;
 
 	result = 0;
 	g_engdstAddrs.pfnSPR_Frames(&hSprite);

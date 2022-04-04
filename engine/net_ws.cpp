@@ -5,6 +5,7 @@
 #include "client.h"
 #include "ws2def.h"
 #include <WinSock2.h>
+#include <vid.h>
 
 // As reHLDS says - this is the original statement.
 #define INV_SOCK 0
@@ -42,6 +43,12 @@ typedef struct
 	int			get;
 	int			send;
 } loopback_t;
+
+typedef struct kbutton_s
+{
+	int		down[2];		// key nums holding it down
+	int		state;			// low bit is down state
+} kbutton_t;
 
 static loopback_t	loopbacks[2];
 int net_sleepforever = 1;
@@ -325,8 +332,6 @@ void SockadrToNetadr(sockaddr* s, netadr_t* a)
 	a->type = NA_IP;
 	*(int*)&a->ip = ((struct sockaddr_in*)s)->sin_addr.s_addr;
 	a->port = ((struct sockaddr_in*)s)->sin_port;
-	// I don't think there should be return statement. - xWhitey
-	//return;
 }
 
 int NET_SendTo(bool verbose, SOCKET s, const char FAR* buf, int len, int flags, const struct sockaddr FAR* to, int tolen)
@@ -505,9 +510,20 @@ SCR_NetGraph
 Visualizes data flow
 ==================
 */
-void SCR_NetGraph( void )
+void SCR_NetGraph()
 {
-	// TODO: Implement
+	// impl - xWhitey
+	/*int value = net_graph.value;
+	int incoming_sequence, outgoing_sequence, height, width;
+	kbutton_s* key = ClientDLL_FindKey("in_graph");
+	if (!value) {
+		if (!key || (key->state & 1) == 0) return;
+		value = 2;
+	}
+	if (net_scale.value <= 0.0) net_scale.value = 1.0;
+	incoming_sequence = cls.netchan.incoming_sequence;
+	height = vid.height;
+	width = vid.width;*/
 }
 
 static double rolling_fps;
