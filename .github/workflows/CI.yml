@@ -20,6 +20,7 @@ jobs:
     - name: Prepare artifacts
       run: |
         mkdir "./bin/valve/dlls"
+        mkdir "./bin/valve/cl_dlls"
         mkdir "./bin/pdb"
         mv engine/Release/hw.dll .\bin
         mv engine/Release/hw.pdb .\bin\pdb
