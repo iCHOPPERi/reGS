@@ -192,6 +192,7 @@
     <ClCompile Include="..\public\FileSystem_Helpers.cpp">
       <Filter>Controls</Filter>
     </ClCompile>
+    <ClCompile Include="..\tier1\CharacterSet.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\vgui_key_translation.h">

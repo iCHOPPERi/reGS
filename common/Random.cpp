@@ -2,6 +2,8 @@
 
 #include "Random.h"
 
+#define ARRAYSIZE(p) (sizeof(p)/sizeof(p[0]))
+
 static int32 idum = 0;
 
 void SeedRandomNumberGenerator()

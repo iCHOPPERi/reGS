@@ -27,6 +27,8 @@ jobs:
         mv launcher/Release/hl.pdb .\bin\pdb
         mv dlls/Release/hl.dll .\bin\valve\dlls
         mv dlls/Release/hl.pdb .\bin\valve\dlls
+        mv GameUI/Release/GameUI.dll .\bin\valve\cl_dlls
+        mv GameUI/Release/GameUI.pdb .\bin\valve\cl_dlls
     - name: Deploy
       uses: actions/upload-artifact@v3
       with:
