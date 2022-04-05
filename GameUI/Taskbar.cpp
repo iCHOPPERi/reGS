@@ -821,7 +821,7 @@ void CTaskbar::UpdateGameMenus()
 
 		if( isInGame )
 		{
-			bAvailable = pData->GetInt( isInCareerGame ? "NotInCareerGame" : "OnlyInCareerGame", 0 ) != 0;
+			bAvailable = true;//pData->GetInt( isInCareerGame ? "NotInCareerGame" : "OnlyInCareerGame", 0 ) != 0;
 		}
 		else
 			bAvailable = pData->GetInt( "OnlyInGame", 0 ) == 0;

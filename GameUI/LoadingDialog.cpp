@@ -178,10 +178,12 @@ void CLoadingDialog::ApplySchemeSettings( vgui2::IScheme* pScheme )
 {
 	BaseClass::ApplySchemeSettings( pScheme );
 
+	/* - TODO: fix crash - ScriptedSnark
 	if( m_pCareerMapImagePanel )
 	{
 		m_pCareerMapImagePanel->SetBorder( pScheme->GetBorder( "InsetBorder" ) );
 	}
+	*/
 }
 
 void CLoadingDialog::OnClose()
