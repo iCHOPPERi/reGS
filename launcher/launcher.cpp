@@ -297,30 +297,27 @@ char* UTIL_GetBaseDir()
 void SetEngineDLL( const char** ppEngineDLL )
 {
 	*ppEngineDLL = HARDWARE_RENDERER_ENGINE;
-
 	const char* pEngineDLLSetting = registry->ReadString( "EngineDLL", HARDWARE_RENDERER_ENGINE );
-	if( _stricmp( pEngineDLLSetting, HARDWARE_RENDERER_ENGINE ) )
-	{
-		if( !_stricmp( pEngineDLLSetting, SOFTWARE_RENDERER_ENGINE ) )
-			*ppEngineDLL = SOFTWARE_RENDERER_ENGINE;
-	}
-	else
+
+	if (!stricmp(pEngineDLLSetting, HARDWARE_RENDERER_ENGINE))
 	{
 		*ppEngineDLL = HARDWARE_RENDERER_ENGINE;
 	}
-
-	if( cmdline->CheckParm( "-soft", nullptr )
-		|| cmdline->CheckParm( "-software", nullptr ) )
+	else if (!stricmp(pEngineDLLSetting, SOFTWARE_RENDERER_ENGINE))
 	{
 		*ppEngineDLL = SOFTWARE_RENDERER_ENGINE;
 	}
-	else if( cmdline->CheckParm( "-gl", nullptr )
-			 || cmdline->CheckParm( "-d3d", nullptr ) )
+
+	if (cmdline->CheckParm("-soft", nullptr) || cmdline->CheckParm("-software", nullptr))
+	{
+		*ppEngineDLL = SOFTWARE_RENDERER_ENGINE;
+	}
+	else if (cmdline->CheckParm("-gl", nullptr) || cmdline->CheckParm("-d3d", nullptr))
 	{
 		*ppEngineDLL = HARDWARE_RENDERER_ENGINE;
 	}
 
-	registry->WriteString( "EngineDLL", *ppEngineDLL );
+	registry->WriteString("EngineDLL", *ppEngineDLL);
 }
 
 bool OnVideoModeFailed()
