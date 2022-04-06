@@ -16,6 +16,8 @@ vgui2/vgui2_surfacelib/Release
 vgui2/vgui2_surfacelib/Debug
 vgui2/controls/Release/
 vgui2/controls/Debug/
+tier0/Release/
+tier0/Debug/
 tier1/Release/
 tier1/Debug/
 dlls/Release/
