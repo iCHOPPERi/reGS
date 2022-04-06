@@ -11,6 +11,8 @@ launcher/Debug/
 vgui2/Release/
 vgui2/Debug/
 vgui2/.vs
+vgui2/src/Release/
+vgui2/src/Debug/
 vgui2/vgui2_surfacelib/.vs
 vgui2/vgui2_surfacelib/Release
 vgui2/vgui2_surfacelib/Debug

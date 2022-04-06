@@ -21,6 +21,10 @@
 #ifndef INTERFACE_H
 #define INTERFACE_H
 
+#ifndef ARRAYSIZE
+#define ARRAYSIZE(p)	(sizeof(p)/sizeof(p[0]))
+#endif
+
 #if !defined ( _WIN32 )
 
 #include <dlfcn.h> // dlopen,dlclose, et al

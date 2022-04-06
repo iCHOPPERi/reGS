@@ -28,6 +28,13 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GameUI", "GameUI\GameUI.vcx
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "tier0", "tier0\tier0.vcxproj", "{462E4D7B-3976-49E0-A81D-993D0977BC14}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "vgui2", "vgui2\src\vgui2.vcxproj", "{83D0BC87-9798-4F81-8AA5-569936157F83}"
+	ProjectSection(ProjectDependencies) = postProject
+		{B747882D-653D-4EB9-A111-697511FDDF03} = {B747882D-653D-4EB9-A111-697511FDDF03}
+		{462E4D7B-3976-49E0-A81D-993D0977BC14} = {462E4D7B-3976-49E0-A81D-993D0977BC14}
+		{B444E0FA-6FB8-48B9-8388-9D969F6BF001} = {B444E0FA-6FB8-48B9-8388-9D969F6BF001}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -66,6 +73,10 @@ Global
 		{462E4D7B-3976-49E0-A81D-993D0977BC14}.Debug|x86.Build.0 = Debug|Win32
 		{462E4D7B-3976-49E0-A81D-993D0977BC14}.Release|x86.ActiveCfg = Release|Win32
 		{462E4D7B-3976-49E0-A81D-993D0977BC14}.Release|x86.Build.0 = Release|Win32
+		{83D0BC87-9798-4F81-8AA5-569936157F83}.Debug|x86.ActiveCfg = Debug|Win32
+		{83D0BC87-9798-4F81-8AA5-569936157F83}.Debug|x86.Build.0 = Debug|Win32
+		{83D0BC87-9798-4F81-8AA5-569936157F83}.Release|x86.ActiveCfg = Release|Win32
+		{83D0BC87-9798-4F81-8AA5-569936157F83}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

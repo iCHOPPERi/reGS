@@ -32,6 +32,8 @@ jobs:
         mv GameUI/Release/GameUI.pdb .\bin\valve\cl_dlls
         mv tier0/Release/tier0.dll .\bin
         mv tier0/Release/tier0.pdb .\bin\pdb
+        mv vgui2/src/Release/vgui2.dll .\bin
+        mv vgui2/src/Release/vgui2.pdb .\bin\pdb
     - name: Deploy
       uses: actions/upload-artifact@v3
       with:

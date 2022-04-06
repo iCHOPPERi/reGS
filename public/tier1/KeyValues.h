@@ -12,6 +12,10 @@
 #pragma once
 #endif
 
+#ifndef ARRAYSIZE
+#define ARRAYSIZE(p)	(sizeof(p)/sizeof(p[0]))
+#endif
+
 // #include <vgui/VGUI.h>
 
 #ifndef NULL
