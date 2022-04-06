@@ -219,7 +219,13 @@ void tri_LightAtPoint( float* vPos, float* value )
 
 void tri_GL_Color4fRendermode( float x, float y, float z, float w, int rendermode )
 {
-	//TODO: implement - Solokiller
+	if (rendermode == 4)
+	{
+		gGlW = w * 0.00392156862745098;
+		qglColor4f(x, y, z, w);
+	}
+	else
+		qglColor4f(x * w, y * w, z * w, 1.0);
 }
 
 void R_FogParams( float flDensity, int iFogSkybox )
