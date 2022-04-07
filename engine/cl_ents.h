@@ -3,6 +3,8 @@
 
 #include "pm_defs.h"
 
+qboolean CL_IsPlayerIndex(int index);
+
 void CL_SetSolidPlayers( int playernum );
 
 void CL_SetUpPlayerPrediction( bool dopred, bool bIncludeLocalClient );

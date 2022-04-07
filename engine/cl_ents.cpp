@@ -1,6 +1,15 @@
 #include "quakedef.h"
 #include "cl_ents.h"
-#include <cl_entity.h>
+#include "cl_entity.h"
+#include "client.h"
+
+qboolean CL_IsPlayerIndex(int index)
+{
+	if (index > 0)
+		return index <= cl.maxclients;
+
+	return false;
+}
 
 void CL_SetSolidPlayers( int playernum )
 {
