@@ -186,6 +186,31 @@ void CL_Connect_f(void) // This function crashes the game due to exception in cl
 	}
 }
 
+void CL_Retry_f() // TODO: improve - ScriptedSnark
+{
+	char szCommand[260]; // [esp+1Ch] [ebp-110h] BYREF
+
+	if (cls.servername[0])
+	{
+		if (strchr(cls.servername, 10) || strchr(cls.servername, 59))
+			Con_Printf("Invalid command separator in server name, refusing retry\n");
+		else
+		{
+			if (cls.passive)
+				snprintf(szCommand, sizeof(szCommand), "listen %s\n", cls.servername);
+			else
+				snprintf(szCommand, sizeof(szCommand), "connect %s\n", cls.servername);
+
+			Cbuf_AddText(szCommand);
+			Con_Printf("Commencing connection retry to %s\n", cls.servername);
+		}
+	}
+	else
+	{
+		Con_Printf("Can't retry, no previous connection\n");
+	}
+}
+
 void CL_TakeSnapshot_f()
 {
 	model_s* in;
@@ -248,6 +273,7 @@ void CL_Init()
 	TextMessageInit();
 	//TODO: implement - Solokiller
 	Cmd_AddCommand/*WithFlags*/("connect", CL_Connect_f/*, 8*/); // TODO: implement slowhacking protection - ScriptedSnark
+	Cmd_AddCommand/*WithFlags*/("retry", CL_Retry_f/*, 8*/); // TODO: also uncomment when this new func from GoldSrc update will be finished - ScriptedSnark
 	Cmd_AddCommand("snapshot", CL_TakeSnapshot_f);
 	Cvar_RegisterVariable( &rate );
 	Cvar_RegisterVariable( &cl_lw );
