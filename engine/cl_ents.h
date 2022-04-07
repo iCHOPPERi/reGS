@@ -5,6 +5,8 @@
 
 qboolean CL_IsPlayerIndex(int index);
 
+void CL_ResetFrameStats(frame_t* frame);
+
 void CL_SetSolidPlayers( int playernum );
 
 void CL_SetUpPlayerPrediction( bool dopred, bool bIncludeLocalClient );

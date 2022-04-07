@@ -11,6 +11,19 @@ qboolean CL_IsPlayerIndex(int index)
 	return false;
 }
 
+void CL_ResetFrameStats(frame_t* frame)
+{
+	frame->clientbytes = 0;
+	frame->packetentitybytes = 0;
+	frame->tentitybytes = 0;
+	frame->playerinfobytes = 0;
+	frame->soundbytes = 0;
+	frame->usrbytes = 0;
+	frame->eventbytes = 0;
+	frame->voicebytes = 0;
+	frame->msgbytes = 0;
+}
+
 void CL_SetSolidPlayers( int playernum )
 {
 	//TODO: implement - Solokiller
