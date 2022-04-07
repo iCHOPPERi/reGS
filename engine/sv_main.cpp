@@ -11,6 +11,8 @@
 #include "cl_main.h"
 #include "host_cmd.h"
 #include "gl_screen.h"
+#include "gl_model.h"
+#include <cmodel.h>
 
 edict_t** g_moved_edict;
 vec3_t* g_moved_from;
@@ -469,7 +471,7 @@ int SV_SpawnServer(qboolean bIsDemo, char* server, char* startspot)
 	ContinueLoadingProgressBar("Server", 3, 0.0f);
 
 	Q_snprintf(sv.modelname, sizeof(sv.modelname), "maps/%s.bsp", server);
-	//sv.worldmodel = Mod_ForName(sv.modelname, FALSE, FALSE);
+	sv.worldmodel = Mod_ForName(sv.modelname, FALSE, FALSE);
 
 	if (!sv.worldmodel)
 	{
@@ -505,7 +507,8 @@ int SV_SpawnServer(qboolean bIsDemo, char* server, char* startspot)
 			sv.active = FALSE;
 			return 0;
 		}
-		//CM_CalcPAS(g_psv.worldmodel);
+
+		CM_CalcPAS(sv.worldmodel);
 	}
 
 	sv.models[1] = sv.worldmodel;

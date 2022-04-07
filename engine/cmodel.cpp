@@ -58,6 +58,39 @@ byte* Mod_DecompressVis(byte* in, model_t* model)
 	return decompressed;
 }
 
+void CM_DecompressPVS(unsigned char* in, unsigned char* decompressed, int byteCount)
+{
+	int c;
+	unsigned char* out;
+
+	if (in == NULL)
+	{
+		Q_memcpy(decompressed, mod_novis, byteCount);
+		return;
+	}
+
+	out = decompressed;
+	while (out < decompressed + byteCount)
+	{
+		if (*in)
+		{
+			*out++ = *in++;
+			continue;
+		}
+
+		c = in[1];
+		in += 2;
+
+		if (c > decompressed + byteCount - out)
+		{
+			c = decompressed + byteCount - out;
+		}
+
+		Q_memset(out, 0, c);
+		out += c;
+	}
+}
+
 unsigned char* CM_LeafPVS(int leafnum)
 {
 	if (gPVS)
@@ -102,4 +135,101 @@ void CM_FreePAS()
 		Mem_Free(gPVS);
 	gPAS = 0;
 	gPVS = 0;
+}
+
+void CM_CalcPAS(model_t* pModel)
+{
+	int rows, rowwords;
+	int actualRowBytes;
+	int i, j, k, l;
+	int index;
+	int bitbyte;
+	unsigned int* dest, * src;
+	unsigned char* scan;
+	int count, vcount, acount;
+
+	Con_DPrintf("Building PAS...\n");
+	CM_FreePAS();
+
+	rows = (pModel->numleafs + 7) / 8;
+	count = pModel->numleafs + 1;
+	actualRowBytes = (rows + 3) & 0xFFFFFFFC;
+	rowwords = actualRowBytes / 4;
+	gPVSRowBytes = actualRowBytes;
+
+	gPVS = (byte*)Mem_Calloc(gPVSRowBytes, count);
+
+	scan = gPVS;
+	vcount = 0;
+	for (i = 0; i < count; i++, scan += gPVSRowBytes)
+	{
+		CM_DecompressPVS(pModel->leafs[i].compressed_vis, scan, rows);
+
+		if (i == 0)
+		{
+			continue;
+		}
+
+		for (j = 0; j < count; j++)
+		{
+			if (scan[j >> 3] & (1 << (j & 7)))
+			{
+				++vcount;
+			}
+		}
+	}
+
+	gPAS = (byte*)Mem_Calloc(gPVSRowBytes, count);
+
+	acount = 0;
+	scan = gPVS;
+	dest = (unsigned int*)gPAS;
+	for (i = 0; i < count; i++, scan += gPVSRowBytes, dest += rowwords)
+	{
+		Q_memcpy(dest, scan, gPVSRowBytes);
+
+		for (j = 0; j < gPVSRowBytes; j++)
+		{
+			bitbyte = scan[j];
+			if (bitbyte == 0)
+			{
+				continue;
+			}
+
+			for (k = 0; k < 8; k++)
+			{
+				if (!(bitbyte & (1 << k)))
+				{
+					continue;
+				}
+
+				index = j * 8 + k + 1;
+				if (index >= count)
+				{
+					continue;
+				}
+
+				src = (unsigned int*)&gPVS[index * gPVSRowBytes];
+				for (l = 0; l < rowwords; l++)
+				{
+					dest[l] |= src[l];
+				}
+			}
+		}
+
+		if (i == 0)
+		{
+			continue;
+		}
+
+		for (j = 0; j < count; j++)
+		{
+			if (((byte*)dest)[j >> 3] & (1 << (j & 7)))
+			{
+				++acount;
+			}
+		}
+	}
+
+	Con_DPrintf("Average leaves visible / audible / total: %i / %i / %i\n", vcount / count, acount / count, count);
 }

@@ -11,6 +11,7 @@ unsigned char* Mod_LeafPVS(mleaf_t* leaf, model_t* model);
 unsigned char* CM_LeafPVS(int leafnum);
 unsigned char* CM_LeafPAS(int leafnum);
 void CM_FreePAS();
+void CM_CalcPAS(model_t* pModel);
 
 bool IsCZPlayerModel(uint32 crc, const char* filename);
 
