@@ -1,7 +1,5 @@
 #include "quakedef.h"
 #include "cl_ents.h"
-#include "cl_entity.h"
-#include "client.h"
 
 qboolean CL_IsPlayerIndex(int index)
 {

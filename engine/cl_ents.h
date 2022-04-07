@@ -2,6 +2,8 @@
 #define ENGINE_CL_ENTS_H
 
 #include "pm_defs.h"
+#include "cl_entity.h"
+#include "client.h"
 
 qboolean CL_IsPlayerIndex(int index);
 
